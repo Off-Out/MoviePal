@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Form, Item, Input } from 'native-base';
+import { Form, Item, Input, Button, Text } from 'native-base';
 
 class LoginForm extends Component {
   render() {
+    const {handleUserInput, login, credential} = this.props
     return (
       <View style={styles.container}>
         <Form>
@@ -13,7 +14,7 @@ class LoginForm extends Component {
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
-                this.props.handleUserInput('email', text);
+                handleUserInput('email', text);
               }}
             />
           </Item>
@@ -24,10 +25,20 @@ class LoginForm extends Component {
               autoCorrect={false}
               secureTextEntry={true}
               onChangeText={text => {
-                this.props.handleUserInput('password', text);
+                handleUserInput('password', text);
               }}
             />
           </Item>
+          <Button
+          block
+          danger
+          style={styles.mb15}
+          onPress={() => {
+            login(credential.email, credential.password);
+          }}
+        >
+          <Text>LOGIN</Text>
+        </Button>
         </Form>
       </View>
     );

@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
+import { Button, Text } from 'native-base'
 import { Container } from 'native-base';
-import { SignUpSection, LoginForm } from '../component';
+import { LoginForm } from '../component';
+import SignUpScreen from './SignUpScreen'
 import { auth, database } from '../firebase';
 
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'gracehopper@eventpal.com',
+      email: '',
       password: '123456',
     };
   }
@@ -19,15 +21,6 @@ class LoginScreen extends Component {
     });
   };
 
-  createUserAccount = (email, password) => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(user => {
-        database.ref(`users/${user.user.uid}`).set({ email })
-        this.props.navigation.navigate('App', {userId: user.user.uid})
-      })
-      .catch(error => Alert.alert(error.message));
-  };
 
   login = async (email, password) => {
     auth
@@ -43,13 +36,23 @@ class LoginScreen extends Component {
           <Image source={require('../image/epLogo.png')} />
         </View>
         <View style={styles.formContainer}>
-          <LoginForm handleUserInput={this.handleUserInput} />
-          <SignUpSection
+          <LoginForm handleUserInput={this.handleUserInput} login={this.login} credential={this.state}/>
+          {/* <SignUpSection
             createUserAccount={this.createUserAccount}
             login={this.login}
             credential={this.state}
             placeholder={this.state.email}
-          />
+          /> */}
+        <Button
+          transparent
+          danger
+          onPress={() =>
+            // console.log("hellos");
+            this.props.navigation.navigate("SignUpScreen")
+          }
+        >
+          <Text style={styles.text}>CREATE ACCOUNT</Text>
+        </Button>
         </View>
       </Container>
     );
@@ -68,6 +71,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
+
   },
 });
 

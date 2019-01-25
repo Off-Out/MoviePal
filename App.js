@@ -12,9 +12,11 @@ import {
   MapScreen,
   ChatScreen,
   LoginScreen,
+  SignUpScreen,
   AuthLoadingScreen,
   SingleEvent,
 } from './src/screen/index';
+
 
 const TabNavigator = createBottomTabNavigator({
   Profile: ProfileScreen,
@@ -34,6 +36,7 @@ class TabComponents extends React.Component {
 
 const AuthStack = createStackNavigator({
   LoginScreen: { screen: LoginScreen },
+  SignUpScreen: { screen: SignUpScreen }
 }, {initialRouteName: "LoginScreen"});
 
 const AppContainer = createAppContainer(

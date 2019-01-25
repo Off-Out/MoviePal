@@ -4,6 +4,6 @@
  * having to figure out which file they belong to!
  */
 
-export { default as SignUpSection } from './SignUpSection';
+
 export { default as LoginForm } from './LoginForm';
 export { default as EventCard } from './Card';
