@@ -18,7 +18,7 @@ class SignUpSection extends Component {
         </Button>
         <Button
           block
-          style={styles.mb15}
+          style={styles.mb17}
           onPress={() =>
             createUserAccount(credential.email, credential.password)
           }

@@ -42,6 +42,7 @@ export default class MapScreen extends Component {
     //     return sub;
     //   });
     // });
+    console.log("mapScreen", this.props.screenProps)
     return (
       <View styles={styles.container}>
         {events.map(event => {
