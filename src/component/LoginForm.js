@@ -1,33 +1,45 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Form, Item, Input } from 'native-base';
+import { Form, Item, Input, Button, Text } from 'native-base';
 
 class LoginForm extends Component {
   render() {
+    const {handleUserInput, login, credential} = this.props
     return (
       <View style={styles.container}>
         <Form>
-          <Item regular style={styles.input}>
+          <Item regular style={styles.item}>
             <Input
-              placeholder="please@please.com"
+              style={styles.input}
+              placeholder="EMAIL-ADDRESS"
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
-                this.props.handleUserInput('email', text);
+                handleUserInput('email', text);
               }}
             />
           </Item>
-          <Item regular style={styles.input}>
+          <Item regular style={styles.item}>
             <Input
-              placeholder="please123"
+              style={styles.input}
+              placeholder="PASSWORD"
               autoCapitalize={'none'}
               autoCorrect={false}
               secureTextEntry={true}
               onChangeText={text => {
-                this.props.handleUserInput('password', text);
+                handleUserInput('password', text);
               }}
             />
           </Item>
+          <Button
+          block
+          danger
+          onPress={() => {
+            login(credential.email, credential.password);
+          }}
+        >
+          <Text>LOGIN</Text>
+        </Button>
         </Form>
       </View>
     );
@@ -35,7 +47,8 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 10, top: 30 },
-  input: { margin: 5 },
+  container: { flex: 1, margin: 13,},
+  item: { margin: 5 },
+  input: { fontSize: 13, color: "lightgrey"}
 });
 export default LoginForm;
