@@ -9,7 +9,7 @@ class LoginForm extends Component {
         <Form>
           <Item regular style={styles.input}>
             <Input
-              placeholder="Username"
+              placeholder="please@please.com"
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
@@ -19,7 +19,7 @@ class LoginForm extends Component {
           </Item>
           <Item regular style={styles.input}>
             <Input
-              placeholder="Password"
+              placeholder="please123"
               autoCapitalize={'none'}
               autoCorrect={false}
               secureTextEntry={true}
