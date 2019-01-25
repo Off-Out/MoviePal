@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, AsyncStorage } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
-import firebase from '../firebase';
+import {auth, database} from '../firebase';
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -15,9 +15,15 @@ export default class ProfileScreen extends Component {
   }
 
   async componentDidMount() {
-    const { navigation } = this.props;
-    console.log(navigation, 'navigation');
-    console.log(navigation.getParam('userId'));
+    console.log("????", this.props.screenProps)
+    // const { getParam } = this.props.navigation;
+    // let user = '';
+    // await database.ref(`/users/${getParam('userId')}`).on('value', (snapshot) => {
+    //   user = snapshot.val()
+    // });
+    // this.setState({
+    //   email: user.email
+    // })
   }
 
   handleName = text => this.setState({ name: text });
@@ -68,13 +74,12 @@ export default class ProfileScreen extends Component {
           danger
           style={styles.button}
           onPress={() =>
-            firebase
-              .auth()
+            auth
               .signOut()
-              .then(() => {
+              .finally(() => { 
                 console.log('Sign Out!');
                 this.props.navigation.navigate('Auth');
-              })
+              }).catch(error => Alert.alert(error.message))
           }
         >
           <Text>LOG OUT</Text>
