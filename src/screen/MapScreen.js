@@ -11,6 +11,7 @@ export default class MapScreen extends Component {
 
   render() {
 
+
     return (
       <View style={styles.container}>
      <MapView

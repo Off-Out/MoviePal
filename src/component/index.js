@@ -6,3 +6,4 @@
 
 export { default as SignUpSection } from './SignUpSection';
 export { default as LoginForm } from './LoginForm';
+export { default as EventCard } from './Card';

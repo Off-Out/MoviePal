@@ -13,6 +13,7 @@ import {
   ChatScreen,
   LoginScreen,
   AuthLoadingScreen,
+  SingleEvent,
 } from './src/screen/index';
 
 const TabNavigator = createBottomTabNavigator({
@@ -22,19 +23,31 @@ const TabNavigator = createBottomTabNavigator({
   Chat: ChatScreen,
 });
 
+class TabComponents extends React.Component {
+  static router = TabNavigator.router
+  render() {
+    return (
+      <TabNavigator navigation={this.props.navigation} screenProps={this.props.navigation.getParam("userId")} />
+    )
+  }
+}
+
 const AuthStack = createStackNavigator({
   LoginScreen: { screen: LoginScreen },
-});
+}, {initialRouteName: "LoginScreen"});
 
-export default createAppContainer(
+const AppContainer = createAppContainer(
   createSwitchNavigator(
     {
       Auth: AuthStack,
       AuthLoading: AuthLoadingScreen,
-      App: TabNavigator,
-      // Home: ProfileScreen,
-      // App: props => <TabNavigator screenProps={ props.navigation.getParam("userId")}/>
+      App: TabComponents,
     }
-    // {initialRouteName: 'Auth'}
   )
 );
+
+export default class Application extends React.Component {
+  render() {
+    return <AppContainer />
+  }
+}
