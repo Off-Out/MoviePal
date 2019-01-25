@@ -48,6 +48,7 @@ class LoginScreen extends Component {
             createUserAccount={this.createUserAccount}
             login={this.login}
             credential={this.state}
+            placeholder={this.state.email}
           />
         </View>
       </Container>
