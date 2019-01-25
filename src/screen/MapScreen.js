@@ -1,61 +1,67 @@
 import React, { Component } from 'react';
-import { Picker, StyleSheet, View, Button } from 'react-native';
+import {StyleSheet, View, Text } from 'react-native';
+import MapView , { PROVIDER_GOOGLE } from 'react-native-maps';
 
-let events = [
-  {
-    name: 'Sport & Outdoor',
-    subcategories: ['Hiking', 'Gym', 'Picnic', 'Boxing'],
-  },
-  { name: 'Shopping', subcategories: ['Local Market', 'Outlet'] },
-  { name: 'Arts & Crafts', subcategories: ['Paint', 'Sewing', 'Poetry'] },
-  { name: 'Fitness & Wellness', subcategories: ['Yoga', 'Meditation'] },
-  { name: 'Foodventure', subcategories: ['Thai', 'Mediterranean'] },
-  { name: 'Local Discoveries', subcategories: ['Walking Tour', 'Museums'] },
-  { name: 'Entertainment', subcategories: ['Movie', 'Coffee', 'Theater'] },
-  { name: 'Create your own', subcategories: ['It is all up to you!'] },
-];
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    margin: 30,
-  },
-});
+    const dummyPlace =[{name:'My Thai', category: 'Restaurants' , latitude:41.8758 , longitude: -87.6189 },
+{name:'My Yoga', category: 'Activities' , latitude:41.8836 , longitude:-87.6163 },
+{name:'Aquarium', category: 'Sport' , latitude:41.8776 , longitude:-87.6140 },
+{name:'Market', category: 'Art' , latitude:41.8923 , longitude:-87.6167 }]
 
 export default class MapScreen extends Component {
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     PickerSelectedVal: '';
-  //   }
-  // }
-  // getSelectedPickerValue = () => {
-  //   Alert.alert('I want to do this ' + this.state.PickerSelectedVal + ' today.')
-  // }
+
   render() {
-    // let category = events.map(item => {
-    //   return item.name;
-    // });
-    // let subcategory = events.map(item => {
-    //   return item.subcategories.map(sub => {
-    //     return sub;
-    //   });
-    // });
-    console.log("mapScreen", this.props.screenProps)
+
+
     return (
-      <View styles={styles.container}>
-        {events.map(event => {
-          return (
-            <Picker key={event.name} selectedValue={event.name}>
-              {event.subcategories.map(item => {
-                return <Picker.Item key={item} label={item} value={item} />;
-              })}
-            </Picker>
-          );
-        })}
-        <Button title="I want to do" onPress={this.category} />
+      <View style={styles.container}>
+     <MapView
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        region={{
+          latitude: 41.8781,
+          longitude: -87.6298,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+
+        }}
+      >
+
+      {/* <MapView.Marker coordinate={{
+          latitude: 41.8781,
+          longitude: -87.6298,}}
+          title={'Are you there'}
+          description={'Yes I am!!'}/> */}
+      {dummyPlace.map( place =>(
+        <MapView.Marker key={place.name} coordinate={{
+          latitude: place.latitude,
+          longitude: place.longitude
+        }}
+         title={place.category}
+          description={place.name}
+
+        />
+      ))}
+      </MapView>
       </View>
     );
   }
 }
+
+const styles= StyleSheet.create({
+  container:{
+    position: 'absolute',
+    top:0,
+    left:0,
+    bottom:0,
+    right:0,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  map:{
+    position: 'absolute',
+    top:0,
+    left:0,
+    bottom:0,
+    right:0,
+  }
+})
