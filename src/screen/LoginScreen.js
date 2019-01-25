@@ -31,47 +31,37 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <Container style={styles.container}>
-        <View style={styles.image}>
-          <Image source={require('../image/epLogo.png')} />
-        </View>
-        <View style={styles.formContainer}>
-          <LoginForm handleUserInput={this.handleUserInput} login={this.login} credential={this.state}/>
-          {/* <SignUpSection
-            createUserAccount={this.createUserAccount}
-            login={this.login}
-            credential={this.state}
-            placeholder={this.state.email}
-          /> */}
+      <View style={styles.container}>
+        <Image style={styles.image} source={require('../image/epLogo.png')} />
+        <LoginForm handleUserInput={this.handleUserInput} login={this.login} credential={this.state}/>
         <Button
           transparent
           danger
           onPress={() =>
-            // console.log("hellos");
             this.props.navigation.navigate("SignUpScreen")
           }
         >
-          <Text style={styles.text}>CREATE ACCOUNT</Text>
+          <Text>CREATE ACCOUNT</Text>
         </Button>
-        </View>
-      </Container>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 3,
+    justifyContent: "center"
+  },
+  loginContainer: {
     flex: 1,
+    margin: 13,
+    top: 30
   },
   image: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
     marginTop: 50,
-  },
-  formContainer: {
-    flex: 1,
-
   },
 });
 

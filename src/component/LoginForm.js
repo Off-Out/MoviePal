@@ -8,9 +8,10 @@ class LoginForm extends Component {
     return (
       <View style={styles.container}>
         <Form>
-          <Item regular style={styles.input}>
+          <Item regular style={styles.item}>
             <Input
-              placeholder="please@please.com"
+              style={styles.input}
+              placeholder="EMAIL-ADDRESS"
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
@@ -18,9 +19,10 @@ class LoginForm extends Component {
               }}
             />
           </Item>
-          <Item regular style={styles.input}>
+          <Item regular style={styles.item}>
             <Input
-              placeholder="please123"
+              style={styles.input}
+              placeholder="PASSWORD"
               autoCapitalize={'none'}
               autoCorrect={false}
               secureTextEntry={true}
@@ -32,7 +34,6 @@ class LoginForm extends Component {
           <Button
           block
           danger
-          style={styles.mb15}
           onPress={() => {
             login(credential.email, credential.password);
           }}
@@ -46,7 +47,8 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 10, top: 30 },
-  input: { margin: 5 },
+  container: { flex: 1, margin: 13,},
+  item: { margin: 5 },
+  input: { fontSize: 13, color: "lightgrey"}
 });
 export default LoginForm;

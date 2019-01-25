@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Image, StyleSheet, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import {auth, database} from '../firebase'
 
@@ -38,8 +38,10 @@ class SignUpScreen extends Component {
     const {name, email, location, password} = this.state
     return (
       <View style={styles.container}>
-        <Form>
-          <Item floatingLabel >
+        <Image style={styles.image} source={require('../image/epLogo.png')} />
+        <Text style={styles.header}> WELCOME PAL! </Text>
+        <Form style={styles.form}>
+          <Item floatingLabel style={styles.item} >
           <Label style={styles.label}>NAME</Label>
             <Input
             style={styles.input}
@@ -50,7 +52,7 @@ class SignUpScreen extends Component {
               }}
             />
           </Item>
-          <Item floatingLabel >
+          <Item floatingLabel style={styles.item}  >
           <Label style={styles.label}>ZIPCODE</Label>
             <Input
             style={styles.input}
@@ -61,7 +63,7 @@ class SignUpScreen extends Component {
               }}
             />
           </Item>
-          <Item floatingLabel >
+          <Item floatingLabel style={styles.item}  >
           <Label style={styles.label}>E-MAIL ADDRESS</Label>
             <Input
             style={styles.input}
@@ -72,7 +74,7 @@ class SignUpScreen extends Component {
               }}
             />
           </Item>
-          <Item floatingLabel >
+          <Item floatingLabel style={styles.item} >
           <Label style={styles.label}>CREATE PASSWORD</Label>
             <Input
             style={styles.input}
@@ -85,15 +87,13 @@ class SignUpScreen extends Component {
             />
           </Item>
           <Button
-          block
-          transparent
-          primary
-          style={styles.mb17}
+          outline danger
+          style={styles.createBtn}
           onPress={() =>
             this.createUserAccount(this.state.email, this.state.password)
           }
         >
-          <Text style={styles.text}>CREATE ACCOUNT</Text>
+          <Text>Join EventPal</Text>
         </Button>
         </Form>
       </View>
@@ -102,20 +102,46 @@ class SignUpScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 10, top: 30 },
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: 40
+  },
+  item: {
+    borderColor: "transparent",
+  },
+  form: {
+    alignSelf: "stretch",
+    margin: 25
+  },
   input: {
     fontSize: 17,
     marginRight: 25,
-    paddingTop: 13,
     marginBottom: 10,
-    // borderColor: 'indianred',
-    // borderBottomWidth: 0.5,
+    borderColor: 'indianred',
+    borderBottomWidth: 0.5,
   },
   label: {
     // marginLeft: 13,
     fontSize: 12,
     marginRight: 10,
   },
+  createBtn: {
+    fontSize: 15,
+    marginTop: 40,
+    alignSelf: "center"
+  },
+  header: {
+    fontWeight: "bold",
+    alignSelf: "center",
+    fontSize: 20,
+    marginTop: 30,
+  },
+  image: {
+    maxHeight: 50,
+    maxWidth: 50,
+  }
 });
 
 export default SignUpScreen;
