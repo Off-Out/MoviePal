@@ -4,13 +4,13 @@ import { Button, Card, Title, Paragraph } from 'react-native-paper';
 const EventCard = () => (
   <Card>
     <Card.Content>
-      <Title>EVENT</Title>
-      <Paragraph>EVENT DETAILS</Paragraph>
+      <Title>EVENT/USER</Title>
+      <Paragraph>EVENT DETAILS/USER DETAILS</Paragraph>
     </Card.Content>
     <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
     <Card.Actions>
-      <Button>Cancel</Button>
-      <Button>Ok</Button>
+      <Button>Add to Calendar</Button>
+      <Button>Back to Map</Button>
     </Card.Actions>
   </Card>
 );

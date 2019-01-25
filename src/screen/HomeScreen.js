@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Alert, Picker } from 'react-native';
-import { Divider, Text, Title, Button } from 'react-native-paper';
+import {
+  Divider,
+  Text,
+  Title,
+  Button,
+  Card,
+  Paragraph,
+} from 'react-native-paper';
+import { EventCard } from '../component';
 
 const dummyDataCategory = [
   { category: 'Entertainment', id: 1 },
@@ -33,58 +41,92 @@ export default class HomeScreen extends Component {
     this.handlePress = this.handlePress.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState({ location: position });
+      },
+      error => Alert.alert(error),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+    console.log(this.state);
+  }
   handlePress() {
-    Alert.alert('COOL THINGS HAPPENING HERE!');
+    const userFilters = Object.keys(this.state).filter(
+      field => this.state[field]
+    );
+    if (userFilters.length) {
+      //BE SMARTER AND DONT USE THIS JUST A PLACEHOLDER
+      console.log('USER SET FILTERS, SUPER!');
+    } else {
+      Alert.alert('Hey!', 'please select all fields before submitting!', {
+        cancelable: false,
+      });
+    }
   }
   handleChange(itemValue, label, whatElse) {
     this.setState({ [whatElse]: itemValue });
     //thunk action here to add to db
   }
   render() {
+    console.log(this.state);
     return (
       <View styles={styles.container}>
-        <View>
-          <View styles={styles.titleView}>
-            <Title styles={{ textAlign: 'center' }}>Hello World</Title>
-          </View>
+        <EventCard />
 
-          <Picker
-            selectedValue={this.state.category}
-            onValueChange={(itemValue, label) =>
-              this.handleChange(itemValue, label, 'category')
-            }
-          >
-            {dummyDataCategory.map(event => (
-              <Picker.Item
-                key={event.id}
-                label={event.category}
-                value={event.category}
-              />
-            ))}
-          </Picker>
-          <Picker
-            selectedValue={this.state.time}
-            onValueChange={(itemValue, label) =>
-              this.handleChange(itemValue, label, 'time')
-            }
-            value="time"
-          >
-            {dummyDataTime.map(opt => (
-              <Picker.Item key={opt.id} label={opt.time} value={opt.time} />
-            ))}
-          </Picker>
+        <Picker
+          itemStyle={{ height: 120 }}
+          styles={styles.picker}
+          selectedValue={this.state.category}
+          onValueChange={(itemValue, label) =>
+            this.handleChange(itemValue, label, 'category')
+          }
+        >
+          <Picker.Item
+            key="unselectable"
+            styles={styles.pickerItem}
+            label="category"
+            value={null}
+          />
+          {dummyDataCategory.map(event => (
+            <Picker.Item
+              key={event.id}
+              label={event.category}
+              value={event.category}
+            />
+          ))}
+        </Picker>
+        <Picker
+          itemStyle={{ height: 120 }}
+          styles={styles.picker}
+          selectedValue={this.state.time}
+          onValueChange={(itemValue, label) =>
+            this.handleChange(itemValue, label, 'time')
+          }
+          value="time"
+        >
+          <Picker.Item key="unselectable" label="time" value={null} />
+          {dummyDataTime.map(opt => (
+            <Picker.Item key={opt.id} label={opt.time} value={opt.time} />
+          ))}
+        </Picker>
 
-          <Picker
-            selectedValue={this.state.location}
-            onValueChange={(itemValue, label) =>
-              this.handleChange(itemValue, label, 'location')
-            }
-          >
-            <Picker.Item label="CURRENT LOCATION" value="location" />
-          </Picker>
-        </View>
-
-        <Button onPress={this.handlePress} title="events" />
+        <Picker
+          itemStyle={{ height: 120 }}
+          styles={styles.picker}
+          selectedValue={this.state.location}
+          onValueChange={(itemValue, label) =>
+            this.handleChange(itemValue, label, 'location')
+          }
+        >
+          <Picker.Item
+            label="CURRENT LOCATION"
+            value={this.state.geoLocation}
+          />
+        </Picker>
+        <Button mode="contained" onPress={this.handlePress}>
+          submit
+        </Button>
       </View>
     );
   }
@@ -96,16 +138,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'steelblue',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: 60,
   },
-
-  titleView: {
-    marginTop: 100,
-  },
-  title: {
-    fontFamily: 'System',
-    fontSize: 40,
-    textAlign: 'center',
-    color: '#2F4E6F',
-    fontWeight: '500',
+  picker: {
+    flex: 2,
   },
 });
