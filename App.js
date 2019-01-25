@@ -13,6 +13,7 @@ import {
   ChatScreen,
   LoginScreen,
   AuthLoadingScreen,
+  SingleEvent,
 } from './src/screen/index';
 
 const TabNavigator = createBottomTabNavigator({
