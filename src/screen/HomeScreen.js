@@ -10,11 +10,17 @@ import {
 } from 'react-native-paper';
 import { EventCard } from '../component';
 
-const dummyDataCategory = [
-  { category: 'Entertainment', id: 1 },
-  { category: 'Sports', id: 2 },
-  { category: 'Food', id: 3 },
-  { category: 'Bars/Night', id: 4 },
+const dummyDataGenre = [
+  { genre: 'Action/Adventure', id: 1 },
+  { genre: 'Art House', id: 2 },
+  { genre: 'Comedy', id: 3 },
+  { genre: 'Documentary', id: 4 },
+  { genre: 'Drama', id: 5 },
+  { genre: 'Family Friendly', id: 6 },
+  { genre: 'Horror', id: 7 },
+  { genre: 'Nostalgic', id: 8 },
+  { genre: 'Romance', id: 9 },
+  { genre: 'Rom-Com', id: 10 },
 ];
 const dummyDataTime = [
   { time: 'morning', id: 1 },
@@ -34,7 +40,7 @@ export default class HomeScreen extends Component {
   constructor() {
     super();
     this.state = {
-      category: '',
+      genre: '',
       time: '',
       location: '',
     };
@@ -77,22 +83,22 @@ export default class HomeScreen extends Component {
         <Picker
           itemStyle={{ height: 120 }}
           styles={styles.picker}
-          selectedValue={this.state.category}
+          selectedValue={this.state.genre}
           onValueChange={(itemValue, label) =>
-            this.handleChange(itemValue, label, 'category')
+            this.handleChange(itemValue, label, 'genre')
           }
         >
           <Picker.Item
             key="unselectable"
             styles={styles.pickerItem}
-            label="category"
+            label="genre"
             value={null}
           />
-          {dummyDataCategory.map(event => (
+          {dummyDataGenre.map(event => (
             <Picker.Item
               key={event.id}
-              label={event.category}
-              value={event.category}
+              label={event.genre}
+              value={event.genre}
             />
           ))}
         </Picker>
