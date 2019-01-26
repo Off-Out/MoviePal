@@ -33,5 +33,4 @@ const EventCard = () => (
     </Card.Actions>
   </Card>
 );
-
 export default EventCard;

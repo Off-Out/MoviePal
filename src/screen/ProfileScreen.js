@@ -15,15 +15,14 @@ export default class ProfileScreen extends Component {
   }
 
   async componentDidMount() {
-    console.log("????", this.props.screenProps)
-    // const { getParam } = this.props.navigation;
-    // let user = '';
-    // await database.ref(`/users/${getParam('userId')}`).on('value', (snapshot) => {
-    //   user = snapshot.val()
-    // });
-    // this.setState({
-    //   email: user.email
-    // })
+    const { getParam } = this.props.navigation;
+    let user = '';
+    await database.ref(`/users/${getParam('userId')}`).on('value', (snapshot) => {
+      user = snapshot.val()
+    });
+    this.setState({
+      email: user.email
+    })
   }
 
   handleName = text => this.setState({ name: text });
@@ -47,7 +46,7 @@ export default class ProfileScreen extends Component {
           />
         </Item>
         <Item stackedLabel style={styles.item}>
-          <Label style={styles.label}>EMAIL</Label>
+        <Label style={styles.label}>NAME</Label>
           <Input
             style={styles.input}
             keyboardType="email-address"

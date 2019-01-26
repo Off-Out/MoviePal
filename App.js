@@ -12,6 +12,7 @@ import {
   MapScreen,
   ChatScreen,
   LoginScreen,
+  SignUpScreen,
   AuthLoadingScreen,
   SingleEvent,
 } from './src/screen/index';
