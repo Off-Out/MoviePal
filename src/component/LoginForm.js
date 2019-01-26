@@ -47,7 +47,7 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 13,},
+  container: { flex: 1, margin:13 },
   item: { margin: 5 },
   input: { fontSize: 14 }
 });

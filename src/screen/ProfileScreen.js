@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import {auth, database} from '../firebase';
+import PasswordInputText from 'react-native-hide-show-password-input'
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -11,6 +12,7 @@ export default class ProfileScreen extends Component {
       name: '',
       email: '',
       location: '',
+      password: ''
     };
   }
 
@@ -24,7 +26,6 @@ export default class ProfileScreen extends Component {
         name: user.name,
         email: user.email,
         location: user.location,
-        password: ''
       })
     })
   }
@@ -44,12 +45,14 @@ export default class ProfileScreen extends Component {
 
   save = async (userId) => {
     let userRef = await database.ref('users').child(`${userId}`);
-    userRef.update({
-      "name": this.state.name,
-      "email": this.state.email,
-      "location": this.state.location
-    }).then(() => Alert.alert('Saved!'))
-    .catch(error => Alert.alert(error.message))
+      userRef.update({
+        "name": this.state.name,
+        "email": this.state.email,
+        "location": this.state.location
+      }).then(() => {
+        if (this.state.password) auth.currentUser.updatePassword(this.state.password)
+      }).then(() => Alert.alert('Saved!'))
+      .catch(error => Alert.alert(error.message))
   }
 
   render() {
@@ -89,16 +92,13 @@ export default class ProfileScreen extends Component {
             onChangeText={text => this.handleInput('location', text)}
           />
         </Item>
-        <Item stackedLabel style={styles.item}>
-          <Label style={styles.label}>CHANGE PASSWORD</Label>
-        <Input
-            style={styles.input}
-            secureTextEntry={true}
+        <PasswordInputText
+            style={styles.password}
+            // secureTextEntry={true}
             name="password"
             value={this.state.password}
             onChangeText={text => this.handleInput('password', text)}
           />
-        </Item>
         <Button transparent danger style={styles.button} onPress={()=> {
           console.log('save')
           this.save(userId)
@@ -127,7 +127,9 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   label: {
-    marginLeft: 13,
+    fontSize: 13,
+    marginLeft: 7,
+    marginBottom: 10,
   },
   image: {
     width: 150,
@@ -138,16 +140,16 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    marginLeft: 13,
+    marginLeft: 7,
     fontSize: 17,
-    marginRight: 25,
-    paddingTop: 13,
+    marginRight: 20,
+    paddingTop: 1,
     marginBottom: 10,
     borderColor: 'indianred',
     borderBottomWidth: 0.5,
   },
 
   button: {
-    margin: 13,
+    margin: 7,
   },
 });

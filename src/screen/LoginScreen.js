@@ -34,6 +34,7 @@ class LoginScreen extends Component {
       <View style={styles.container}>
         <Image style={styles.image} source={require('../image/epLogo.png')} />
         <LoginForm handleUserInput={this.handleUserInput} login={this.login} credential={this.state}/>
+        <View style={styles.button}>
         <Button
           transparent
           danger
@@ -41,8 +42,24 @@ class LoginScreen extends Component {
             this.props.navigation.navigate("SignUpScreen")
           }
         >
-          <Text>CREATE ACCOUNT</Text>
+          <Text style={{fontSize: 15}}>CREATE ACCOUNT</Text>
         </Button>
+        <Button
+          transparent
+          danger
+          onPress={() => {
+            if (!this.state.email) {
+              Alert.alert('Please enter your email')
+            }
+            else  {
+              auth.sendPasswordResetEmail(this.state.email)
+              .then(() => Alert.alert('Reset Password Email Sent!'))
+            }
+          }}
+        >
+          <Text style={{fontSize: 15}}>FORGOT PASSWORD?</Text>
+        </Button>
+        </View>
       </View>
     );
   }
@@ -50,19 +67,19 @@ class LoginScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
-    justifyContent: "center"
-  },
-  loginContainer: {
     flex: 1,
-    margin: 13,
-    top: 30
+    justifyContent: "flex-start"
   },
   image: {
-    flex: 1,
     alignSelf: 'center',
     marginTop: 50,
   },
+  button: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignSelf: "center",
+    fontSize: 15,
+  }
 });
 
 export default LoginScreen;
