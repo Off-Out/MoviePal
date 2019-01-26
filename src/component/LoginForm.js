@@ -4,7 +4,7 @@ import { Form, Item, Input, Button, Text } from 'native-base';
 
 class LoginForm extends Component {
   render() {
-    const {handleUserInput, login, credential} = this.props
+    const { handleUserInput, login, credential } = this.props;
     return (
       <View style={styles.container}>
         <Form>
@@ -32,14 +32,14 @@ class LoginForm extends Component {
             />
           </Item>
           <Button
-          block
-          danger
-          onPress={() => {
-            login(credential.email, credential.password);
-          }}
-        >
-          <Text>LOGIN</Text>
-        </Button>
+            block
+            danger
+            onPress={() => {
+              login(credential.email, credential.password);
+            }}
+          >
+            <Text>LOGIN</Text>
+          </Button>
         </Form>
       </View>
     );
@@ -47,8 +47,8 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 13,},
+  container: { flex: 1, margin: 13 },
   item: { margin: 5 },
-  input: { fontSize: 13, color: "lightgrey"}
+  input: { fontSize: 13, color: 'lightgrey' },
 });
 export default LoginForm;
