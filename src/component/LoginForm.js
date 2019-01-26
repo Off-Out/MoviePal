@@ -11,7 +11,7 @@ class LoginForm extends Component {
           <Item regular style={styles.item}>
             <Input
               style={styles.input}
-              placeholder="EMAIL-ADDRESS"
+              placeholder="EMAIL"
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
@@ -49,6 +49,6 @@ class LoginForm extends Component {
 const styles = StyleSheet.create({
   container: { flex: 1, margin: 13,},
   item: { margin: 5 },
-  input: { fontSize: 13, color: "lightgrey"}
+  input: { fontSize: 14 }
 });
 export default LoginForm;

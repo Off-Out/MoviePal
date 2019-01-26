@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import {auth, database} from '../firebase';
 
@@ -8,28 +8,52 @@ export default class ProfileScreen extends Component {
     super();
 
     this.state = {
-      name: 'EventPal',
-      email: 'eventPal@gmail.com',
-      location: '60605',
+      name: '',
+      email: '',
+      location: '',
     };
   }
 
   async componentDidMount() {
-    const { getParam } = this.props.navigation;
+    const userId = this.props.screenProps;
+    console.log(this.props.screenProps, "screenProps")
     let user = '';
-    await database.ref(`/users/${getParam('userId')}`).on('value', (snapshot) => {
-      user = snapshot.val()
-    });
-    this.setState({
-      email: user.email
+    await database.ref(`/users/${userId}`).on('value', (snapshot) => {
+      user = snapshot.val();
+      this.setState({
+        name: user.name,
+        email: user.email,
+        location: user.location,
+        password: ''
+      })
     })
   }
 
-  handleName = text => this.setState({ name: text });
-  handleEmail = text => this.setState({ email: text });
-  handleLocation = text => this.setState({ location: text });
+  handleInput = (stateField, text) => {
+    this.setState({ [stateField]: text })
+  }
+
+  logout = () => {
+    auth
+    .signOut()
+    .finally(() => { 
+      console.log('Sign Out!');
+      this.props.navigation.navigate('Auth');
+    }).catch(error => Alert.alert(error.message))
+  }
+
+  save = async (userId) => {
+    let userRef = await database.ref('users').child(`${userId}`);
+    userRef.update({
+      "name": this.state.name,
+      "email": this.state.email,
+      "location": this.state.location
+    }).then(() => Alert.alert('Saved!'))
+    .catch(error => Alert.alert(error.message))
+  }
 
   render() {
+    const userId = this.props.screenProps;
     return (
       <Form style={styles.form}>
         <Image
@@ -42,17 +66,17 @@ export default class ProfileScreen extends Component {
             style={styles.input}
             name="name"
             value={this.state.name}
-            onChangeText={this.handleName}
+            onChangeText={text => this.handleInput('name', text)}
           />
         </Item>
         <Item stackedLabel style={styles.item}>
-        <Label style={styles.label}>NAME</Label>
+        <Label style={styles.label}>EMAIL</Label>
           <Input
             style={styles.input}
             keyboardType="email-address"
             name="email"
             value={this.state.email}
-            onChangeText={this.handleEmail}
+            onChangeText={text => this.handleInput('email', text)}
           />
         </Item>
         <Item stackedLabel style={styles.item}>
@@ -60,26 +84,32 @@ export default class ProfileScreen extends Component {
           <Input
             style={styles.input}
             keyboardType={'numeric'}
-            style={styles.input}
             name="location"
             value={this.state.location}
+            onChangeText={text => this.handleInput('location', text)}
           />
         </Item>
-        <Button transparent danger style={styles.button}>
+        <Item stackedLabel style={styles.item}>
+          <Label style={styles.label}>CHANGE PASSWORD</Label>
+        <Input
+            style={styles.input}
+            secureTextEntry={true}
+            name="password"
+            value={this.state.password}
+            onChangeText={text => this.handleInput('password', text)}
+          />
+        </Item>
+        <Button transparent danger style={styles.button} onPress={()=> {
+          console.log('save')
+          this.save(userId)
+        }}>
           <Text>SAVE</Text>
         </Button>
         <Button
           transparent
           danger
           style={styles.button}
-          onPress={() =>
-            auth
-              .signOut()
-              .finally(() => { 
-                console.log('Sign Out!');
-                this.props.navigation.navigate('Auth');
-              }).catch(error => Alert.alert(error.message))
-          }
+          onPress={() => this.logout()}
         >
           <Text>LOG OUT</Text>
         </Button>
