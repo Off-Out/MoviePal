@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
+import * as Expo from 'expo';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
-import {auth, database} from '../firebase'
+import { auth, database } from '../firebase'
 
 class SignUpScreen extends Component {
   constructor() {
@@ -11,6 +12,7 @@ class SignUpScreen extends Component {
       location: '',
       email: '',
       password: '',
+      photoUrl: '',
     };
   }
 
@@ -33,6 +35,33 @@ class SignUpScreen extends Component {
       })
       .catch(error => Alert.alert(error.message));
   };
+
+  signIn = async () => {
+    try {
+      await Expo.Google.logInAsync({
+        androidClientId: "963629551224-0iocmkcve8i96rbg244m91mj5tvmflto.apps.googleusercontent.com",
+        iosClientId: "963629551224-c9ul63cjjnsmmm7hsbp24svrrrj0r2b1.apps.googleusercontent.com",
+        scopes: ["profile", "email"]
+      })
+      .then(result => {
+        const {user} = result;
+        // const uid = user.id;
+        console.log(result, "<<<result")
+        return result.accessToken
+        database.ref(`users/${uid}`).set({
+          name: user.name,
+          email: user.email,
+          image: user.photoUrl,
+        })
+        .then(() => this.props.navigation.navigate('App'
+        // , {userId: user.uid}
+        )
+        )
+      })
+    } catch (e) {
+      console.log("error", e)
+    }
+  }
 
   render() {
     const {name, email, location, password} = this.state
@@ -94,6 +123,13 @@ class SignUpScreen extends Component {
           }
         >
           <Text>Join EventPal</Text>
+        </Button>
+        <Button
+          danger
+          style={styles.createBtn}
+          onPress={() => this.signIn()}
+        >
+          <Text>Signin With Google</Text>
         </Button>
         </Form>
       </View>

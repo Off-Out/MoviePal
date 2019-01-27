@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, View, Text } from 'react-native';
-import MapView , { PROVIDER_GOOGLE } from 'react-native-maps';
+// import MapView , { PROVIDER_GOOGLE } from 'react-native-maps';
 
     const dummyPlace =[{name:'My Thai', category: 'Restaurants' , latitude:41.8758 , longitude: -87.6189 },
 {name:'My Yoga', category: 'Activities' , latitude:41.8836 , longitude:-87.6163 },
@@ -14,7 +14,7 @@ export default class MapScreen extends Component {
 
     return (
       <View style={styles.container}>
-     <MapView
+     {/* <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={{
@@ -24,24 +24,24 @@ export default class MapScreen extends Component {
           longitudeDelta: 0.0421
 
         }}
-      >
+      > */}
 
       {/* <MapView.Marker coordinate={{
           latitude: 41.8781,
           longitude: -87.6298,}}
           title={'Are you there'}
-          description={'Yes I am!!'}/> */}
-      {dummyPlace.map( place =>(
-        <MapView.Marker key={place.name} coordinate={{
-          latitude: place.latitude,
-          longitude: place.longitude
-        }}
-         title={place.category}
-          description={place.name}
+      //     description={'Yes I am!!'}/> */}
+      {/* // {dummyPlace.map( place =>( */}
+      {/* //   <MapView.Marker key={place.name} coordinate={{ */}
+      {/* //     latitude: place.latitude,
+      //     longitude: place.longitude
+      //   }}
+      //    title={place.category}
+      //     description={place.name}
 
-        />
-      ))}
-      </MapView>
+      //   />
+      // ))}
+      // </MapView> */}
       </View>
     );
   }

@@ -50,7 +50,9 @@ export default class ProfileScreen extends Component {
         "email": this.state.email,
         "location": this.state.location
       }).then(() => {
-        if (this.state.password) auth.currentUser.updatePassword(this.state.password)
+        if (this.state.email) auth.currentUser.updateEmail(this.state.email)
+        else if (this.state.password) auth.currentUser.updateProfile(this.state.password);
+        this.setState({password: ''})
       }).then(() => Alert.alert('Saved!'))
       .catch(error => Alert.alert(error.message))
   }
