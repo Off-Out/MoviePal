@@ -7,3 +7,4 @@
 
 export { default as LoginForm } from './LoginForm';
 export { default as EventCard } from './Card';
+export {default as Map} from './Map';
