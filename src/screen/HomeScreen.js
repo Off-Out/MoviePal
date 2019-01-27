@@ -144,9 +144,9 @@ export default class HomeScreen extends Component {
         <View style={{ flex: 1 }}>
           <EventCard state={this.state} />
         </View>
-        <View style={{ flex: 12, margin: 30 }}>
+        <View style={styles.pickerContainer}>
           <Picker
-            style={{ margin: 10, height: 130 }}
+            style={styles.pickerItem}
             selectedValue={this.state.genre}
             onValueChange={(itemValue, label, genrePoster) =>
               this.handleChange(itemValue, label, 'genre', genrePoster)
@@ -163,7 +163,7 @@ export default class HomeScreen extends Component {
             ))}
           </Picker>
           <Picker
-            style={{ margin: 10, height: 130 }}
+            style={styles.pickerItem}
             selectedValue={this.state.time}
             onValueChange={(itemValue, label) =>
               this.handleChange(itemValue, label, 'time')
@@ -177,7 +177,7 @@ export default class HomeScreen extends Component {
           </Picker>
 
           <Picker
-            style={{ margin: 10, height: 130 }}
+            style={styles.pickerItem}
             selectedValue={this.state.location}
             onValueChange={(itemValue, label) =>
               this.handleChange(itemValue, label, 'location')
@@ -204,12 +204,17 @@ export default class HomeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    /* backgroundColor: 'transparent', */
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: 60,
   },
-  picker: {
-    flex: 2,
+  pickerContainer: {
+    flex: 12,
+    margin: 30,
+  },
+  pickerItem: {
+    margin: 10,
+    height: 130,
   },
 });

@@ -7,15 +7,22 @@ class EventCard extends React.Component {
     return prevProps.state.genre !== this.props.state.genre;
   }
   render() {
-    console.log('RENDER', this.props);
     if (this.props.image) {
       return <Text>...Loading</Text>;
     } else {
       return (
-        <Card sytle={{ alignItems: 'stretch' }}>
-          <View style={{ flexDirection: 'row' }}>
+        <Card
+          style={{ alignItems: 'stretch', backgroundColor: 'white' }}
+          elevation={4}
+        >
+          <View style={{ flexDirection: 'row', backgroundColor: 'white' }}>
             <Card.Content style={{ marginTop: 25 }}>
-              <Title>Today's Movie</Title>
+              {this.props.state.movie ? (
+                <Title>{this.props.state.movie}</Title>
+              ) : (
+                <Title>{this.props.state.user}</Title>
+              )}
+
               <Paragraph>USER/EVENT</Paragraph>
             </Card.Content>
             <Card.Cover
@@ -25,11 +32,12 @@ class EventCard extends React.Component {
                 marginBottom: 10,
                 width: 100,
                 height: 100,
+                backgroundColor: 'pink',
               }}
               source={{ uri: this.props.state.image }}
             />
           </View>
-          {this.props.user ? null : (
+          {this.props.state.user ? null : (
             <Card.Actions>
               <Button
                 onPress={() =>

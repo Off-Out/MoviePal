@@ -10,12 +10,12 @@ import {
 } from 'react-native-paper';
 import { EventCard } from '../component';
 
-const dummyDataCategory = [
-  { category: 'Entertainment', id: 1 },
-  { category: 'Sports', id: 2 },
-  { category: 'Food', id: 3 },
-  { category: 'Bars/Night', id: 4 },
-];
+const dummyDataGenre = {
+  genre: 'Horror',
+  id: 7,
+  genrePosterURI: 'https://picsum.photos/200/?',
+};
+
 const dummyDataTime = [
   { time: 'morning', id: 1 },
   { time: 'afternoon', id: 2 },
@@ -23,27 +23,84 @@ const dummyDataTime = [
   { time: 'after hours', id: 4 },
 ];
 
-const dummyDataLocation = [
-  {
-    defaultLocation: [-87.639035, 41.895266],
-    previousLocations: [],
-  },
-];
-
-const SingleEvent = () => {
-  return (
-    <View
-      styles={{
-        flexDirection: 'column',
-        flex: 1,
-        justifyContent: 'flex-bottom',
-        alignContent: 'center',
-      }}
-    >
-      <Title />
-      <EventCard styles={{ flex: 2 }} />
-    </View>
-  );
+const dummyUser = {
+  name: 'Cindy',
+  email: 'cindy@cindy.com',
+  id: 1,
 };
+const dummyTheater = {
+  theater: 'Logan Square Theater',
+  id: 1,
+  location: 'Logan Square, Chicago',
+};
+const dummyJoinTable = {
+  userId: 1,
+  genreId: 7,
+  timeId: 3,
+  theaterId: 1,
+};
+const dummyShowTimes = [{ time: `515` }, { time: '6:15' }, { time: `715` }];
+
+class SingleEvent extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      movie: '',
+      genre: '',
+      time: '',
+      location: '',
+      image: '',
+      showtime: '',
+    };
+    this.handlePress = this.handlePress.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      movie: 'Get Out',
+      genre: 'horror',
+      time: 'evening',
+      location: 'Logan Square',
+      image: 'https://picsum.photos/200/?random',
+      showtime: '',
+    });
+  }
+  handlePress(event, ind, label) {
+    console.log('EVENT HERE', label);
+  }
+  render() {
+    return (
+      <View
+        style={{
+          flexDirection: 'column',
+          flex: 1,
+          justifyContent: 'flex-bottom',
+          alignContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <View style={{ flex: 1, height: 160 }}>
+          <EventCard state={this.state} />
+        </View>
+        <Title style={{ marginTop: 20 }}>Show Times</Title>
+        <View style={{ flex: 2, flexDirection: 'row' }}>
+          {dummyShowTimes.map(movieTime => (
+            <Button
+              mode="outlined"
+              style={{ height: 40, margin: 10 }}
+              key={movieTime.time}
+              accessibilityLabel={movieTime.time}
+              onPress={(accessibilityLabel, key) =>
+                this.handlePress(accessibilityLabel, key, accessibilityLabel)
+              }
+            >
+              {movieTime.time}
+            </Button>
+          ))}
+        </View>
+      </View>
+    );
+  }
+}
 
 export default SingleEvent;
