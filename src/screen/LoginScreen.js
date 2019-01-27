@@ -11,7 +11,7 @@ class LoginScreen extends Component {
     super(props);
     this.state = {
       email: '',
-      password: '123456',
+      password: '',
     };
   }
 
@@ -29,12 +29,44 @@ class LoginScreen extends Component {
       .catch(error => Alert.alert(error.message));
   };
 
+  signInWithGoogle = async () => {
+    try {
+      await Expo.Google.logInAsync({
+        androidClientId: "963629551224-0iocmkcve8i96rbg244m91mj5tvmflto.apps.googleusercontent.com",
+        iosClientId: "963629551224-iivt1efj479sg2ucve5bjsdrm8ng3b75.apps.googleusercontent.com",
+        scopes: ["profile", "email"]
+      })
+      .then(result => {
+        const {user} = result;
+        console.log(result, "<<<result")
+        // return result.accessToken
+        // database.ref(`users/${uid}`).set({
+        //   name: user.name,
+        //   email: user.email,
+        //   image: user.photoUrl,
+        // })
+        // .then(() => this.props.navigation.navigate('App'
+        // // , {userId: user.uid}
+        // )
+        // )
+      })
+    } catch (e) {
+      console.log("error", e)
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Image style={styles.image} source={require('../image/epLogo.png')} />
         <LoginForm handleUserInput={this.handleUserInput} login={this.login} credential={this.state}/>
         <View style={styles.button}>
+        <Button
+          danger
+          onPress={() => this.signInWithGoogle()}
+        >
+          <Text>Signin With Google</Text>
+        </Button>
         <Button
           transparent
           danger
@@ -57,7 +89,7 @@ class LoginScreen extends Component {
             }
           }}
         >
-          <Text style={{fontSize: 15}}>FORGOT PASSWORD?</Text>
+          <Text style={{fontSize: 10}}>FORGOT PASSWORD?</Text>
         </Button>
         </View>
       </View>
@@ -73,6 +105,8 @@ const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
     marginTop: 50,
+    maxHeight: 30,
+    maxWidth: 30
   },
   button: {
     flex: 1,

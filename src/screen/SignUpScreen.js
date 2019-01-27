@@ -36,33 +36,6 @@ class SignUpScreen extends Component {
       .catch(error => Alert.alert(error.message));
   };
 
-  signIn = async () => {
-    try {
-      await Expo.Google.logInAsync({
-        androidClientId: "963629551224-0iocmkcve8i96rbg244m91mj5tvmflto.apps.googleusercontent.com",
-        iosClientId: "963629551224-c9ul63cjjnsmmm7hsbp24svrrrj0r2b1.apps.googleusercontent.com",
-        scopes: ["profile", "email"]
-      })
-      .then(result => {
-        const {user} = result;
-        // const uid = user.id;
-        console.log(result, "<<<result")
-        return result.accessToken
-        database.ref(`users/${uid}`).set({
-          name: user.name,
-          email: user.email,
-          image: user.photoUrl,
-        })
-        .then(() => this.props.navigation.navigate('App'
-        // , {userId: user.uid}
-        )
-        )
-      })
-    } catch (e) {
-      console.log("error", e)
-    }
-  }
-
   render() {
     const {name, email, location, password} = this.state
     return (
@@ -123,13 +96,6 @@ class SignUpScreen extends Component {
           }
         >
           <Text>Join EventPal</Text>
-        </Button>
-        <Button
-          danger
-          style={styles.createBtn}
-          onPress={() => this.signIn()}
-        >
-          <Text>Signin With Google</Text>
         </Button>
         </Form>
       </View>
