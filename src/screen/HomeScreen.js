@@ -10,6 +10,8 @@ import {
 } from 'react-native-paper';
 import { EventCard } from '../component';
 
+const HorrorPoster = 'poster';
+
 const dummyUser = {
   user: {
     id: 1,
@@ -49,7 +51,7 @@ const dummyDataGenre = [
   },
   {
     genre: 'Horror',
-    genrePosterURI: 'https://picsum.photos/200/?random',
+    genrePosterURI: '../image/Horror.png',
     id: 7,
   },
   {
@@ -90,7 +92,7 @@ export default class HomeScreen extends Component {
       genre: '',
       time: '',
       location: '',
-      image: '',
+      image: '../image/Horror.png',
     };
     this.handlePress = this.handlePress.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -103,10 +105,11 @@ export default class HomeScreen extends Component {
       error => Alert.alert(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
-    console.log(this.state);
+    console.log('STATE OF PARENT COMPONENT', this.state);
 
     //if user is logged in, add to props
   }
+
   handlePress() {
     const userFilters = Object.keys(this.state).filter(
       field => this.state[field]
@@ -122,20 +125,20 @@ export default class HomeScreen extends Component {
   }
   handleChange(itemValue, label, whatElse) {
     if (whatElse === 'genre') {
-      let genrePoster = dummyDataGenre.filter(movie => {
-        if (movie[whatElse] === itemValue) return movie.genrePosterURI;
-      })[0].genrePosterURI;
+      let genrePoster = dummyDataGenre.filter(movieGenre => {
+        if (movieGenre[whatElse] === itemValue)
+          return movieGenre.genrePosterURI;
+      });
       this.setState({
+        image: genrePoster[0].genrePosterURI,
         [whatElse]: itemValue,
-        image: genrePoster.genrePosterURI.genrePosterURI,
       });
     } else {
       this.setState({ [whatElse]: itemValue });
     }
-    //thunk action here to add to db
   }
   render() {
-    console.log(this.state);
+    console.log('rerendering!');
     return (
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
@@ -145,8 +148,8 @@ export default class HomeScreen extends Component {
           <Picker
             style={{ margin: 10, height: 130 }}
             selectedValue={this.state.genre}
-            onValueChange={(itemValue, label, genrePosterURI) =>
-              this.handleChange(itemValue, label, 'genre', this.genrePosterURI)
+            onValueChange={(itemValue, label, genrePoster) =>
+              this.handleChange(itemValue, label, 'genre', genrePoster)
             }
           >
             <Picker.Item key="unselectable" label="genre" value={null} />
@@ -155,6 +158,7 @@ export default class HomeScreen extends Component {
                 key={event.id}
                 label={event.genre}
                 value={event.genre}
+                genrePoster={HorrorPoster}
               />
             ))}
           </Picker>
