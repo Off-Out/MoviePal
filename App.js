@@ -39,9 +39,9 @@ class TabComponents extends React.Component {
 
 const AuthStack = createStackNavigator(
   {
-    LoginScreen: { screen: LoginScreen },
+    SingleEvent: { screen: SingleEvent },
   },
-  { initialRouteName: 'LoginScreen' }
+  { initialRouteName: 'SingleEvent' }
 );
 
 const AppContainer = createAppContainer(

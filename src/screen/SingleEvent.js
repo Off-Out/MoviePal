@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert, Picker } from 'react-native';
+import { StyleSheet, View, Alert, Picker, FlatList } from 'react-native';
 import {
   Divider,
   Text,
@@ -79,24 +79,30 @@ class SingleEvent extends React.Component {
           alignItems: 'center',
         }}
       >
-        <View style={{ flex: 1, height: 160 }}>
+        <View style={{ flex: 1 }}>
           <EventCard state={this.state} />
         </View>
         <Title style={{ marginTop: 20 }}>Show Times</Title>
-        <View style={{ flex: 2, flexDirection: 'row' }}>
-          {dummyShowTimes.map(movieTime => (
-            <Button
-              mode="outlined"
-              style={{ height: 40, margin: 10 }}
-              key={movieTime.time}
-              accessibilityLabel={movieTime.time}
-              onPress={(accessibilityLabel, key) =>
-                this.handlePress(accessibilityLabel, key, accessibilityLabel)
-              }
-            >
-              {movieTime.time}
-            </Button>
-          ))}
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <FlatList
+            data={[{ time: `515` }, { time: '6:15' }, { time: `715` }]}
+            renderItem={({ item }) => (
+              <Button
+                mode="outlined"
+                style={{ height: 40, width: 40, margin: 10, marginEnd: 10 }}
+                key={item.time}
+                accessibilityLabel={item.time}
+                onPress={(accessibilityLabel, key) =>
+                  this.handlePress(accessibilityLabel, key, accessibilityLabel)
+                }
+              >
+                {item.time}
+              </Button>
+            )}
+          />
+        </View>
+        <View style={{ flex: 1, height: 60 }}>
+          <Text style={{ margin: 10 }}>Select Tickets {`&`} Quantities</Text>
         </View>
       </View>
     );
