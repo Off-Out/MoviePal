@@ -11,7 +11,7 @@ class LoginForm extends Component {
           <Item regular style={styles.item}>
             <Input
               style={styles.input}
-              placeholder="EMAIL-ADDRESS"
+              placeholder="EMAIL"
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
@@ -40,6 +40,21 @@ class LoginForm extends Component {
         >
           <Text>LOGIN</Text>
         </Button>
+        <Button
+          transparent
+          danger
+          onPress={() => {
+            if (!this.state.email) {
+              Alert.alert('Please enter your email')
+            }
+            else  {
+              auth.sendPasswordResetEmail(this.state.email)
+              .then(() => Alert.alert('Reset Password Email Sent!'))
+            }
+          }}
+        >
+          <Text style={{fontSize: 13, alignSelf: "center"}}>FORGOT PASSWORD?</Text>
+        </Button>
         </Form>
       </View>
     );
@@ -47,8 +62,8 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 13,},
+  container: { margin:13 },
   item: { margin: 5 },
-  input: { fontSize: 13, color: "lightgrey"}
+  input: { fontSize: 14 }
 });
 export default LoginForm;
