@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
-import {auth, database} from '../firebase';
+import { auth, database } from '../firebase';
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -11,57 +11,79 @@ export default class ProfileScreen extends Component {
       name: '',
       email: '',
       location: '',
-      password: ''
+      password: '',
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const userId = this.props.screenProps;
     let user = '';
-    database.ref(`/users/${userId}`).on('value', (snapshot) => {
+    await database.ref(`/users/${userId}`).on('value', snapshot => {
       user = snapshot.val();
       this.setState({
         name: user.name,
         email: user.email,
         location: user.location,
-      })
-    })
+      });
+    });
   }
 
   handleInput = (stateField, text) => {
-    this.setState({ [stateField]: text })
-  }
+    this.setState({ [stateField]: text });
+  };
 
   logout = () => {
     auth
-    .signOut()
-    .finally(() => { 
-      console.log('Sign Out!');
-      this.props.navigation.navigate('Auth');
-    }).catch(error => Alert.alert(error.message))
-  }
-
-  save = async (userId) => {
-    let userRef = await database.ref('users').child(`${userId}`);
-      userRef.update({
-        "name": this.state.name,
-        "email": this.state.email,
-        "location": this.state.location
-      }).then(() => {
-        if (this.state.email) auth.currentUser.updateEmail(this.state.email)
-        if (this.state.password) auth.currentUser.updatePassword(this.state.password);
-      }).then(() => {
-        this.setState({password: ''});
-        Alert.alert('Saved!')
+      .signOut()
+      .finally(() => {
+        console.log('Sign Out!');
+        this.props.navigation.navigate('Auth');
       })
-      .catch(error => Alert.alert(error.message))
-  }
+      .catch(error => Alert.alert(error.message));
+  };
+
+  save = async userId => {
+    let userRef = await database.ref('users').child(`${userId}`);
+    userRef
+      .update({
+        name: this.state.name,
+        email: this.state.email,
+        location: this.state.location,
+      })
+      .then(() => {
+        if (this.state.email) auth.currentUser.updateEmail(this.state.email);
+        if (this.state.password)
+          auth.currentUser.updatePassword(this.state.password);
+      })
+      .then(() => {
+        this.setState({ password: '' });
+        Alert.alert('Saved!');
+      })
+      .catch(error => Alert.alert(error.message));
+  };
 
   render() {
     const currentUser = auth.currentUser;
-    const isProvider = currentUser.providerData[0].providerId !== "password"
-    const display = isProvider? "none" : "flex";
+    const isProvider = currentUser.providerData[0].providerId !== 'password';
+    const display = isProvider ? 'none' : 'flex';
     const userId = this.props.screenProps;
+
+    const movieTitle = 'Little Mermaid';
+    // const random = Math.round(Math.random() *1000);
+    const movieId = 'a1234567bc';
+    const randomChatRoomId = userId => {
+      const movieRef = database.ref('chatroom/' + movieId);
+      movieRef.set({
+        title: movieTitle,
+        users: userId,
+      });
+      movieRef.update({
+        users: {
+          [`${userId}`]: true,
+        },
+      });
+    };
+
     return (
       <Form style={styles.form}>
         <Image
@@ -78,7 +100,7 @@ export default class ProfileScreen extends Component {
           />
         </Item>
         <Item stackedLabel style={styles.item}>
-        <Label style={styles.label}>EMAIL</Label>
+          <Label style={styles.label}>EMAIL</Label>
           <Input
             style={styles.input}
             keyboardType="email-address"
@@ -98,15 +120,20 @@ export default class ProfileScreen extends Component {
           />
         </Item>
         <Input
-            style={[styles.input, {display}]}
-            secureTextEntry={true}
-            name="password"
-            value={this.state.password}
-            onChangeText={text => this.handleInput('password', text)}
-          />
-        <Button transparent danger style={[styles.saveBtn, {display}]} onPress={()=> {
-          this.save(userId)
-        }}>
+          style={[styles.input, { display }]}
+          secureTextEntry={true}
+          name="password"
+          value={this.state.password}
+          onChangeText={text => this.handleInput('password', text)}
+        />
+        <Button
+          transparent
+          danger
+          style={[styles.saveBtn, { display }]}
+          onPress={() => {
+            this.save(userId);
+          }}
+        >
           <Text>SAVE</Text>
         </Button>
         <Button
@@ -116,6 +143,19 @@ export default class ProfileScreen extends Component {
           onPress={() => this.logout()}
         >
           <Text>LOG OUT</Text>
+        </Button>
+        <Button
+          primary
+          style={styles.button}
+          onPress={async () => {
+            console.log('Pressed Add Event Button');
+            await randomChatRoomId(this.props.screenProps);
+            this.props.navigation.navigate('Chatscreen', {
+              userId: this.props.screenProps,
+            });
+          }}
+        >
+          <Text>Add Event</Text>
         </Button>
       </Form>
     );

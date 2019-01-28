@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Alert, Picker, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  Picker,
+  FlatList,
+  SafeAreaView,
+} from 'react-native';
 import {
   Divider,
   Text,
@@ -49,14 +56,7 @@ const dummyShowTimes = [{ time: `515` }, { time: '6:15' }, { time: `715` }];
 class SingleEvent extends React.Component {
   constructor() {
     super();
-    this.state = {
-      movie: '',
-      genre: '',
-      time: '',
-      location: '',
-      image: '',
-      showtime: '',
-    };
+    this.state = {};
     this.config = {
       url: 'http://data.tmsapi.com/v1.1/movies/showings',
       zipCode: '60647',
@@ -69,25 +69,43 @@ class SingleEvent extends React.Component {
 
   async componentDidMount() {
     this.setState({
-      movie: 'Get Out',
-      genre: 'horror',
+      movie: 'My Cousin Vinny',
+      tmsId: 'MV000347260000',
+      rootId: '13817',
+      genre: 'comedy',
+      rating: 'R',
       time: 'evening',
-      location: 'Logan Square',
-      image: 'https://picsum.photos/200/?random',
-      showtime: '',
+      theater: 'Logan Theatre',
+      zip: '60647',
+      image: '',
+      address: {
+        city: 'Chicago',
+        country: 'USA',
+        postalCode: '60647',
+        state: 'IL',
+        street: '2626 N. Milwaukee Ave.',
+      },
+      geoCode: {
+        latitude: '41.9297',
+        longitude: '-87.7084',
+      },
+      theatreId: '2877',
+      showtime: ['8:00 PM', '9:15 PM', '11:00 PM'],
+      selectedTime: '',
     });
-    await this.fetchTheaters();
+
+    /* await this.fetchTheaters(); */
   }
   async fetchTheaters() {
     const res = await axios.get(
-      'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&numDays=1&zip=60647&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+      'http://data.tmsapi.com/v1.1/theatres?zip=60647&radius=1&units=mi&api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
     );
-    const movies = res.data;
+    const movies = res.data.filter(theater => theater.name === 'Logan Theatre');
 
-    console.log(movies.body);
+    console.log(movies);
   }
-  handlePress(event, ind, label) {
-    console.log('EVENT HERE', label);
+  handlePress(selectedTime) {
+    this.setState({ selectedTime });
   }
   render() {
     return (
@@ -103,21 +121,27 @@ class SingleEvent extends React.Component {
         <View style={{ flex: 1 }}>
           <EventCard state={this.state} />
         </View>
-        <Title style={{ marginTop: 20 }}>Show Times</Title>
+
+        <Title style={{ marginTop: 10 }}>Show Times</Title>
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <FlatList
-            data={[{ time: `515` }, { time: '6:15' }, { time: `715` }]}
+            horizontal={true}
+            data={this.state.showtime}
             renderItem={({ item }) => (
               <Button
                 mode="outlined"
-                style={{ height: 40, width: 40, margin: 10, marginEnd: 10 }}
-                key={item.time}
-                accessibilityLabel={item.time}
-                onPress={(accessibilityLabel, key) =>
-                  this.handlePress(accessibilityLabel, key, accessibilityLabel)
-                }
+                style={{
+                  flexDirection: 'center',
+                  height: 40,
+                  width: 110,
+                  margin: 10,
+                  marginEnd: 10,
+                }}
+                key={item}
+                accessibilityLabel={item}
+                onPress={() => this.handlePress(item)}
               >
-                {item.time}
+                {item}
               </Button>
             )}
           />

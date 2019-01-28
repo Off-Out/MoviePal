@@ -193,7 +193,9 @@ export default class HomeScreen extends Component {
           </Button>
         </View>
       </View>
-    ) : null;
+    ) : (
+      <Text>...Loading</Text>
+    );
   }
 }
 
