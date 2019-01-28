@@ -4,7 +4,6 @@ import {
   createStackNavigator,
   createSwitchNavigator,
   createAppContainer,
-  withNavigation,
 } from 'react-navigation';
 import {
   ProfileScreen,

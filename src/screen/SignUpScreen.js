@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
+import * as Expo from 'expo';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
-import {auth, database} from '../firebase'
+import { auth, database } from '../firebase'
 
 class SignUpScreen extends Component {
   constructor() {
@@ -11,6 +12,7 @@ class SignUpScreen extends Component {
       location: '',
       email: '',
       password: '',
+      photoUrl: '',
     };
   }
 
