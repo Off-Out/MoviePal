@@ -9,7 +9,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/testPosters",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,8 +19,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "config":{
-        "googleMapsApiKey" : "AIzaSyACTGlMW-wdAvQxWNi3yOgJTGpgk3ZN6Yw"
+      "config": {
+        "googleMapsApiKey": "AIzaSyACTGlMW-wdAvQxWNi3yOgJTGpgk3ZN6Yw"
       }
     }
   }

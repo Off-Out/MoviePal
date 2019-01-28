@@ -9,15 +9,10 @@ import {
   Paragraph,
 } from 'react-native-paper';
 import { EventCard } from '../component';
+import firebase, { auth, database } from '../firebase';
 
 const HorrorPoster = 'poster';
 
-const dummyUser = {
-  user: {
-    id: 1,
-    name: 'Cindy',
-  },
-};
 const dummyDataGenre = [
   {
     genre: 'Action/Adventure',
@@ -77,18 +72,11 @@ const dummyDataTime = [
   { time: 'after hours', id: 4 },
 ];
 
-const dummyDataLocation = [
-  {
-    defaultLocation: [-87.639035, 41.895266],
-    previousLocations: [],
-  },
-];
-
 export default class HomeScreen extends Component {
   constructor() {
     super();
     this.state = {
-      user: 'Cindy',
+      user: '',
       genre: '',
       time: '',
       location: '',
@@ -97,14 +85,22 @@ export default class HomeScreen extends Component {
     this.handlePress = this.handlePress.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
+  async componentDidMount() {
+    const userId = this.props.screenProps;
+
+    await database.ref(`/users/${userId}`).on('value', snapshot => {
+      const userDetails = snapshot.val();
+      this.setState({ user: userDetails.name });
+      console.log('USER DETAILS', userDetails);
+    });
+
+    /*  navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({ location: position });
       },
       error => Alert.alert(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
+    ); */
     console.log('STATE OF PARENT COMPONENT', this.state);
 
     //if user is logged in, add to props
@@ -138,8 +134,7 @@ export default class HomeScreen extends Component {
     }
   }
   render() {
-    console.log('rerendering!');
-    return (
+    return this.state.user ? (
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
           <EventCard state={this.state} />
@@ -197,7 +192,7 @@ export default class HomeScreen extends Component {
           </Button>
         </View>
       </View>
-    );
+    ) : null;
   }
 }
 

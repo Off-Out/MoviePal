@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Form, Item, Input, Button, Text } from 'native-base';
+import { Form, Item, Input, Button, Text, Alert } from 'native-base';
 
 class LoginForm extends Component {
   render() {
@@ -32,7 +32,6 @@ class LoginForm extends Component {
             />
           </Item>
           <Button
-<<<<<<< HEAD
             block
             danger
             onPress={() => {
@@ -41,31 +40,23 @@ class LoginForm extends Component {
           >
             <Text>LOGIN</Text>
           </Button>
-=======
-          block
-          danger
-          onPress={() => {
-            login(credential.email, credential.password);
-          }}
-        >
-          <Text>LOGIN</Text>
-        </Button>
-        <Button
-          transparent
-          danger
-          onPress={() => {
-            if (!this.state.email) {
-              Alert.alert('Please enter your email')
-            }
-            else  {
-              auth.sendPasswordResetEmail(this.state.email)
-              .then(() => Alert.alert('Reset Password Email Sent!'))
-            }
-          }}
-        >
-          <Text style={{fontSize: 13, alignSelf: "center"}}>FORGOT PASSWORD?</Text>
-        </Button>
->>>>>>> b88f96ec9d940c6a807fecbf027cb7c6c175ffce
+          <Button
+            transparent
+            danger
+            onPress={() => {
+              if (!this.state.email) {
+                Alert.alert('Please enter your email');
+              } else {
+                auth
+                  .sendPasswordResetEmail(this.state.email)
+                  .then(() => Alert.alert('Reset Password Email Sent!'));
+              }
+            }}
+          >
+            <Text style={{ fontSize: 13, alignSelf: 'center' }}>
+              FORGOT PASSWORD?
+            </Text>
+          </Button>
         </Form>
       </View>
     );
@@ -73,14 +64,8 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-  container: { flex: 1, margin: 13 },
+  container: { margin: 13 },
   item: { margin: 5 },
-  input: { fontSize: 13, color: 'lightgrey' },
-=======
-  container: { margin:13 },
-  item: { margin: 5 },
-  input: { fontSize: 14 }
->>>>>>> b88f96ec9d940c6a807fecbf027cb7c6c175ffce
+  input: { fontSize: 14 },
 });
 export default LoginForm;

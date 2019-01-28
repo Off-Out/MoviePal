@@ -23,7 +23,11 @@ class EventCard extends React.Component {
                 <Title>{this.props.state.user}</Title>
               )}
 
-              <Paragraph>USER/EVENT</Paragraph>
+              {this.props.state.user ? (
+                <Paragraph>USER</Paragraph>
+              ) : (
+                <Paragraph>MOVIE</Paragraph>
+              )}
             </Card.Content>
             <Card.Cover
               style={{
