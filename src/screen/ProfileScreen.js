@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import {auth, database} from '../firebase';
 
+
 export default class ProfileScreen extends Component {
   constructor() {
     super();
@@ -15,17 +16,17 @@ export default class ProfileScreen extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const userId = this.props.screenProps;
     let user = '';
-    database.ref(`/users/${userId}`).on('value', (snapshot) => {
+    await database.ref(`/users/${userId}`).on('value', (snapshot) => {
       user = snapshot.val();
       this.setState({
         name: user.name,
         email: user.email,
         location: user.location,
       })
-    })
+    });
   }
 
   handleInput = (stateField, text) => {
@@ -62,6 +63,22 @@ export default class ProfileScreen extends Component {
     const isProvider = currentUser.providerData[0].providerId !== "password"
     const display = isProvider? "none" : "flex";
     const userId = this.props.screenProps;
+
+    const movieTitle = "Little Mermaid";
+    // const random = Math.round(Math.random() *1000);
+    const movieId = "a1234567bc";
+    const randomChatRoomId = (userId) => {
+      const movieRef = database.ref('chatroom/' + movieId)
+      movieRef.set({
+        title: movieTitle,
+      });
+      movieRef.update({
+        users: {
+          [`${userId}`]: true
+        }
+      })
+    }
+
     return (
       <Form style={styles.form}>
         <Image
@@ -116,6 +133,15 @@ export default class ProfileScreen extends Component {
           onPress={() => this.logout()}
         >
           <Text>LOG OUT</Text>
+        </Button>
+        <Button primary style={styles.button}
+        onPress={async () => {
+          console.log("Pressed Add Event Button")
+          await randomChatRoomId(this.props.screenProps);
+          this.props.navigation.navigate("Chatscreen", {userId: this.props.screenProps})
+          }}
+        >
+          <Text>Add Event</Text>
         </Button>
       </Form>
     );

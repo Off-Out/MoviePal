@@ -61,13 +61,7 @@ class LoginScreen extends Component {
       <View style={styles.container}>
         <Image style={styles.image} source={require('../image/epLogo.png')} />
         <LoginForm handleUserInput={this.handleUserInput} login={this.login} credential={this.state}/>
-          <View style={styles.button}>
-          {/* <Menu style={{flexDirection: "column", padding: 30}}>
-            <MenuTrigger text="CREATE ACCOUNT" />
-              <Text >CREATE ACCOUNT</Text>
-            <MenuOptions>
-              <MenuOption text="SIGN-UP WITH GOOGLE" onSelect={() => this.signInWithGoogle()} />
-              <MenuOption text="SIGN-UP WITH EMAIL" onSelect={() => this.props.navigation.navigate("SignUpScreen")} /> */}
+          {/* <View style={styles.button}> */}
         <Button
          block
           success
@@ -94,10 +88,7 @@ class LoginScreen extends Component {
         >
           <Text style={{fontSize: 15, color: 'orangered', fontWeight: "bold"}}>CREATE ACCOUNT</Text>
         </Button>
-        {/* </MenuOptions>
-        </Menu> */}
-        </View>
-        {/* </MenuProvider> */}
+        {/* </View> */}
       </View>
     );
   }
