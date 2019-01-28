@@ -4,7 +4,6 @@
  * having to figure out which file they belong to!
  */
 
-
 export { default as LoginForm } from './LoginForm';
 export { default as EventCard } from './Card';
-
+export { default as Search } from './Search';

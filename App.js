@@ -11,17 +11,23 @@ import {
   MapScreen,
   ChatScreen,
   LoginScreen,
-  SignUpScreen,
-  AuthLoadingScreen,
-  SingleEvent,
+  SingleTheaterScreen,
+  FilterScreen,
+  ListScreen,
 } from './src/screen/index';
+
+const MapStackNavigator = createStackNavigator({
+  Main: MapScreen,
+  Filter: FilterScreen,
+  SingleTheater: SingleTheaterScreen,
+  ListScreen: ListScreen,
+});
 
 const TabNavigator = createBottomTabNavigator({
   Profile: ProfileScreen,
   Home: HomeScreen,
-  Map: MapScreen,
+  Map: MapStackNavigator,
   Chat: ChatScreen,
-  Single: SingleEvent,
 });
 
 class TabComponents extends React.Component {
@@ -46,7 +52,7 @@ const AuthStack = createStackNavigator(
 const AppContainer = createAppContainer(
   createSwitchNavigator({
     Auth: AuthStack,
-    AuthLoading: AuthLoadingScreen,
+
     App: TabComponents,
   })
 );
