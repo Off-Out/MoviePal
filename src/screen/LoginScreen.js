@@ -3,8 +3,9 @@ import { View, Image, StyleSheet, Alert } from 'react-native';
 import { Button, Text } from 'native-base'
 import { Container } from 'native-base';
 import { LoginForm } from '../component';
-import SignUpScreen from './SignUpScreen'
-import { auth, database } from '../firebase';
+import SignUpScreen from './SignUpScreen';
+import { MenuProvider, Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu'
+import firebase, { auth, database } from '../firebase';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -29,30 +30,30 @@ class LoginScreen extends Component {
       .catch(error => Alert.alert(error.message));
   };
 
-  signInWithGoogle = async () => {
-    try {
-      await Expo.Google.logInAsync({
+  signInWithGoogle = () => {
+    Expo.Google.logInAsync({
         androidClientId: "963629551224-0iocmkcve8i96rbg244m91mj5tvmflto.apps.googleusercontent.com",
         iosClientId: "963629551224-iivt1efj479sg2ucve5bjsdrm8ng3b75.apps.googleusercontent.com",
         scopes: ["profile", "email"]
       })
       .then(result => {
-        const {user} = result;
-        console.log(result, "<<<result")
-        // return result.accessToken
-        // database.ref(`users/${uid}`).set({
-        //   name: user.name,
-        //   email: user.email,
-        //   image: user.photoUrl,
-        // })
-        // .then(() => this.props.navigation.navigate('App'
-        // // , {userId: user.uid}
-        // )
-        // )
+        if (result.type === 'success') {
+          const credential = firebase.auth.GoogleAuthProvider.credential(result.idToken, result.accessToken);
+          const user = auth.signInAndRetrieveDataWithCredential(credential);
+          return user
+        }
+        else return {cancelled: true}
       })
-    } catch (e) {
-      console.log("error", e)
-    }
+      .then(() => {
+        const user = auth.currentUser;
+        database.ref(`users/${user.uid}`).set({
+          name: user.displayName,
+          email: user.email,
+          // photo: user.photoUrl
+        })
+        this.props.navigation.navigate('App', {userId: user.uid})
+      })
+      .catch(error => console.error(error))
   }
 
   render() {
@@ -60,38 +61,43 @@ class LoginScreen extends Component {
       <View style={styles.container}>
         <Image style={styles.image} source={require('../image/epLogo.png')} />
         <LoginForm handleUserInput={this.handleUserInput} login={this.login} credential={this.state}/>
-        <View style={styles.button}>
+          <View style={styles.button}>
+          {/* <Menu style={{flexDirection: "column", padding: 30}}>
+            <MenuTrigger text="CREATE ACCOUNT" />
+              <Text >CREATE ACCOUNT</Text>
+            <MenuOptions>
+              <MenuOption text="SIGN-UP WITH GOOGLE" onSelect={() => this.signInWithGoogle()} />
+              <MenuOption text="SIGN-UP WITH EMAIL" onSelect={() => this.props.navigation.navigate("SignUpScreen")} /> */}
         <Button
-          danger
+         block
+          success
+          style={{marginBottom: 10}}
           onPress={() => this.signInWithGoogle()}
         >
-          <Text>Signin With Google</Text>
+          <Text>SIGN-IN WITH GOOGLE</Text>
         </Button>
         <Button
-          transparent
-          danger
+         block
+          primary
+          style={{marginBottom: 10}}
+          onPress={() => this.signInWithGoogle()}
+        >
+          <Text>SIGN-IN WITH FACEBOOK</Text>
+        </Button>
+        <Button
+          block
+          bordered
+          warning
           onPress={() =>
             this.props.navigation.navigate("SignUpScreen")
           }
         >
-          <Text style={{fontSize: 15}}>CREATE ACCOUNT</Text>
+          <Text style={{fontSize: 15, color: 'orangered', fontWeight: "bold"}}>CREATE ACCOUNT</Text>
         </Button>
-        <Button
-          transparent
-          danger
-          onPress={() => {
-            if (!this.state.email) {
-              Alert.alert('Please enter your email')
-            }
-            else  {
-              auth.sendPasswordResetEmail(this.state.email)
-              .then(() => Alert.alert('Reset Password Email Sent!'))
-            }
-          }}
-        >
-          <Text style={{fontSize: 10}}>FORGOT PASSWORD?</Text>
-        </Button>
+        {/* </MenuOptions>
+        </Menu> */}
         </View>
+        {/* </MenuProvider> */}
       </View>
     );
   }
@@ -99,19 +105,19 @@ class LoginScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "flex-start"
+    justifyContent: "center",
   },
   image: {
-    alignSelf: 'center',
-    marginTop: 50,
-    maxHeight: 30,
-    maxWidth: 30
+    alignSelf: "center",
+    marginTop: 20,
   },
   button: {
+    display: "flex",
     flex: 1,
-    justifyContent: "flex-start",
-    alignSelf: "center",
+    justifyContent: "center",
+    color: "black",
+    marginLeft: 13,
+    marginRight: 13,
     fontSize: 15,
   }
 });

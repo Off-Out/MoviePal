@@ -40,6 +40,21 @@ class LoginForm extends Component {
         >
           <Text>LOGIN</Text>
         </Button>
+        <Button
+          transparent
+          danger
+          onPress={() => {
+            if (!this.state.email) {
+              Alert.alert('Please enter your email')
+            }
+            else  {
+              auth.sendPasswordResetEmail(this.state.email)
+              .then(() => Alert.alert('Reset Password Email Sent!'))
+            }
+          }}
+        >
+          <Text style={{fontSize: 13, alignSelf: "center"}}>FORGOT PASSWORD?</Text>
+        </Button>
         </Form>
       </View>
     );
@@ -47,7 +62,7 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin:13 },
+  container: { margin:13 },
   item: { margin: 5 },
   input: { fontSize: 14 }
 });

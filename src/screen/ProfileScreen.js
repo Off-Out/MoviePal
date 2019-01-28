@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import {auth, database} from '../firebase';
-import PasswordInputText from 'react-native-hide-show-password-input'
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -16,11 +15,10 @@ export default class ProfileScreen extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const userId = this.props.screenProps;
-    console.log(this.props.screenProps, "screenProps")
     let user = '';
-    await database.ref(`/users/${userId}`).on('value', (snapshot) => {
+    database.ref(`/users/${userId}`).on('value', (snapshot) => {
       user = snapshot.val();
       this.setState({
         name: user.name,
@@ -60,6 +58,9 @@ export default class ProfileScreen extends Component {
   }
 
   render() {
+    const currentUser = auth.currentUser;
+    const isProvider = currentUser.providerData[0].providerId !== "password"
+    const display = isProvider? "none" : "flex";
     const userId = this.props.screenProps;
     return (
       <Form style={styles.form}>
@@ -96,15 +97,14 @@ export default class ProfileScreen extends Component {
             onChangeText={text => this.handleInput('location', text)}
           />
         </Item>
-        <PasswordInputText
-            style={styles.password}
-            // secureTextEntry={true}
+        <Input
+            style={[styles.input, {display}]}
+            secureTextEntry={true}
             name="password"
             value={this.state.password}
             onChangeText={text => this.handleInput('password', text)}
           />
-        <Button transparent danger style={styles.button} onPress={()=> {
-          console.log('save')
+        <Button transparent danger style={[styles.saveBtn, {display}]} onPress={()=> {
           this.save(userId)
         }}>
           <Text>SAVE</Text>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
   },
 
-  button: {
+  saveBtn: {
     margin: 7,
   },
 });
