@@ -124,27 +124,31 @@ class SingleEvent extends React.Component {
 
         <Title style={{ marginTop: 10 }}>Show Times</Title>
         <View style={{ flex: 1, flexDirection: 'row' }}>
-          <FlatList
-            horizontal={true}
-            data={this.state.showtime}
-            renderItem={({ item }) => (
-              <Button
-                mode="outlined"
-                style={{
-                  flexDirection: 'center',
-                  height: 40,
-                  width: 110,
-                  margin: 10,
-                  marginEnd: 10,
-                }}
-                key={item}
-                accessibilityLabel={item}
-                onPress={() => this.handlePress(item)}
-              >
-                {item}
-              </Button>
-            )}
-          />
+          {!this.state.selectedTime ? (
+            <FlatList
+              horizontal={true}
+              data={this.state.showtime}
+              renderItem={({ item }) => (
+                <Button
+                  mode="outlined"
+                  style={{
+                    flexDirection: 'center',
+                    height: 40,
+                    width: 110,
+                    margin: 10,
+                    marginEnd: 10,
+                  }}
+                  key={item}
+                  accessibilityLabel={item}
+                  onPress={() => this.handlePress(item)}
+                >
+                  {item}
+                </Button>
+              )}
+            />
+          ) : (
+            <Text>Purchase Tickets!</Text>
+          )}
         </View>
         <View style={{ flex: 1, height: 60 }}>
           <Text style={{ margin: 10 }}>Select Tickets {`&`} Quantities</Text>
