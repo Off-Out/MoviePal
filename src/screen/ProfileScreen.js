@@ -66,17 +66,14 @@ export default class ProfileScreen extends Component {
 
     const movieTitle = "Little Mermaid";
     // const random = Math.round(Math.random() *1000);
-    const movieId = "a1234567bc";
+    const chatId = "a1234567bc";
+
     const randomChatRoomId = (userId) => {
-      const movieRef = database.ref('chatroom/' + movieId)
-      movieRef.set({
+      const chatRef = database.ref('chatroom/' + chatId)
+      chatRef.update({
         title: movieTitle,
       });
-      movieRef.update({
-        users: {
-          [`${userId}`]: true
-        }
-      })
+      chatRef.child(`/users/${userId}`).set(true)
     }
 
     return (
@@ -135,10 +132,9 @@ export default class ProfileScreen extends Component {
           <Text>LOG OUT</Text>
         </Button>
         <Button primary style={styles.button}
-        onPress={async () => {
+        onPress={() => {
           console.log("Pressed Add Event Button")
-          await randomChatRoomId(this.props.screenProps);
-          this.props.navigation.navigate("Chatscreen", {userId: this.props.screenProps})
+          randomChatRoomId(this.props.screenProps);
           }}
         >
           <Text>Add Event</Text>
