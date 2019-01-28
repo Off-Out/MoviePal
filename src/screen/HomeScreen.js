@@ -83,7 +83,7 @@ export default class HomeScreen extends Component {
       image: '../image/Horror.png',
     };
     this.handlePress = this.handlePress.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.setUserFilter = this.setUserFilter.bind(this);
   }
   async componentDidMount() {
     const userId = this.props.screenProps;
@@ -119,7 +119,7 @@ export default class HomeScreen extends Component {
       });
     }
   }
-  handleChange(itemValue, label, whatElse) {
+  setUserFilter(itemValue, label, whatElse) {
     if (whatElse === 'genre') {
       let genrePoster = dummyDataGenre.filter(movieGenre => {
         if (movieGenre[whatElse] === itemValue)
@@ -134,6 +134,9 @@ export default class HomeScreen extends Component {
     }
   }
   render() {
+    const setCategoryFilter = (itemValue, label, genrePoster) =>
+      this.setUserFilter(itemValue, label, 'genre', genrePoster);
+
     return this.state.user ? (
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
@@ -143,9 +146,7 @@ export default class HomeScreen extends Component {
           <Picker
             style={styles.pickerItem}
             selectedValue={this.state.genre}
-            onValueChange={(itemValue, label, genrePoster) =>
-              this.handleChange(itemValue, label, 'genre', genrePoster)
-            }
+            onValueChange={setCategoryFilter}
           >
             <Picker.Item key="unselectable" label="genre" value={null} />
             {dummyDataGenre.map(event => (
@@ -161,7 +162,7 @@ export default class HomeScreen extends Component {
             style={styles.pickerItem}
             selectedValue={this.state.time}
             onValueChange={(itemValue, label) =>
-              this.handleChange(itemValue, label, 'time')
+              this.setUserFilter(itemValue, label, 'time')
             }
             value="time"
           >
@@ -175,7 +176,7 @@ export default class HomeScreen extends Component {
             style={styles.pickerItem}
             selectedValue={this.state.location}
             onValueChange={(itemValue, label) =>
-              this.handleChange(itemValue, label, 'location')
+              this.setUserFilter(itemValue, label, 'location')
             }
           >
             <Picker.Item
@@ -192,7 +193,9 @@ export default class HomeScreen extends Component {
           </Button>
         </View>
       </View>
-    ) : null;
+    ) : (
+      <Text>...Loading</Text>
+    );
   }
 }
 
