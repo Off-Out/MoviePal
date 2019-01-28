@@ -9,9 +9,11 @@ export default class Search extends Component {
         style={{
           flexDirection: 'row',
           padding: 10,
-          marginTop: 10,
+          marginTop: 25,
           backgroundColor: 'white',
           marginHorizontal: 20,
+          zIndex: 1,
+          position: 'absolute',
         }}
       >
         <Ionicons name="ios-search" size={20} />

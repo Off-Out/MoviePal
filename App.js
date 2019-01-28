@@ -4,7 +4,6 @@ import {
   createStackNavigator,
   createSwitchNavigator,
   createAppContainer,
-  withNavigation,
 } from 'react-navigation';
 import {
   ProfileScreen,
@@ -12,14 +11,22 @@ import {
   MapScreen,
   ChatScreen,
   LoginScreen,
-  AuthLoadingScreen,
-  SingleEvent,
+  SingleTheaterScreen,
+  FilterScreen,
+  ListScreen,
 } from './src/screen/index';
+
+const MapStackNavigator = createStackNavigator({
+  Main: MapScreen,
+  Filter: FilterScreen,
+  SingleTheater: SingleTheaterScreen,
+  ListScreen: ListScreen,
+});
 
 const TabNavigator = createBottomTabNavigator({
   Profile: ProfileScreen,
   Home: HomeScreen,
-  Map: MapScreen,
+  Map: MapStackNavigator,
   Chat: ChatScreen,
 });
 
