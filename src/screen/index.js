@@ -5,10 +5,12 @@
  */
 
 export { default as LoginScreen } from './LoginScreen';
+export { default as SignUpScreen } from './SignUpScreen';
 export { default as ProfileScreen } from './ProfileScreen';
 export { default as HomeScreen } from './HomeScreen';
 export { default as ChatScreen } from './ChatScreen';
 export { default as AuthLoadingScreen } from './AuthLoadingScreen';
+export { default as SingleEvent } from './SingleEvent';
 
 //Map and its related Screen
 export { default as MapScreen } from './MapScreen';

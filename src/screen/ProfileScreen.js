@@ -1,36 +1,84 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import {auth, database} from '../firebase';
+
 
 export default class ProfileScreen extends Component {
   constructor() {
     super();
 
     this.state = {
-      name: 'EventPal',
-      email: 'eventPal@gmail.com',
-      location: '60605',
+      name: '',
+      email: '',
+      location: '',
+      password: ''
     };
   }
 
   async componentDidMount() {
-    console.log("????", this.props.screenProps)
-    // const { getParam } = this.props.navigation;
-    // let user = '';
-    // await database.ref(`/users/${getParam('userId')}`).on('value', (snapshot) => {
-    //   user = snapshot.val()
-    // });
-    // this.setState({
-    //   email: user.email
-    // })
+    const userId = this.props.screenProps;
+    let user = '';
+    await database.ref(`/users/${userId}`).on('value', (snapshot) => {
+      user = snapshot.val();
+      this.setState({
+        name: user.name,
+        email: user.email,
+        location: user.location,
+      })
+    });
   }
 
-  handleName = text => this.setState({ name: text });
-  handleEmail = text => this.setState({ email: text });
-  handleLocation = text => this.setState({ location: text });
+  handleInput = (stateField, text) => {
+    this.setState({ [stateField]: text })
+  }
+
+  logout = () => {
+    auth
+    .signOut()
+    .finally(() => { 
+      console.log('Sign Out!');
+      this.props.navigation.navigate('Auth');
+    }).catch(error => Alert.alert(error.message))
+  }
+
+  save = async (userId) => {
+    let userRef = await database.ref('users').child(`${userId}`);
+      userRef.update({
+        "name": this.state.name,
+        "email": this.state.email,
+        "location": this.state.location
+      }).then(() => {
+        if (this.state.email) auth.currentUser.updateEmail(this.state.email)
+        if (this.state.password) auth.currentUser.updatePassword(this.state.password);
+      }).then(() => {
+        this.setState({password: ''});
+        Alert.alert('Saved!')
+      })
+      .catch(error => Alert.alert(error.message))
+  }
 
   render() {
+    const currentUser = auth.currentUser;
+    const isProvider = currentUser.providerData[0].providerId !== "password"
+    const display = isProvider? "none" : "flex";
+    const userId = this.props.screenProps;
+
+    const movieTitle = "Little Mermaid";
+    // const random = Math.round(Math.random() *1000);
+    const movieId = "a1234567bc";
+    const randomChatRoomId = (userId) => {
+      const movieRef = database.ref('chatroom/' + movieId)
+      movieRef.set({
+        title: movieTitle,
+      });
+      movieRef.update({
+        users: {
+          [`${userId}`]: true
+        }
+      })
+    }
+
     return (
       <Form style={styles.form}>
         <Image
@@ -43,17 +91,17 @@ export default class ProfileScreen extends Component {
             style={styles.input}
             name="name"
             value={this.state.name}
-            onChangeText={this.handleName}
+            onChangeText={text => this.handleInput('name', text)}
           />
         </Item>
         <Item stackedLabel style={styles.item}>
-          <Label style={styles.label}>EMAIL</Label>
+        <Label style={styles.label}>EMAIL</Label>
           <Input
             style={styles.input}
             keyboardType="email-address"
             name="email"
             value={this.state.email}
-            onChangeText={this.handleEmail}
+            onChangeText={text => this.handleInput('email', text)}
           />
         </Item>
         <Item stackedLabel style={styles.item}>
@@ -61,28 +109,39 @@ export default class ProfileScreen extends Component {
           <Input
             style={styles.input}
             keyboardType={'numeric'}
-            style={styles.input}
             name="location"
             value={this.state.location}
+            onChangeText={text => this.handleInput('location', text)}
           />
         </Item>
-        <Button transparent danger style={styles.button}>
+        <Input
+            style={[styles.input, {display}]}
+            secureTextEntry={true}
+            name="password"
+            value={this.state.password}
+            onChangeText={text => this.handleInput('password', text)}
+          />
+        <Button transparent danger style={[styles.saveBtn, {display}]} onPress={()=> {
+          this.save(userId)
+        }}>
           <Text>SAVE</Text>
         </Button>
         <Button
           transparent
           danger
           style={styles.button}
-          onPress={() =>
-            auth
-              .signOut()
-              .finally(() => { 
-                console.log('Sign Out!');
-                this.props.navigation.navigate('Auth');
-              }).catch(error => Alert.alert(error.message))
-          }
+          onPress={() => this.logout()}
         >
           <Text>LOG OUT</Text>
+        </Button>
+        <Button primary style={styles.button}
+        onPress={async () => {
+          console.log("Pressed Add Event Button")
+          await randomChatRoomId(this.props.screenProps);
+          this.props.navigation.navigate("Chatscreen", {userId: this.props.screenProps})
+          }}
+        >
+          <Text>Add Event</Text>
         </Button>
       </Form>
     );
@@ -98,7 +157,9 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   label: {
-    marginLeft: 13,
+    fontSize: 13,
+    marginLeft: 7,
+    marginBottom: 10,
   },
   image: {
     width: 150,
@@ -109,16 +170,16 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    marginLeft: 13,
+    marginLeft: 7,
     fontSize: 17,
-    marginRight: 25,
-    paddingTop: 13,
+    marginRight: 20,
+    paddingTop: 1,
     marginBottom: 10,
     borderColor: 'indianred',
     borderBottomWidth: 0.5,
   },
 
-  button: {
-    margin: 13,
+  saveBtn: {
+    margin: 7,
   },
 });
