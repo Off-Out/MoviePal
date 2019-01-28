@@ -23,16 +23,18 @@ class LoginScreen extends Component {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(user => {
-        database.ref(`users/${user.user.uid}`).set({ email })
-        this.props.navigation.navigate('App', {userId: user.user.uid})
+        database.ref(`users/${user.user.uid}`).set({ email });
+        this.props.navigation.navigate('App', { userId: user.user.uid });
       })
       .catch(error => Alert.alert(error.message));
   };
 
-  login = async (email, password) => {
+  login = (email, password) => {
     auth
       .signInWithEmailAndPassword(email, password)
-      .then(result => this.props.navigation.navigate('App', {userId: result.user.uid}))
+      .then(result =>
+        this.props.navigation.navigate('App', { userId: result.user.uid })
+      )
       .catch(error => Alert.alert(error.message));
   };
 

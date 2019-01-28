@@ -24,30 +24,33 @@ const TabNavigator = createBottomTabNavigator({
 });
 
 class TabComponents extends React.Component {
-  static router = TabNavigator.router
+  static router = TabNavigator.router;
   render() {
     return (
-      <TabNavigator navigation={this.props.navigation} screenProps={this.props.navigation.getParam("userId")} />
-    )
+      <TabNavigator
+        navigation={this.props.navigation}
+        screenProps={this.props.navigation.getParam('userId')}
+      />
+    );
   }
 }
 
-const AuthStack = createStackNavigator({
-  LoginScreen: { screen: LoginScreen },
-}, {initialRouteName: "LoginScreen"});
+const AuthStack = createStackNavigator(
+  {
+    LoginScreen: { screen: LoginScreen },
+  },
+  { initialRouteName: 'LoginScreen' }
+);
 
 const AppContainer = createAppContainer(
-  createSwitchNavigator(
-    {
-      Auth: AuthStack,
-      AuthLoading: AuthLoadingScreen,
-      App: TabComponents,
-    }
-  )
+  createSwitchNavigator({
+    Auth: AuthStack,
+    App: TabComponents,
+  })
 );
 
 export default class Application extends React.Component {
   render() {
-    return <AppContainer />
+    return <AppContainer />;
   }
 }
