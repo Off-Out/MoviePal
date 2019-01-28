@@ -9,6 +9,11 @@ import {
   Paragraph,
 } from 'react-native-paper';
 import { EventCard } from '../component';
+import axios from 'axios';
+
+const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
+const isGraceNote =
+  'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&zip=78701&api_key=w8xkqtbg6vf3aj5vdxmc4zjj';
 
 const dummyDataGenre = {
   genre: 'Horror',
@@ -52,10 +57,17 @@ class SingleEvent extends React.Component {
       image: '',
       showtime: '',
     };
+    this.config = {
+      url: 'http://data.tmsapi.com/v1.1/movies/showings',
+      zipCode: '60647',
+      jsonp: 'dataHandler',
+      api_key: gracenote,
+    };
+
     this.handlePress = this.handlePress.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({
       movie: 'Get Out',
       genre: 'horror',
@@ -64,6 +76,15 @@ class SingleEvent extends React.Component {
       image: 'https://picsum.photos/200/?random',
       showtime: '',
     });
+    await this.fetchTheaters();
+  }
+  async fetchTheaters() {
+    const res = await axios.get(
+      'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&numDays=1&zip=60647&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+    );
+    const movies = res.data;
+
+    console.log(movies.body);
   }
   handlePress(event, ind, label) {
     console.log('EVENT HERE', label);
