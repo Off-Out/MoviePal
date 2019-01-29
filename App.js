@@ -71,7 +71,7 @@ class TabComponents extends React.Component {
     return (
       <TabNavigator
         navigation={this.props.navigation}
-        screenProps={this.props.navigation.getParam('info')}
+        screenProps={this.props.navigation.getParam('userId')}
       />
     );
   }

@@ -16,11 +16,11 @@ export default class ProfileScreen extends Component {
   }
 
   componentDidMount() {
-    const {uid} = this.props.screenProps;
+    const userId = this.props.screenProps
+    console.log("userId", userId)
     console.log(this.props.screenProps,">>>>screenProps")
-    let user = '';
-    database.ref(`/users/${uid}`).on('value', snapshot => {
-      user = snapshot.val();
+    database.ref(`/users/${userId}`).on('value', snapshot => {
+      let user = snapshot.val()
       this.setState({
         name: user.name,
         email: user.email,
@@ -43,8 +43,8 @@ export default class ProfileScreen extends Component {
       .catch(error => Alert.alert(error.message));
   };
 
-  save = async uid => {
-    let userRef = await database.ref('users').child(`${uid}`);
+  save = async userId => {
+    let userRef = await database.ref('users').child(`${userId}`);
     userRef
       .update({
         name: this.state.name,
@@ -67,24 +67,25 @@ export default class ProfileScreen extends Component {
     const currentUser = auth.currentUser;
     const isProvider = currentUser.providerData[0].providerId !== 'password';
     const display = isProvider ? 'none' : 'flex';
-    const {uid} = this.props.screenProps;
+
+    const userId = this.props.screenProps;
 
     const movieTitle = 'Little Mermaid';
     const chatId = "a1234567bc";
 
-    const randomChatRoomId = (uid) => {
+    const randomChatRoomId = (userId) => {
       const chatRef = database.ref('chatroom/' + chatId)
       chatRef.update({
         title: movieTitle,
-        users: uid,
+        users: userId,
       })
-      .then(() => chatRef.child(`/users/${uid}`).set(true))
+      .then(() => chatRef.child(`/users/${userId}`).set(true))
       .then(() => {
         console.log('here???')
         this.props.navigation.navigate('Chat', {info: {
           movie: movieTitle,
           chatId: chatId,
-          user: uid
+          user: userId
         }})
       })
     }
@@ -136,7 +137,7 @@ export default class ProfileScreen extends Component {
           danger
           style={[styles.saveBtn, { display }]}
           onPress={() => {
-            this.save(uid);
+            this.save(userId);
           }}
         >
           <Text>SAVE</Text>
@@ -154,7 +155,7 @@ export default class ProfileScreen extends Component {
           style={styles.button}
           onPress={() => {
             console.log('Pressed Add Event Button');
-            randomChatRoomId(uid);
+            randomChatRoomId(userId);
           }}
         >
           <Text>Add Event</Text>

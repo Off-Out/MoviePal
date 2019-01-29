@@ -20,23 +20,31 @@ export default class ChatScreen extends Component {
 
   render() {
     const info = this.props.navigation.getParam('info')
-
-    return (
-      <View style={styles.container}>
-      <NavBar movie={info.movie}/>
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={(message) => {
-          ChatBackEnd.sendMessage(message);
-        }}
-        user={{
-          _id: ChatBackEnd.getUid(),
-          name: ChatBackEnd.getName(),
-          // avatar: 
-        }}
-      />
-      </View>
-    );
+    if (!info) {
+      return (
+        <View style={{flex: 1, justifyContent:"center"}}>
+          <Text>Please join an event to enter the event's chatroom!</Text>
+        </View>
+      )
+    }
+    else {
+      return (
+        <View style={styles.container}>
+        <NavBar movie={info.movie}/>
+        <GiftedChat
+          messages={this.state.messages}
+          onSend={(message) => {
+            ChatBackEnd.sendMessage(message);
+          }}
+          user={{
+            _id: ChatBackEnd.getUid(),
+            name: ChatBackEnd.getName(),
+            // avatar: 
+          }}
+        />
+        </View>
+      );
+    }
   }
   componentDidMount() {
     ChatBackEnd.loadMessages((message) => {
