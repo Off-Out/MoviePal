@@ -11,6 +11,7 @@ import {
   MapScreen,
   ChatScreen,
   LoginScreen,
+  SignUpScreen,
   SingleTheaterScreen,
   FilterScreen,
   ListScreen,
@@ -37,7 +38,7 @@ class TabComponents extends React.Component {
     return (
       <TabNavigator
         navigation={this.props.navigation}
-        screenProps={this.props.navigation.getParam('userId')}
+        screenProps={this.props.navigation.getParam('info')}
       />
     );
   }
@@ -45,15 +46,18 @@ class TabComponents extends React.Component {
 
 const AuthStack = createStackNavigator(
   {
-    SingleEvent: { screen: SingleEvent },
+    LoginScreen: { screen: LoginScreen },
+    SignUpScreen: { screen: SignUpScreen }
   },
-  { initialRouteName: 'SingleEvent' }
+  // {
+  //   SingleEvent: { screen: SingleEvent},
+  // }
+
 );
 
 const AppContainer = createAppContainer(
   createSwitchNavigator({
     Auth: AuthStack,
-
     App: TabComponents,
   })
 );

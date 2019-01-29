@@ -32,7 +32,7 @@ class LoginScreen extends Component {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(result =>
-        this.props.navigation.navigate('App', { userId: result.user.uid })
+        this.props.navigation.navigate('App', { info: result.user })
       )
       .catch(error => Alert.alert(error.message));
   };
@@ -61,14 +61,14 @@ class LoginScreen extends Component {
         database.ref(`users/${user.uid}`).once("value", snapshot => {
           if (snapshot.exists()) {
             console.log("exists!")
-            this.props.navigation.navigate('App', { userId: user.uid });
+            this.props.navigation.navigate('App', { info: {user}});
           } else {
             database.ref(`users/${user.uid}`).set({
               name: user.displayName,
               email: user.email,
               // photo: user.photoUrl
             });
-            this.props.navigation.navigate('App', { userId: user.uid });
+            this.props.navigation.navigate('App', { info: {user}});
           }
         })
       }
