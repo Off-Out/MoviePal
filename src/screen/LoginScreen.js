@@ -66,11 +66,12 @@ class LoginScreen extends Component {
       '367646357383853',
       { permissions: ['public_profile', 'email'] }
     );
-    console.log('token', token);
+
     if (type === 'success') {
       const credential = firebase.auth.FacebookAuthProvider.credential(token);
       const user = auth.signInAndRetrieveDataWithCredential(credential);
-      console.log('user', user);
+    } else {
+      return 'cancel';
     }
   };
 
