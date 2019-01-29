@@ -16,6 +16,7 @@ import {
   ListScreen,
   SingleEvent,
 } from './src/screen/index';
+import { Ionicons } from '@expo/vector-icons';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
@@ -25,11 +26,49 @@ const MapStackNavigator = createStackNavigator({
 });
 
 const TabNavigator = createBottomTabNavigator({
-  Profile: ProfileScreen,
-  Home: HomeScreen,
-  Map: MapStackNavigator,
-  Chat: ChatScreen,
+  Profile: {
+    screen: ProfileScreen,
+    navigationOptions: {
+      tabBarLabel: 'PROFILE',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-contact" color={tintColor} size={24} />
+      ),
+    },
+  },
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: {
+      tabBarLabel: 'HOME',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-home" color={tintColor} size={24} />
+      ),
+    },
+  },
+  Map: {
+    screen: MapStackNavigator,
+    navigationOptions: {
+      tabBarLabel: 'MAP',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-map" color={tintColor} size={24} />
+      ),
+    },
+  },
+  Chat: {
+    screen: ChatScreen,
+    navigationOptions: {
+      tabBarLabel: 'CHAT',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
+      ),
+    },
+  },
 });
+
+const AuthStack = createStackNavigator(
+ {
+   LoginScreen: { screen: LoginScreen },
+   SignUpScreen: { screen: SignUpScreen }
+ }
 
 class TabComponents extends React.Component {
   static router = TabNavigator.router;
@@ -43,23 +82,12 @@ class TabComponents extends React.Component {
   }
 }
 
-const AuthStack = createStackNavigator(
-  {
-    SingleEvent: { screen: SingleEvent },
-  },
-  { initialRouteName: 'SingleEvent' }
-);
 
 const AppContainer = createAppContainer(
   createSwitchNavigator({
     Auth: AuthStack,
-
     App: TabComponents,
   })
 );
 
-export default class Application extends React.Component {
-  render() {
-    return <AppContainer />;
-  }
-}
+export default AppContainer;

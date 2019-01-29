@@ -16,15 +16,22 @@ export default class Search extends Component {
           position: 'absolute',
         }}
       >
-        <Ionicons name="ios-search" size={20} />
+        <Ionicons
+          name="ios-search"
+          size={20}
+          onPress={() => this.props.handleZipCodeSubmit()}
+        />
         <TextInput
-          placeholder="Search"
+          placeholder="Search for local movie theaters"
           placeholderTextColor="grey"
           style={{
             flex: 1,
             fontWeight: '700',
             backgroundColor: 'white',
             marginLeft: 5,
+          }}
+          onChangeText={text => {
+            this.props.handleZipCodeChange(text);
           }}
         />
         <Ionicons name="ios-options" size={20} />
