@@ -1,0 +1,1 @@
+// Colors for chat avatar
