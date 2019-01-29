@@ -15,6 +15,7 @@ import {
   SingleTheaterScreen,
   FilterScreen,
   ListScreen,
+
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -71,6 +72,8 @@ const AuthStack = createStackNavigator(
     SignUpScreen: { screen: SignUpScreen },
   },
   { initialRouteName: 'LoginScreen' }
+  // { SingleEvent: { screen: SingleEvent } },
+  // { initialRouteName: 'SingleEvent' }
 );
 
 

@@ -6,7 +6,7 @@ var baseUrl = 'http://data.tmsapi.com/v1.1';
 
 var showtimesUrl = baseUrl + '/movies/showings';
 
-var zipCode = '78701';
+var zipCode = '60647';
 
 var d = new Date();
 

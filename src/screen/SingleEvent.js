@@ -14,9 +14,11 @@ import {
   Button,
   Card,
   Paragraph,
+  List,
 } from 'react-native-paper';
 import { EventCard } from '../component';
 import axios from 'axios';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
 const isGraceNote =
@@ -56,7 +58,14 @@ const dummyShowTimes = [{ time: `515` }, { time: '6:15' }, { time: `715` }];
 class SingleEvent extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      movie: '',
+      genres: '',
+      rating: '',
+      showtime: [],
+      selectedTime: '',
+      quantity: 0,
+    };
     this.config = {
       url: 'http://data.tmsapi.com/v1.1/movies/showings',
       zipCode: '60647',
@@ -69,11 +78,12 @@ class SingleEvent extends React.Component {
 
   async componentDidMount() {
     this.setState({
-      movie: 'My Cousin Vinny',
-      tmsId: 'MV000347260000',
+      userGenre: 'horror',
+      movie: 'Glass',
+      tmsId: 'MV010018040000',
       rootId: '13817',
-      genre: 'comedy',
-      rating: 'R',
+      genres: 'Thriller',
+      rating: 'PG-13',
       time: 'evening',
       theater: 'Logan Theatre',
       zip: '60647',
@@ -90,71 +100,149 @@ class SingleEvent extends React.Component {
         longitude: '-87.7084',
       },
       theatreId: '2877',
-      showtime: ['8:00 PM', '9:15 PM', '11:00 PM'],
+      showtime: [],
       selectedTime: '',
+      shortDescription: '',
     });
 
-    /* await this.fetchTheaters(); */
+    await this.fetchTheaters();
   }
   async fetchTheaters() {
     const res = await axios.get(
-      'http://data.tmsapi.com/v1.1/theatres?zip=60647&radius=1&units=mi&api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+      'http://data.tmsapi.com/v1.1/theatres/2877/showings?startDate=2019-01-29&numDays=5&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
     );
-    const movies = res.data.filter(theater => theater.name === 'Logan Theatre');
 
-    console.log(movies);
+    const movies = res.data.filter(movie => movie.tmsId === 'MV010018040000');
+    const showtimes = movies[0].showtimes.map(
+      movie => movie.dateTime.split('T')[1]
+    );
+    const rating = movies[0].ratings[0].code;
+    const genres = movies[0].genres.join('');
+    const image = movies[0].preferredImage.uri;
+    const shortDescription = movies[0].shortDescription;
+
+    this.setState({
+      showtime: showtimes,
+      rating: rating,
+      genres: genres,
+      shortDescription: shortDescription,
+      image: image,
+    });
+    console.log('SHORT DESCRIPTION', shortDescription);
   }
   handlePress(selectedTime) {
     this.setState({ selectedTime });
   }
   render() {
-    return (
-      <View
-        style={{
-          flexDirection: 'column',
-          flex: 1,
-          justifyContent: 'flex-bottom',
-          alignContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <View style={{ flex: 1 }}>
-          <EventCard state={this.state} />
-        </View>
+    const { navigation } = this.props;
 
-        <Title style={{ marginTop: 10 }}>Show Times</Title>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          {!this.state.selectedTime ? (
-            <FlatList
-              horizontal={true}
-              data={this.state.showtime}
-              renderItem={({ item }) => (
-                <Button
-                  mode="outlined"
-                  style={{
-                    flexDirection: 'center',
-                    height: 40,
-                    width: 110,
-                    margin: 10,
-                    marginEnd: 10,
-                  }}
-                  key={item}
-                  accessibilityLabel={item}
-                  onPress={() => this.handlePress(item)}
-                >
-                  {item}
-                </Button>
+    if (!this.state.shortDescription) {
+      return <Text>...Loading</Text>;
+    } else {
+      return (
+        <View
+          style={{
+            flexDirection: 'column',
+            flex: 1,
+            justifyContent: 'flex-bottom',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <EventCard state={this.state} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Title style={{ alignSelf: 'center', marginTop: 10 }}>
+              Show Times
+            </Title>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              {!this.state.selectedTime ? (
+                <FlatList
+                  numColumns={3}
+                  data={this.state.showtime}
+                  renderItem={({ item }) => (
+                    <Button
+                      mode="outlined"
+                      style={{
+                        flexDirection: 'center',
+                        height: 40,
+                        width: 110,
+                        margin: 10,
+                        marginEnd: 10,
+                      }}
+                      key={item}
+                      accessibilityLabel={item}
+                      onPress={() => this.handlePress(item)}
+                    >
+                      {item}
+                    </Button>
+                  )}
+                />
+              ) : (
+                <View>
+                  <Button onPress={() => this.setState({ selectedTime: '' })}>
+                    All Showtimes
+                  </Button>
+                  <Text style={{ margin: 10, alignSelf: 'center' }}>
+                    Select Tickets {`&`} Quantities
+                  </Text>
+
+                  <FlatList
+                    numColumns={3}
+                    alignContent="center"
+                    data={['qty', 'type', 'price']}
+                    renderItem={({ item }) => (
+                      <View>
+                        <Text
+                          style={{
+                            alignSelf: 'center',
+                            height: 20,
+                            width: 110,
+                          }}
+                          key={item}
+                          accessibilityLabel={item}
+                        >
+                          {item}
+                        </Text>
+                      </View>
+                    )}
+                  />
+
+                  {/* <List.Accordion
+                    title="0"
+                    left={props => <List.Icon {...props} icon="face" />}
+                  >
+                    <List.Item
+                      onPress={(itemValue, second) =>
+                        console.log(itemValue, second)
+                      }
+                      title="1"
+                      value={1}
+                    />
+                  </List.Accordion> */}
+
+                  <Paragraph>Adult Weekday</Paragraph>
+                  <Paragraph>Adult Weekend</Paragraph>
+                  <Paragraph>Child</Paragraph>
+                  <Paragraph>Vet/Senior </Paragraph>
+
+                  <Button
+                    onPress={() =>
+                      navigation.navigate('Chat', {
+                        state: this.state,
+                      })
+                    }
+                  >
+                    Purchase Tickets!
+                  </Button>
+                </View>
               )}
-            />
-          ) : (
-            <Text>Purchase Tickets!</Text>
-          )}
+            </View>
+          </View>
         </View>
-        <View style={{ flex: 1, height: 60 }}>
-          <Text style={{ margin: 10 }}>Select Tickets {`&`} Quantities</Text>
-        </View>
-      </View>
-    );
+      );
+    }
   }
 }
 
