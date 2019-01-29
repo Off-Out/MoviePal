@@ -1,29 +1,36 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Form, Item, Input, Button, Text, Alert } from 'native-base';
+import { View, StyleSheet, Alert } from 'react-native';
+import { Form, Item, Input, Button, Text } from 'native-base';
+import { auth } from '../firebase';
 
 class LoginForm extends Component {
   render() {
-    const { handleUserInput, login, credential } = this.props;
+    const {
+      handleUserInput,
+      login,
+      credential,
+      signInWithGoogle,
+      signInWithFacebook,
+    } = this.props;
+    console.log('what is this?', this.props);
+
     return (
       <View style={styles.container}>
         <Form>
-          <Item regular style={styles.item}>
+          <Item block style={styles.item}>
             <Input
-              style={styles.input}
               placeholder="EMAIL"
-              autoCapitalize={'none'}
+              autoCapitalize="none"
               autoCorrect={false}
               onChangeText={text => {
                 handleUserInput('email', text);
               }}
             />
           </Item>
-          <Item regular style={styles.item}>
+          <Item block style={styles.item}>
             <Input
-              style={styles.input}
               placeholder="PASSWORD"
-              autoCapitalize={'none'}
+              autoCapitalize="none"
               autoCorrect={false}
               secureTextEntry={true}
               onChangeText={text => {
@@ -32,6 +39,7 @@ class LoginForm extends Component {
             />
           </Item>
           <Button
+            style={styles.button}
             block
             danger
             onPress={() => {
@@ -40,23 +48,52 @@ class LoginForm extends Component {
           >
             <Text>LOGIN</Text>
           </Button>
+
           <Button
-            transparent
-            danger
-            onPress={() => {
-              if (!this.state.email) {
-                Alert.alert('Please enter your email');
-              } else {
-                auth
-                  .sendPasswordResetEmail(this.state.email)
-                  .then(() => Alert.alert('Reset Password Email Sent!'));
-              }
-            }}
+            block
+            success
+            style={styles.button}
+            onPress={() => signInWithGoogle()}
           >
-            <Text style={{ fontSize: 13, alignSelf: 'center' }}>
-              FORGOT PASSWORD?
-            </Text>
+            <Text>SIGN-IN WITH GOOGLE</Text>
           </Button>
+
+          <Button
+            block
+            primary
+            style={styles.button}
+            onPress={() => signInWithFacebook()}
+          >
+            <Text>SIGN-IN WITH FACEBOOK</Text>
+          </Button>
+
+          <View>
+            <Button
+              block
+              danger
+              style={styles.button}
+              onPress={() => {
+                if (!credential.email) {
+                  console.log('here');
+                  Alert.alert('Please enter your email');
+                } else {
+                  auth
+                    .sendPasswordResetEmail(credential.email)
+                    .then(() => Alert.alert('Reset Password Email Sent!'));
+                }
+              }}
+            >
+              <Text>FORGOT PASSWORD?</Text>
+            </Button>
+            <Button
+              block
+              warning
+              style={styles.button}
+              onPress={() => this.props.navigation.navigate('SignUpScreen')}
+            >
+              <Text>CREATE ACCOUNT</Text>
+            </Button>
+          </View>
         </Form>
       </View>
     );
@@ -64,8 +101,8 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { margin: 13 },
-  item: { margin: 5 },
-  input: { fontSize: 14 },
+  container: { flex: 1, justifyContent: 'space-evenly' },
+  item: { marginLeft: 10, marginRight: 10, marginBottom: 10 },
+  button: { marginLeft: 10, marginRight: 10, marginBottom: 10 },
 });
 export default LoginForm;
