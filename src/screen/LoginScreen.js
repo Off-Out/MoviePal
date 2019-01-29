@@ -44,33 +44,36 @@ class LoginScreen extends Component {
             result.idToken,
             result.accessToken
           );
-          const user = auth.signInAndRetrieveDataWithCredential(credential);
-          return user;
+          return auth.signInAndRetrieveDataWithCredential(credential);
         } else {
           return { cancelled: true };
         }
       })
       .then(() => {
-        const user = auth.currentUser;
+        const user = auth.currentUser || {}
         if (user.uid) {
           database.ref(`users/${user.uid}`).once('value', snapshot => {
             if (snapshot.exists()) {
               console.log('exists!');
-              this.props.navigation.navigate('App', { userId: user.uid });
-            } else {
+              this.props.navigation.navigate('App', { userId: user.uid })
+            };
+            if (!snapshot.exists()) {
+              console.log('doesnt exist!')
+              console.log("loginscreen user", user)
+              
               database.ref(`users/${user.uid}`).set({
-                name: user.displayName,
-                email: user.email,
-                // photo: user.photoUrl
+                name: user.providerData[0].displayName,
+                email: user.providerData[0].email,
+                photo: user.providerData[0].photoURL
               });
-              this.props.navigation.navigate('App', { userId: user.uid });
+              this.props.navigation.navigate('App', { userId: user.uid })
             }
           });
         }
       })
       .catch(error => console.error(error));
   };
-
+  
   signInWithFacebook = async () => {
     const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
       '367646357383853',
