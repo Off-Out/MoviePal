@@ -11,10 +11,10 @@ import {
   MapScreen,
   ChatScreen,
   LoginScreen,
+  SignUpScreen,
   SingleTheaterScreen,
   FilterScreen,
   ListScreen,
-  SignUpScreen,
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 

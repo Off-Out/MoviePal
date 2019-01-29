@@ -52,11 +52,21 @@ class LoginScreen extends Component {
       })
       .then(() => {
         const user = auth.currentUser;
-        database.ref(`users/${user.uid}`).set({
-          name: user.displayName,
-          email: user.email,
-        });
-        this.props.navigation.navigate('App', { userId: user.uid });
+        if (user.uid) {
+          database.ref(`users/${user.uid}`).once('value', snapshot => {
+            if (snapshot.exists()) {
+              console.log('exists!');
+              this.props.navigation.navigate('App', { userId: user.uid });
+            } else {
+              database.ref(`users/${user.uid}`).set({
+                name: user.displayName,
+                email: user.email,
+                // photo: user.photoUrl
+              });
+              this.props.navigation.navigate('App', { userId: user.uid });
+            }
+          });
+        }
       })
       .catch(error => console.error(error));
   };
