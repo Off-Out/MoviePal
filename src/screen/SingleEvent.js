@@ -69,11 +69,11 @@ class SingleEvent extends React.Component {
 
   async componentDidMount() {
     this.setState({
-      movie: 'My Cousin Vinny',
-      tmsId: 'MV000347260000',
+      movie: 'Glass',
+      tmsId: 'MV010018040000',
       rootId: '13817',
-      genre: 'comedy',
-      rating: 'R',
+      genre: 'Thriller',
+      rating: 'PG-13',
       time: 'evening',
       theater: 'Logan Theatre',
       zip: '60647',
@@ -90,19 +90,24 @@ class SingleEvent extends React.Component {
         longitude: '-87.7084',
       },
       theatreId: '2877',
-      showtime: ['8:00 PM', '9:15 PM', '11:00 PM'],
+      showtime: ['11:00 AM', '1:00 PM', '3:15 PM'],
       selectedTime: '',
     });
 
-    /* await this.fetchTheaters(); */
+    await this.fetchTheaters();
   }
   async fetchTheaters() {
     const res = await axios.get(
-      'http://data.tmsapi.com/v1.1/theatres?zip=60647&radius=1&units=mi&api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+      'http://data.tmsapi.com/v1.1/theatres/2877/showings?startDate=2019-01-29&numDays=5&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
     );
-    const movies = res.data.filter(theater => theater.name === 'Logan Theatre');
 
-    console.log(movies);
+    const movies = res.data.filter(movie => movie.tmsId === 'MV010018040000');
+    const showtimes = movies[0].showtimes.map(
+      movie => movie.dateTime.split('T')[1]
+    );
+    this.setState({ showtime: showtimes });
+
+    console.log('MOVIES AT LOGAN SQUARE', showtimes);
   }
   handlePress(selectedTime) {
     this.setState({ selectedTime });
@@ -126,7 +131,7 @@ class SingleEvent extends React.Component {
         <View style={{ flex: 1, flexDirection: 'row' }}>
           {!this.state.selectedTime ? (
             <FlatList
-              horizontal={true}
+              numColumns={3}
               data={this.state.showtime}
               renderItem={({ item }) => (
                 <Button
