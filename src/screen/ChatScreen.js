@@ -32,7 +32,7 @@ export default class ChatScreen extends Component {
         user={{
           _id: ChatBackEnd.getUid(),
           name: ChatBackEnd.getName(),
-          avatar: '',
+          // avatar: 
         }}
       />
       </View>

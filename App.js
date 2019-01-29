@@ -65,13 +65,6 @@ const TabNavigator = createBottomTabNavigator({
   },
 });
 
-const AuthStack = createStackNavigator(
- {
-   LoginScreen: { screen: LoginScreen },
-   SignUpScreen: { screen: SignUpScreen }
- }
-)
-
 class TabComponents extends React.Component {
   static router = TabNavigator.router;
   render() {

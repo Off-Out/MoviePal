@@ -70,7 +70,6 @@ export default class ProfileScreen extends Component {
     const {uid} = this.props.screenProps;
 
     const movieTitle = 'Little Mermaid';
-    // const random = Math.round(Math.random() *1000);
     const chatId = "a1234567bc";
 
     const randomChatRoomId = (uid) => {
