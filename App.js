@@ -11,6 +11,7 @@ import {
   MapScreen,
   ChatScreen,
   LoginScreen,
+  SignUpScreen,
   SingleTheaterScreen,
   FilterScreen,
   ListScreen,
@@ -64,12 +65,6 @@ const TabNavigator = createBottomTabNavigator({
   },
 });
 
-const AuthStack = createStackNavigator(
- {
-   LoginScreen: { screen: LoginScreen },
-   SignUpScreen: { screen: SignUpScreen }
- }
-
 class TabComponents extends React.Component {
   static router = TabNavigator.router;
   render() {
@@ -82,6 +77,16 @@ class TabComponents extends React.Component {
   }
 }
 
+const AuthStack = createStackNavigator(
+  {
+    LoginScreen: { screen: LoginScreen },
+    SignUpScreen: { screen: SignUpScreen }
+  },
+  // {
+  //   SingleEvent: { screen: SingleEvent},
+  // }
+
+);
 
 const AppContainer = createAppContainer(
   createSwitchNavigator({
