@@ -14,6 +14,7 @@ import {
   SingleTheaterScreen,
   FilterScreen,
   ListScreen,
+  SingleEvent,
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -64,11 +65,10 @@ const TabNavigator = createBottomTabNavigator({
 });
 
 const AuthStack = createStackNavigator(
-  {
-    LoginScreen: { screen: LoginScreen },
-  },
-  { initialRouteName: 'LoginScreen' }
-);
+ {
+   LoginScreen: { screen: LoginScreen },
+   SignUpScreen: { screen: SignUpScreen }
+ }
 
 class TabComponents extends React.Component {
   static router = TabNavigator.router;
@@ -81,6 +81,7 @@ class TabComponents extends React.Component {
     );
   }
 }
+
 
 const AppContainer = createAppContainer(
   createSwitchNavigator({
