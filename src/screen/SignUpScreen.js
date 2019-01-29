@@ -31,7 +31,7 @@ class SignUpScreen extends Component {
           location: this.state.location,
           email: this.state.email
         })
-        this.props.navigation.navigate('App', {userId: user.uid})
+        this.props.navigation.navigate('App', {userId: user.user.uid})
       })
       .catch(error => Alert.alert(error.message));
   };
