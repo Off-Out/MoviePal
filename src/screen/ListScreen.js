@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text,SafeAreaView, View ,Button} from 'react-native';
+import MapScreen from './MapScreen';
 
-export class ListScreen extends Component {
+
+class ListScreen extends React.Component {
   render() {
+    /* 2. Get the param, provide a fallback value if not available */
+    const { navigation } = this.props;
+
+     const theaters = navigation.getParam('theaters');
+
+
     return (
-      <View>
-        <Text> textInComponent </Text>
-      </View>
+      <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>List Screen</Text>
+        <Text> Theaters: {JSON.stringify(theaters)}</Text>
+
+
+
+        <Button
+          title="Go back"
+          onPress={() => this.props.navigation.goBack()}
+        />
+      </SafeAreaView>
     );
   }
 }

@@ -6,19 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 
 export default class MapScreen extends Component {
-  static navigationOptions = ({ navigation, tintColor }) => ({
-    headerTitle: 'Map',
-    headerRight: (
-      <Ionicons
-        name="ios-list-box"
-        style={{ marginRight: 10 }}
-        color={tintColor}
-        size={24}
-        onPress={() => navigation.navigate('ListScreen')}
-      />
-    ),
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -27,12 +14,34 @@ export default class MapScreen extends Component {
     };
   }
 
+   static navigationOptions = ({ navigation, tintColor }) => {
+    const theaters = navigation.getParam('theaters')
+
+    return {
+    headerTitle: 'Map',
+    headerRight: (
+      <Ionicons
+        name="ios-list-box"
+        style={{ marginRight: 10 }}
+        color={tintColor}
+        size={24}
+        onPress={() => navigation.navigate('ListScreen', {
+              theaters
+            })}
+      />
+    )
+  }};
+
+
   componentDidMount = async () => {
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres?zip=${
         this.state.zipCode
       }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
+    this.props.navigation.setParams({
+      theaters : response.data,
+    })
     this.setState({
       theaters: response.data,
     });
@@ -58,6 +67,7 @@ export default class MapScreen extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
+
         <MapView
           style={{ flex: 1, zIndex: -1 }}
           provider={PROVIDER_GOOGLE}
@@ -70,6 +80,7 @@ export default class MapScreen extends Component {
           showsUserLocation
           showsMyLocationButton={true}
         >
+
           {this.state.theaters.map(marker => (
             <Marker
               key={marker.theatreId}
@@ -81,6 +92,7 @@ export default class MapScreen extends Component {
               description={marker.location.address.street}
             />
           ))}
+
         </MapView>
         <Search
           handleZipCodeChange={this.handleZipCodeChange}
