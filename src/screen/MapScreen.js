@@ -12,7 +12,10 @@ export default class MapScreen extends Component {
       <Ionicons
         name="ios-list-box"
         style={{ marginRight: 10 }}
+<<<<<<< HEAD
         color={tintColor}
+=======
+>>>>>>> 76dec75881f71287319753a62109629be3df6a1e
         size={24}
         onPress={() => navigation.navigate('ListScreen')}
       />

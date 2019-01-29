@@ -1,4 +1,4 @@
-import firebase, {auth, database} from '../firebase';
+import firebase, { auth, database } from '../firebase';
 
 class ChatBackEnd {
   uid = '';
@@ -6,17 +6,20 @@ class ChatBackEnd {
   messagesRef = null;
   // initialize Firebase Backend
   constructor() {
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(async user => {
       if (user) {
-        console.log('backend', user)
+        console.log('backend', user);
         this.setUid(user.uid);
-        database.ref(`/users/${user.uid}`).on('value', snapshot => {
-          this.setName(snapshot.val().name)
-        })
-      } else {
-        firebase.auth().signInAnonymously().catch((error) => {
-          alert(error.message);
+        await database.ref(`/users/${user.uid}`).on('value', snapshot => {
+          this.setName(snapshot.val().name);
         });
+      } else {
+        firebase
+          .auth()
+          .signInAnonymously()
+          .catch(error => {
+            alert(error.message);
+          });
       }
     });
   }
@@ -28,19 +31,19 @@ class ChatBackEnd {
   }
 
   setName(value) {
-    this.name = value
+    this.name = value;
   }
 
   getName() {
-    return this.name
+    return this.name;
   }
   // retrieve the messages from the Backend
   loadMessages(callback) {
     this.messagesRef = firebase.database().ref('messages');
     this.messagesRef.off();
-    const onReceive = (data) => {
+    const onReceive = data => {
       const message = data.val();
-      console.log('message', message)
+      console.log('message', message);
       callback({
         _id: data.key,
         text: message.text,
