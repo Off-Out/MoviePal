@@ -9,7 +9,15 @@ class EventCard extends React.Component {
   render() {
     return (
       <SafeAreaView>
-        <Card style={{ backgroundColor: 'white' }} elevation={4}>
+        <Card
+          style={{
+            backgroundColor: 'white',
+            width: 380,
+            height: 300,
+            alignItems: 'center',
+          }}
+          elevation={4}
+        >
           <View
             style={{
               flexDirection: 'row',
@@ -17,7 +25,7 @@ class EventCard extends React.Component {
               backgroundColor: 'white',
             }}
           >
-            <Card.Content style={{ marginTop: 25, marginRight: 40 }}>
+            <Card.Content style={{ marginTop: 25 }}>
               {this.props.state.movie ? (
                 <Title>{this.props.state.movie}</Title>
               ) : (
@@ -28,7 +36,7 @@ class EventCard extends React.Component {
                 <Paragraph>{this.props.state.userEmail}</Paragraph>
               ) : (
                 <View>
-                  <Paragraph style={{ alignSelf: 'right' }}>
+                  <Paragraph>
                     {this.props.state.genres}
                     {'   '}
                     {this.props.state.rating}
@@ -47,11 +55,10 @@ class EventCard extends React.Component {
             </Card.Content>
             <Card.Cover
               style={{
-                alignContent: 'right',
                 marginTop: 10,
-                marginRight: 10,
+
                 marginBottom: 10,
-                width: 100,
+                width: 160,
               }}
               source={{
                 uri:

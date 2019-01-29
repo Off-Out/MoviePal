@@ -62,6 +62,7 @@ class SingleEvent extends React.Component {
       rating: '',
       showtime: [],
       selectedTime: '',
+      quantity: 0,
     };
     this.config = {
       url: 'http://data.tmsapi.com/v1.1/movies/showings',
@@ -176,10 +177,35 @@ class SingleEvent extends React.Component {
                 />
               ) : (
                 <View>
+                  <Button onPress={() => this.setState({ selectedTime: '' })}>
+                    All Showtimes
+                  </Button>
                   <Text style={{ margin: 10 }}>
                     Select Tickets {`&`} Quantities
                   </Text>
-                  <Button>Purchase Tickets!</Button>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={this.state.quantity}
+                      onValueChange={itemValue =>
+                        this.setState({ quantity: itemValue })
+                      }
+                    >
+                      <Picker.Item
+                        key="unselectable"
+                        label="quantity"
+                        value={0}
+                      />
+                      <Picker.Item label="1" value={1} />
+                      <Picker.Item label="2" value={2} />
+                      <Picker.Item label="3" value={3} />
+                      <Picker.Item label="4" value={4} />
+                      <Picker.Item label="5" value={5} />
+                      <Picker.Item label="6" value={6} />
+                    </Picker>
+
+                    <Button>Purchase Tickets!</Button>
+                  </View>
                 </View>
               )}
             </View>
