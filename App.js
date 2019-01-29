@@ -14,6 +14,7 @@ import {
   SingleTheaterScreen,
   FilterScreen,
   ListScreen,
+  SignUpScreen,
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -66,6 +67,7 @@ const TabNavigator = createBottomTabNavigator({
 const AuthStack = createStackNavigator(
   {
     LoginScreen: { screen: LoginScreen },
+    SignUpScreen: { screen: SignUpScreen },
   },
   { initialRouteName: 'LoginScreen' }
 );

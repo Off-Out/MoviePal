@@ -6,13 +6,12 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 
 export default class MapScreen extends Component {
-  static navigationOptions = ({ navigation, tintColor }) => ({
+  static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Map',
     headerRight: (
       <Ionicons
         name="ios-list-box"
         style={{ marginRight: 10 }}
-        color={tintColor}
         size={24}
         onPress={() => navigation.navigate('ListScreen')}
       />

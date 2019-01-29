@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default class Search extends Component {
@@ -39,5 +39,3 @@ export default class Search extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({});
