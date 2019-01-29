@@ -14,9 +14,11 @@ import {
   Button,
   Card,
   Paragraph,
+  List,
 } from 'react-native-paper';
 import { EventCard } from '../component';
 import axios from 'axios';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
 const isGraceNote =
@@ -132,6 +134,8 @@ class SingleEvent extends React.Component {
     this.setState({ selectedTime });
   }
   render() {
+    const { navigation } = this.props;
+
     if (!this.state.shortDescription) {
       return <Text>...Loading</Text>;
     } else {
@@ -180,32 +184,52 @@ class SingleEvent extends React.Component {
                   <Button onPress={() => this.setState({ selectedTime: '' })}>
                     All Showtimes
                   </Button>
-                  <Text style={{ margin: 10 }}>
+                  <Text style={{ margin: 10, alignSelf: 'center' }}>
                     Select Tickets {`&`} Quantities
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Picker
-                      mode="dropdown"
-                      selectedValue={this.state.quantity}
-                      onValueChange={itemValue =>
-                        this.setState({ quantity: itemValue })
-                      }
-                    >
-                      <Picker.Item
-                        key="unselectable"
-                        label="quantity"
-                        value={0}
-                      />
-                      <Picker.Item label="1" value={1} />
-                      <Picker.Item label="2" value={2} />
-                      <Picker.Item label="3" value={3} />
-                      <Picker.Item label="4" value={4} />
-                      <Picker.Item label="5" value={5} />
-                      <Picker.Item label="6" value={6} />
-                    </Picker>
 
-                    <Button>Purchase Tickets!</Button>
-                  </View>
+                  <FlatList
+                    numColumns={3}
+                    alignContent="center"
+                    data={['qty', 'type', 'price']}
+                    renderItem={({ item }) => (
+                      <View>
+                        <Text
+                          style={{
+                            alignSelf: 'center',
+                            height: 20,
+                            width: 110,
+                          }}
+                          key={item}
+                          accessibilityLabel={item}
+                        >
+                          {item}
+                        </Text>
+                      </View>
+                    )}
+                  />
+
+                  {/* <List.Accordion
+                    title="0"
+                    left={props => <List.Icon {...props} icon="face" />}
+                  >
+                    <List.Item
+                      onPress={(itemValue, second) =>
+                        console.log(itemValue, second)
+                      }
+                      title="1"
+                      value={1}
+                    />
+                  </List.Accordion> */}
+
+                  <Paragraph>Adult Weekday</Paragraph>
+                  <Paragraph>Adult Weekend</Paragraph>
+                  <Paragraph>Child</Paragraph>
+                  <Paragraph>Vet/Senior </Paragraph>
+
+                  <Button onPress={() => navigation.navigate('Chat')}>
+                    Purchase Tickets!
+                  </Button>
                 </View>
               )}
             </View>
