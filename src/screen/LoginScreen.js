@@ -28,7 +28,7 @@ class LoginScreen extends Component {
     });
   };
 
-  login = async (email, password) => {
+  login = (email, password) => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(result =>
