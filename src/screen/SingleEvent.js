@@ -227,7 +227,13 @@ class SingleEvent extends React.Component {
                   <Paragraph>Child</Paragraph>
                   <Paragraph>Vet/Senior </Paragraph>
 
-                  <Button onPress={() => navigation.navigate('Chat')}>
+                  <Button
+                    onPress={() =>
+                      navigation.navigate('Chat', {
+                        state: this.state,
+                      })
+                    }
+                  >
                     Purchase Tickets!
                   </Button>
                 </View>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { Asset, AppLoading } from 'expo';
 import { GiftedChat } from 'react-native-gifted-chat';
-import ChatBackEnd from '../component/ChatBackEnd'
+import ChatBackEnd from '../component/ChatBackEnd';
 // Sentry is a crash reporting and aggregation platform that provides you with "real-time insight into production deployments with info to reproduce and fix crashes"
 // import Sentry from 'sentry-expo';
 import LoginScreen from './LoginScreen';
@@ -19,36 +19,35 @@ export default class ChatScreen extends Component {
   }
 
   render() {
-    const info = this.props.navigation.getParam('info')
+    const info = this.props.navigation.getParam('info');
     if (!info) {
       return (
-        <View style={{flex: 1, justifyContent:"center"}}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
           <Text>Please join an event to enter the event's chatroom!</Text>
         </View>
-      )
-    }
-    else {
+      );
+    } else {
       return (
         <View style={styles.container}>
-        <NavBar movie={info.movie}/>
-        <GiftedChat
-          messages={this.state.messages}
-          onSend={(message) => {
-            ChatBackEnd.sendMessage(message);
-          }}
-          user={{
-            _id: ChatBackEnd.getUid(),
-            name: ChatBackEnd.getName(),
-            // avatar: 
-          }}
-        />
+          <NavBar movie={info.movie} />
+          <GiftedChat
+            messages={this.state.messages}
+            onSend={message => {
+              ChatBackEnd.sendMessage(message);
+            }}
+            user={{
+              _id: ChatBackEnd.getUid(),
+              name: ChatBackEnd.getName(),
+              // avatar:
+            }}
+          />
         </View>
       );
     }
   }
   componentDidMount() {
-    ChatBackEnd.loadMessages((message) => {
-      this.setState((previousState) => {
+    ChatBackEnd.loadMessages(message => {
+      this.setState(previousState => {
         return {
           messages: GiftedChat.append(previousState.messages, message),
         };
@@ -68,32 +67,32 @@ export default class ChatScreen extends Component {
 //   name: React.PropTypes.string,
 // };
 
-  // onSend = (messages = []) => {
-  //   this.setState(previousState => ({
-  //     messages: GiftedChat.append(previousState.messages, [
-  //       { ...messages[0], sent: true, received: true },
-  //     ]),
-  //   }));
-  // };
+// onSend = (messages = []) => {
+//   this.setState(previousState => ({
+//     messages: GiftedChat.append(previousState.messages, [
+//       { ...messages[0], sent: true, received: true },
+//     ]),
+//   }));
+// };
 
-  // parsePatterns = linkStyle => {
-  //   return [
-  //     {
-  //       pattern: /#(\w+)/,
-  //       style: { ...linkStyle, color: 'darkorange' },
-  //       onPress: () => Linking.openURL('http://gifted.chat'),
-  //     },
-  //   ];
-  // };
+// parsePatterns = linkStyle => {
+//   return [
+//     {
+//       pattern: /#(\w+)/,
+//       style: { ...linkStyle, color: 'darkorange' },
+//       onPress: () => Linking.openURL('http://gifted.chat'),
+//     },
+//   ];
+// };
 
-  // async componentWillMount() {
-  //   // init with only system messages
-  //   await Asset.fromModule(require('../../assets/avatar.png')).downloadAsync();
-  //   this.setState({
-  //     messages: '',
-  //     appIsReady: true,
-  //   });
-  // }
+// async componentWillMount() {
+//   // init with only system messages
+//   await Asset.fromModule(require('../../assets/avatar.png')).downloadAsync();
+//   this.setState({
+//     messages: '',
+//     appIsReady: true,
+//   });
+// }
 
 //   render() {
 //     if (!this.state.appIsReady) {
