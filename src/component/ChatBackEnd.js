@@ -6,11 +6,11 @@ class ChatBackEnd {
   messagesRef = null;
   // initialize Firebase Backend
   constructor() {
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(async (user) => {
       if (user) {
         console.log('backend', user)
         this.setUid(user.uid);
-        database.ref(`/users/${user.uid}`).on('value', snapshot => {
+        await database.ref(`/users/${user.uid}`).on('value', snapshot => {
           this.setName(snapshot.val().name)
         })
       } else {
