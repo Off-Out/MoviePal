@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default class Search extends Component {
@@ -16,9 +16,13 @@ export default class Search extends Component {
           position: 'absolute',
         }}
       >
-        <Ionicons name="ios-search" size={20} />
+        <Ionicons
+          name="ios-search"
+          size={20}
+          onPress={() => this.props.handleZipCodeSubmit()}
+        />
         <TextInput
-          placeholder="Search"
+          placeholder="Search for local movie theaters"
           placeholderTextColor="grey"
           style={{
             flex: 1,
@@ -26,11 +30,12 @@ export default class Search extends Component {
             backgroundColor: 'white',
             marginLeft: 5,
           }}
+          onChangeText={text => {
+            this.props.handleZipCodeChange(text);
+          }}
         />
         <Ionicons name="ios-options" size={20} />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({});

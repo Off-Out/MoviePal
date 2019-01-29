@@ -15,11 +15,12 @@ export default class ProfileScreen extends Component {
     };
   }
 
-  async componentDidMount() {
-    const userId = this.props.screenProps;
-    let user = '';
-    await database.ref(`/users/${userId}`).on('value', snapshot => {
-      user = snapshot.val();
+  componentDidMount() {
+    const userId = this.props.screenProps
+    console.log("userId", userId)
+    console.log(this.props.screenProps,">>>>screenProps")
+    database.ref(`/users/${userId}`).on('value', snapshot => {
+      let user = snapshot.val()
       this.setState({
         name: user.name,
         email: user.email,
@@ -66,23 +67,28 @@ export default class ProfileScreen extends Component {
     const currentUser = auth.currentUser;
     const isProvider = currentUser.providerData[0].providerId !== 'password';
     const display = isProvider ? 'none' : 'flex';
+
     const userId = this.props.screenProps;
 
     const movieTitle = 'Little Mermaid';
-    // const random = Math.round(Math.random() *1000);
-    const movieId = 'a1234567bc';
-    const randomChatRoomId = userId => {
-      const movieRef = database.ref('chatroom/' + movieId);
-      movieRef.set({
+    const chatId = "a1234567bc";
+
+    const randomChatRoomId = (userId) => {
+      const chatRef = database.ref('chatroom/' + chatId)
+      chatRef.update({
         title: movieTitle,
         users: userId,
-      });
-      movieRef.update({
-        users: {
-          [`${userId}`]: true,
-        },
-      });
-    };
+      })
+      .then(() => chatRef.child(`/users/${userId}`).set(true))
+      .then(() => {
+        console.log('here???')
+        this.props.navigation.navigate('Chat', {info: {
+          movie: movieTitle,
+          chatId: chatId,
+          user: userId
+        }})
+      })
+    }
 
     return (
       <Form style={styles.form}>
@@ -147,12 +153,9 @@ export default class ProfileScreen extends Component {
         <Button
           primary
           style={styles.button}
-          onPress={async () => {
+          onPress={() => {
             console.log('Pressed Add Event Button');
-            await randomChatRoomId(this.props.screenProps);
-            this.props.navigation.navigate('Chatscreen', {
-              userId: this.props.screenProps,
-            });
+            randomChatRoomId(userId);
           }}
         >
           <Text>Add Event</Text>

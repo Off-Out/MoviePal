@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
-import { Button, Text } from 'native-base';
-import { Container } from 'native-base';
+import { SignUpScreen } from '../screen';
 import { LoginForm } from '../component';
-import SignUpScreen from './SignUpScreen';
-import {
-  MenuProvider,
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu';
+import { withNavigation } from 'react-navigation';
+
 import firebase, { auth, database } from '../firebase';
 
 class LoginScreen extends Component {
@@ -28,7 +21,7 @@ class LoginScreen extends Component {
     });
   };
 
-  login = async (email, password) => {
+  login = (email, password) => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(result =>
@@ -53,68 +46,56 @@ class LoginScreen extends Component {
           );
           const user = auth.signInAndRetrieveDataWithCredential(credential);
           return user;
-        } else return { cancelled: true };
+        } else {
+          return { cancelled: true };
+        }
       })
       .then(() => {
         const user = auth.currentUser;
-        database.ref(`users/${user.uid}`).set({
-          name: user.displayName,
-          email: user.email,
-          // photo: user.photoUrl
-        });
-        this.props.navigation.navigate('App', { userId: user.uid });
+        if (user.uid) {
+          database.ref(`users/${user.uid}`).once('value', snapshot => {
+            if (snapshot.exists()) {
+              console.log('exists!');
+              this.props.navigation.navigate('App', { userId: user.uid });
+            } else {
+              database.ref(`users/${user.uid}`).set({
+                name: user.displayName,
+                email: user.email,
+                // photo: user.photoUrl
+              });
+              this.props.navigation.navigate('App', { userId: user.uid });
+            }
+          });
+        }
       })
       .catch(error => console.error(error));
+  };
+
+  signInWithFacebook = async () => {
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
+      '367646357383853',
+      { permissions: ['public_profile', 'email'] }
+    );
+
+    if (type === 'success') {
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+      const user = auth.signInAndRetrieveDataWithCredential(credential);
+    } else {
+      return 'cancel';
+    }
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.image} source={require('../image/epLogo.png')} />
         <LoginForm
           handleUserInput={this.handleUserInput}
           login={this.login}
           credential={this.state}
+          signInWithGoogle={this.signInWithGoogle}
+          signInWithFacebook={this.signInWithFacebook}
+          navigation={this.props.navigation}
         />
-        <View style={styles.button}>
-          {/* <Menu style={{flexDirection: "column", padding: 30}}>
-            <MenuTrigger text="CREATE ACCOUNT" />
-              <Text >CREATE ACCOUNT</Text>
-            <MenuOptions>
-              <MenuOption text="SIGN-UP WITH GOOGLE" onSelect={() => this.signInWithGoogle()} />
-              <MenuOption text="SIGN-UP WITH EMAIL" onSelect={() => this.props.navigation.navigate("SignUpScreen")} /> */}
-          <Button
-            block
-            success
-            style={{ marginBottom: 10 }}
-            onPress={() => this.signInWithGoogle()}
-          >
-            <Text>SIGN-IN WITH GOOGLE</Text>
-          </Button>
-          <Button
-            block
-            primary
-            style={{ marginBottom: 10 }}
-            onPress={() => this.signInWithGoogle()}
-          >
-            <Text>SIGN-IN WITH FACEBOOK</Text>
-          </Button>
-          <Button
-            block
-            bordered
-            warning
-            onPress={() => this.props.navigation.navigate('SignUpScreen')}
-          >
-            <Text
-              style={{ fontSize: 15, color: 'orangered', fontWeight: 'bold' }}
-            >
-              CREATE ACCOUNT
-            </Text>
-          </Button>
-          {/* </MenuOptions>
-        </Menu> */}
-        </View>
-        {/* </MenuProvider> */}
       </View>
     );
   }
@@ -122,20 +103,8 @@ class LoginScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-  },
-  image: {
-    alignSelf: 'center',
-    marginTop: 20,
-  },
-  button: {
-    display: 'flex',
     flex: 1,
     justifyContent: 'center',
-    color: 'black',
-    marginLeft: 13,
-    marginRight: 13,
-    fontSize: 15,
   },
 });
 
