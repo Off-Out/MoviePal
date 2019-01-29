@@ -50,49 +50,30 @@ class LoginScreen extends Component {
         }
       })
       .then(() => {
-<<<<<<< HEAD
-        const user = auth.currentUser;
-        if (user.uid) {
-        database.ref(`users/${user.uid}`).once("value", snapshot => {
-          if (snapshot.exists()) {
-            console.log("exists!")
-            this.props.navigation.navigate('App', { userId: user.uid });
-          } else {
-            database.ref(`users/${user.uid}`).set({
-              name: user.displayName,
-              email: user.email,
-              // photo: user.photoUrl
-            });
-            this.props.navigation.navigate('App', { userId: user.uid});
-          }
-        })
-      }
-=======
-        const user = auth.currentUser || {}
+        const user = auth.currentUser || {};
         if (user.uid) {
           database.ref(`users/${user.uid}`).once('value', snapshot => {
             if (snapshot.exists()) {
               console.log('exists!');
-              this.props.navigation.navigate('App', { userId: user.uid })
-            };
+              this.props.navigation.navigate('App', { userId: user.uid });
+            }
             if (!snapshot.exists()) {
-              console.log('doesnt exist!')
-              console.log("loginscreen user", user)
-              
+              console.log('doesnt exist!');
+              console.log('loginscreen user', user);
+
               database.ref(`users/${user.uid}`).set({
                 name: user.providerData[0].displayName,
                 email: user.providerData[0].email,
-                photo: user.providerData[0].photoURL
+                photo: user.providerData[0].photoURL,
               });
-              this.props.navigation.navigate('App', { userId: user.uid })
+              this.props.navigation.navigate('App', { userId: user.uid });
             }
           });
         }
->>>>>>> 76dec75881f71287319753a62109629be3df6a1e
       })
       .catch(error => console.error(error));
   };
-  
+
   signInWithFacebook = async () => {
     const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
       '367646357383853',
