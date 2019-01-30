@@ -58,7 +58,8 @@ class SingleEvent extends React.Component {
       selectedTime: '',
       shortDescription: '',
       quantity: '',
-      type: '',
+      ticket: '',
+      priceOptions: '',
     });
 
     await this.fetchTheaters();
@@ -150,27 +151,41 @@ class SingleEvent extends React.Component {
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Picker
                       style={{ width: 80 }}
-                      onValueChange={itemValue =>
-                        this.setState({ quantity: itemValue })
-                      }
+                      selectedValue={this.state.quantity}
+                      onValueChange={(itemValue, ind) => {
+                        this.setState({ quantity: itemValue, price: '12.50' });
+                      }}
                     >
                       <Picker.Item
                         key="undelectable"
                         label="qty"
                         value={null}
                       />
+
                       {ticketQty.map(num => (
                         <Picker.Item key={num} label={num} value={num} />
                       ))}
                     </Picker>
-                    <Picker style={{ width: 80 }}>
-                      <Picker.Item key="undelectable" label="type" />
+                    <Picker
+                      style={{ width: 280 }}
+                      selectedValue={this.state.ticketType}
+                      onValueChange={(itemValue, ind) =>
+                        this.setState({ ticketType: itemValue })
+                      }
+                    >
+                      <Picker.Item key="undselectable" label="type" />
                       {ticketType.map(type => (
                         <Picker.Item key={type} label={type} value={type} />
                       ))}
                     </Picker>
-                    <Picker key="undelectable" style={{ width: 80 }}>
-                      <Picker.Item label="price" />
+
+                    <Picker>
+                      <Picker.Item
+                        key="undelectable"
+                        label="price"
+                        style={{ width: 80 }}
+                      />
+                      <Picker.Item label={this.state.price} />
                     </Picker>
                   </View>
 
