@@ -3,6 +3,7 @@ import firebase, {auth, database} from '../firebase';
 class ChatBackEnd {
   uid = '';
   name = '';
+  chatId = '';
   messagesRef = null;
   // initialize Firebase Backend
   constructor() {
@@ -11,7 +12,8 @@ class ChatBackEnd {
         console.log('backend', user)
         this.setUid(user.uid);
         await database.ref(`/users/${user.uid}`).on('value', snapshot => {
-          this.setName(snapshot.val().name)
+          this.setName(snapshot.val().name);
+          this.setChatId(snapshot.val().chatId)
         })
       } else {
         firebase.auth().signInAnonymously().catch((error) => {
@@ -34,9 +36,13 @@ class ChatBackEnd {
   getName() {
     return this.name
   }
+
+  setChatId(value) {
+    this.chatId = value
+  }
   // retrieve the messages from the Backend
   loadMessages(callback) {
-    this.messagesRef = database.ref('messages');
+    this.messagesRef = database.ref(`/chatroom/${this.chatId}/messages`);
     this.messagesRef.off();
     const onReceive = (data) => {
       const message = data.val();
@@ -51,7 +57,7 @@ class ChatBackEnd {
         },
       });
     };
-    this.messagesRef.limitToLast(20).on('child_added', onReceive);
+    this.messagesRef.limitToLast(50).on('child_added', onReceive);
   }
   // send the message to the Backend
   sendMessage(message) {

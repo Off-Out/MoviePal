@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import NavBar, { NavTitle, NavButton } from 'react-native-nav';
 
 
-export default function NavBarCustom(screenProps) {
+export default function ChatNavBarCustom(screenProps) {
   console.log('Navbar props >>>>', screenProps)
   const { movieInfo } = screenProps
   return (

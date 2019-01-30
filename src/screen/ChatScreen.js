@@ -7,7 +7,7 @@ import ChatBackEnd from '../component/ChatBackEnd';
 // Sentry is a crash reporting and aggregation platform that provides you with "real-time insight into production deployments with info to reproduce and fix crashes"
 // import Sentry from 'sentry-expo';
 import LoginScreen from './LoginScreen';
-import NavBar from '../component/NavBar';
+import ChatNavBar from '../component/ChatNavBar';
 
 export default class ChatScreen extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ export default class ChatScreen extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <NavBar movieInfo={movieInfo} />
+          <ChatNavBar movieInfo={movieInfo} />
           <GiftedChat
             messages={this.state.messages}
             onSend={message => {
