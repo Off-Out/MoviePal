@@ -188,6 +188,8 @@ class SingleEvent extends React.Component {
 
   render() {
     const { navigation } = this.props;
+    const movie = navigation.getParam('movie', null);
+    console.log('movie showtime and other details', movie);
 
     if (!this.state.shortDescription) {
       return <Text>...Loading</Text>;

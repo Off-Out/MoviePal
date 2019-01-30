@@ -16,7 +16,7 @@ import {
   SingleEvent,
   FilterScreen,
   ListScreen,
-
+  SingleEvent,
 } from './src/screen/index';
 import { auth, database } from './src/firebase'
 import { Text } from 'native-base'
@@ -27,6 +27,7 @@ const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
   Filter: FilterScreen,
   SingleTheater: SingleTheaterScreen,
+  SingleEvent: SingleEvent,
   ListScreen: ListScreen,
   SingleEvent: SingleEvent
 });
@@ -77,7 +78,6 @@ const TabNavigator = createBottomTabNavigator({
 });
 
 const AuthStack = createStackNavigator(
-
   {
     LoginScreen: { screen: LoginScreen },
     SignUpScreen: { screen: SignUpScreen },
@@ -86,7 +86,6 @@ const AuthStack = createStackNavigator(
   // { SingleEvent: { screen: SingleEvent } },
   // { initialRouteName: 'SingleEvent' }
 );
-
 
 class TabComponents extends React.Component {
   static router = TabNavigator.router;
