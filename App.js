@@ -67,13 +67,13 @@ const TabNavigator = createBottomTabNavigator({
 });
 
 const AuthStack = createStackNavigator(
-  // {
-  //   LoginScreen: { screen: LoginScreen },
-  //   SignUpScreen: { screen: SignUpScreen },
-  // },
-  // { initialRouteName: 'LoginScreen' }
-  { SingleMovie: { screen: SingleMovie } },
-  { initialRouteName: 'SingleMovie' }
+  {
+    LoginScreen: { screen: LoginScreen },
+    SignUpScreen: { screen: SignUpScreen },
+  },
+  { initialRouteName: 'LoginScreen' }
+  // { SingleMovie: { screen: SingleMovie } },
+  // { initialRouteName: 'SingleMovie' }
 );
 
 class TabComponents extends React.Component {
