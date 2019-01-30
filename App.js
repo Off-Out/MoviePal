@@ -13,6 +13,7 @@ import {
   LoginScreen,
   SignUpScreen,
   SingleTheaterScreen,
+  SingleEvent,
   FilterScreen,
   ListScreen,
 
@@ -24,6 +25,7 @@ const MapStackNavigator = createStackNavigator({
   Filter: FilterScreen,
   SingleTheater: SingleTheaterScreen,
   ListScreen: ListScreen,
+  SingleEvent: SingleEvent
 });
 
 const TabNavigator = createBottomTabNavigator({

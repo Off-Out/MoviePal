@@ -36,7 +36,7 @@ class ChatBackEnd {
   }
   // retrieve the messages from the Backend
   loadMessages(callback) {
-    this.messagesRef = firebase.database().ref('messages');
+    this.messagesRef = database.ref('messages');
     this.messagesRef.off();
     const onReceive = (data) => {
       const message = data.val();

@@ -72,31 +72,6 @@ export default class ProfileScreen extends Component {
 
     const userId = this.props.screenProps;
 
-    const movieTitle = 'Little Mermaid';
-    const chatId = "a1234567bc";
-
-    const goToChatRoom = (userId) => {
-      const chatRef = database.ref('chatroom/' + chatId)
-      const userRef = database.ref('users/' + userId)
-      chatRef.update({
-        title: movieTitle,
-        users: userId,
-      })
-      .then(() => chatRef.child(`/users/${userId}`).set(true))
-      // .then(() => userRef.update({
-      //   movie: movieTitle,
-      //   chatId: chatId
-      // }))
-      .then(() => {
-        console.log('here???')
-        this.props.navigation.navigate('Chat', {info: {
-          movie: movieTitle,
-          chatId: chatId,
-          user: userId
-        }})
-      })
-    }
-
     return (
       <Form style={styles.form}>
         <Image
@@ -157,15 +132,15 @@ export default class ProfileScreen extends Component {
         >
           <Text>LOG OUT</Text>
         </Button>
-        <Button
+          <Button
           primary
           style={styles.button}
           onPress={() => {
-            console.log('Pressed Add Event Button');
-            goToChatRoom(userId);
+            console.log('Pressed Go To Single Event Button');
+            this.props.navigation.navigate('SingleEvent', {userId})
           }}
         >
-          <Text>Add Event</Text>
+          <Text>Single Event Go!</Text>
         </Button>
       </Form>
     );

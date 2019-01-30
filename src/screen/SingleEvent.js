@@ -19,6 +19,7 @@ import {
 import { EventCard } from '../component';
 import axios from 'axios';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { auth, database } from '../firebase'
 
 const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
 const isGraceNote =
@@ -133,6 +134,49 @@ class SingleEvent extends React.Component {
   handlePress(selectedTime) {
     this.setState({ selectedTime });
   }
+  
+  // const movieTitle = 'Little Mermaid';
+  // const chatId = "a1234567bc";
+
+  goToChatRoom = (userId) => {
+    console.log('go to chat room!')
+    const { movie, selectedTime, theater } = this.state
+    const chatId = `${theater}${selectedTime}${movie.substr(movie.length - 5, movie.length - 1)}`
+    console.log("chatId", chatId)
+    const chatRef = database.ref('chatroom/' + chatId);
+
+    chatRef.once('value', snapshot => {
+      if (snapshot.exists()) {
+        chatRef.child('users' + userId)
+      } else {
+        chatRef.set({
+          title: this.state.movie,
+          selectedTime: this.state.selectedTime,
+          theater: this.state.theater,
+          users: userId,
+        });
+      }
+    }).then(() => chatRef.child(`/users/${userId}`).set(true))
+    .then(() => {
+      const userRef = database.ref('users/' + userId);
+      const date = new Date().toDateString()
+      userRef.update({
+        pastMovies: {
+          [`${date}`]: {
+            movie: this.state.movie,
+            selectedTime: this.state.selectedTime,
+            theater: this.state.theater,
+          }
+        },
+      chatId: chatId
+      });
+    })
+    .then(() => {
+      console.log('here???')
+      this.props.navigation.navigate('Chat')
+    })
+  }
+
   render() {
     const { navigation } = this.props;
 
@@ -228,11 +272,7 @@ class SingleEvent extends React.Component {
                   <Paragraph>Vet/Senior </Paragraph>
 
                   <Button
-                    onPress={() =>
-                      navigation.navigate('Chat', {
-                        state: this.state,
-                      })
-                    }
+                    onPress={() => this.goToChatRoom(this.props.screenProps)}
                   >
                     Purchase Tickets!
                   </Button>

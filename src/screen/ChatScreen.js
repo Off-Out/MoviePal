@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { Asset, AppLoading } from 'expo';
 import { GiftedChat } from 'react-native-gifted-chat';
+import { auth, database } from '../firebase';
 import ChatBackEnd from '../component/ChatBackEnd';
 // Sentry is a crash reporting and aggregation platform that provides you with "real-time insight into production deployments with info to reproduce and fix crashes"
 // import Sentry from 'sentry-expo';
@@ -13,14 +14,17 @@ export default class ChatScreen extends Component {
     super(props);
 
     this.state = {
+      userChatId: '',
+      movieInfo: {},
       messages: [],
       appIsReady: false,
     };
   }
 
-  render() {
-    const info = this.props.navigation.getParam('info');
-    if (!info) {
+  render () {
+    const userId = this.props.screenProps;
+
+    if (!this.state.userChatId) {
       return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
           <Text>Please join an event to enter the event's chatroom!</Text>
@@ -29,7 +33,7 @@ export default class ChatScreen extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <NavBar movie={info.movie} />
+          <NavBar movieInfo={this.state.movieInfo} />
           <GiftedChat
             messages={this.state.messages}
             onSend={message => {
@@ -45,7 +49,13 @@ export default class ChatScreen extends Component {
       );
     }
   }
-  componentDidMount() {
+  async componentDidMount() {
+    await database.ref(`users/${userId}`).on('value', snapshot => {
+      this.setState({userChatId: snapshot.val()}).chatId
+    });
+    await database.ref(`chatroom/${this.state.userChatId}`).once('value', snapshot => {
+        this.setState({movieInfo: snapshot.val()})
+      });
     ChatBackEnd.loadMessages(message => {
       this.setState(previousState => {
         return {
