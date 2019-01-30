@@ -16,13 +16,13 @@ export default class ProfileScreen extends Component {
   }
 
   componentDidMount() {
-    const userId = this.props.screenProps
-    console.log("userId", userId)
-    console.log(this.props.screenProps,">>>>screenProps")
+    const userId = this.props.screenProps;
+    console.log('userId', userId);
+    console.log(this.props.screenProps, '>>>>screenProps');
     database.ref(`/users/${userId}`).on('value', snapshot => {
-      let user = snapshot.val()
-      console.log("profilescreen" , user)
-      console.log("profilescreen snapshot.val()" , snapshot.val())
+      let user = snapshot.val();
+      console.log('profilescreen', user);
+      console.log('profilescreen snapshot.val()', snapshot.val());
       this.setState({
         name: user.name,
         email: user.email,
@@ -73,29 +73,32 @@ export default class ProfileScreen extends Component {
     const userId = this.props.screenProps;
 
     const movieTitle = 'Little Mermaid';
-    const chatId = "a1234567bc";
+    const chatId = 'a1234567bc';
 
-    const goToChatRoom = (userId) => {
-      const chatRef = database.ref('chatroom/' + chatId)
-      const userRef = database.ref('users/' + userId)
-      chatRef.update({
-        title: movieTitle,
-        users: userId,
-      })
-      .then(() => chatRef.child(`/users/${userId}`).set(true))
-      // .then(() => userRef.update({
-      //   movie: movieTitle,
-      //   chatId: chatId
-      // }))
-      .then(() => {
-        console.log('here???')
-        this.props.navigation.navigate('Chat', {info: {
-          movie: movieTitle,
-          chatId: chatId,
-          user: userId
-        }})
-      })
-    }
+    const goToChatRoom = userId => {
+      const chatRef = database.ref('chatroom/' + chatId);
+      const userRef = database.ref('users/' + userId);
+      chatRef
+        .update({
+          title: movieTitle,
+          users: userId,
+        })
+        .then(() => chatRef.child(`/users/${userId}`).set(true))
+        // .then(() => userRef.update({
+        //   movie: movieTitle,
+        //   chatId: chatId
+        // }))
+        .then(() => {
+          console.log('here???');
+          this.props.navigation.navigate('Chat', {
+            info: {
+              movie: movieTitle,
+              chatId: chatId,
+              user: userId,
+            },
+          });
+        });
+    };
 
     return (
       <Form style={styles.form}>
