@@ -137,7 +137,7 @@ export default class SingleTheaterScreen extends Component {
                     <TouchableOpacity
                       key={movie.tmsId}
                       onPress={() =>
-                        navigation.navigate('SingleEvent', {
+                        navigation.navigate('SingleMovie', {
                           movie,
                         })
                       }
