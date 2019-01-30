@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
-import { SignUpScreen } from '../screen';
+
 import { LoginForm } from '../component';
-import { withNavigation } from 'react-navigation';
 
 import firebase, { auth, database } from '../firebase';
 

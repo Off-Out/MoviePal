@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 
 export default class MapScreen extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -15,24 +14,25 @@ export default class MapScreen extends Component {
     };
   }
 
-   static navigationOptions = ({ navigation, tintColor }) => {
-    const theaters = navigation.getParam('theaters')
+  static navigationOptions = ({ navigation, tintColor }) => {
+    const theaters = navigation.getParam('theaters');
 
     return {
-
-    headerTitle: 'Map',
-    headerRight: (
-      <Ionicons
-        name="ios-list-box"
-        style={{ marginRight: 10 }}
-        size={24}
-        onPress={() => navigation.navigate('ListScreen', {
-              theaters
-            })}
-      />
-    )
-  }};
-
+      headerTitle: 'Map',
+      headerRight: (
+        <Ionicons
+          name="ios-list-box"
+          style={{ marginRight: 10 }}
+          size={24}
+          onPress={() =>
+            navigation.navigate('ListScreen', {
+              theaters,
+            })
+          }
+        />
+      ),
+    };
+  };
 
   componentDidMount = async () => {
     const response = await axios.get(
@@ -41,8 +41,8 @@ export default class MapScreen extends Component {
       }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
     this.props.navigation.setParams({
-      theaters : response.data,
-    })
+      theaters: response.data,
+    });
     this.setState({
       theaters: response.data,
     });
@@ -68,7 +68,6 @@ export default class MapScreen extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-
         <MapView
           style={{ flex: 1, zIndex: -1 }}
           provider={PROVIDER_GOOGLE}
@@ -81,7 +80,6 @@ export default class MapScreen extends Component {
           showsUserLocation
           showsMyLocationButton={true}
         >
-
           {this.state.theaters.map(marker => (
             <Marker
               key={marker.theatreId}
@@ -91,9 +89,13 @@ export default class MapScreen extends Component {
               }}
               title={marker.name}
               description={marker.location.address.street}
+              onPress={() =>
+                this.props.navigation.navigate('SingleTheater', {
+                  theatre: marker,
+                })
+              }
             />
           ))}
-
         </MapView>
         <Search
           handleZipCodeChange={this.handleZipCodeChange}
