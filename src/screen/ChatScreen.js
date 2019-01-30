@@ -14,8 +14,6 @@ export default class ChatScreen extends Component {
     super(props);
 
     this.state = {
-      userChatId: '',
-      movieInfo: {},
       messages: [],
       appIsReady: false,
     };
@@ -23,8 +21,10 @@ export default class ChatScreen extends Component {
 
   render () {
     const userId = this.props.screenProps;
+    const movieInfo = this.props.navigation.getParam('movieInfo')
+    const userChatId = this.props.navigation.getParam('userChatId')
 
-    if (!this.state.userChatId) {
+    if (!userChatId) {
       return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
           <Text>Please join an event to enter the event's chatroom!</Text>
@@ -33,7 +33,7 @@ export default class ChatScreen extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <NavBar movieInfo={this.state.movieInfo} />
+          <NavBar movieInfo={movieInfo} />
           <GiftedChat
             messages={this.state.messages}
             onSend={message => {
@@ -49,13 +49,8 @@ export default class ChatScreen extends Component {
       );
     }
   }
-  async componentDidMount() {
-    await database.ref(`users/${userId}`).on('value', snapshot => {
-      this.setState({userChatId: snapshot.val()}).chatId
-    });
-    await database.ref(`chatroom/${this.state.userChatId}`).once('value', snapshot => {
-        this.setState({movieInfo: snapshot.val()})
-      });
+
+  componentDidMount() {
     ChatBackEnd.loadMessages(message => {
       this.setState(previousState => {
         return {

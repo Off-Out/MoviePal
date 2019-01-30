@@ -11,7 +11,7 @@ export default function NavBarCustom(screenProps) {
       <NavButton />
       <NavTitle>
         <Text style={{ fontSize: 10, color: '#aaa' }}>💬 MoviePal</Text> {'\n'}
-        <Text style={{ fontSize: 12 }}>{`Watching "${movieInfo.title}" `}</Text>
+        <Text style={{ fontSize: 12 }}>{`Watching "${movieInfo.movie}" `}</Text>
         <Text style={{ fontSize: 12 }}>{` @ ${movieInfo.theater}`}</Text>
         <Text style={{ fontSize: 12 }}>{`, ${movieInfo.selectedTime} `}</Text>
       </NavTitle>

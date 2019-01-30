@@ -172,9 +172,18 @@ class SingleEvent extends React.Component {
       });
     })
     .then(() => {
+      database.ref('users/' + userId);
       console.log('here???')
-      this.props.navigation.navigate('Chat')
+      this.props.navigation.navigate('Chat', {
+        movieInfo: {
+          movie: this.state.movie,
+          selectedTime: this.state.selectedTime,
+          theater: this.state.theater
+        },
+        userChatId: chatId
+      })
     })
+    .catch(error => console.error(error))
   }
 
   render() {
