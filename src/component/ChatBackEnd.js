@@ -42,7 +42,8 @@ class ChatBackEnd {
   }
   // retrieve the messages from the Backend
   loadMessages(callback) {
-    this.messagesRef = database.ref(`/chatroom/${this.chatId}/messages`);
+    const today = new Date().toDateString()
+    this.messagesRef = database.ref(`/chatroom/${today}/${this.chatId}/messages`);
     this.messagesRef.off();
     const onReceive = (data) => {
       const message = data.val();

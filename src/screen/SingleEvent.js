@@ -143,15 +143,13 @@ class SingleEvent extends React.Component {
     const { movie, selectedTime, theater } = this.state
     const chatId = `${theater}${selectedTime}${movie.substr(movie.length - 5, movie.length - 1)}`
     console.log("chatId", chatId)
-    const chatRef = database.ref('chatroom/' + chatId);
-    chatRef.remove()
-
+    const today = new Date().toDateString();
+    const chatRef = database.ref(`chatroom/${today}/` +  chatId);
     chatRef.once('value', snapshot => {
       if (snapshot.exists()) {
         chatRef.child('users' + userId)
       } else {
         chatRef.set({
-          createdTime: new Date().toDateString(),
           title: this.state.movie,
           selectedTime: this.state.selectedTime,
           theater: this.state.theater,
@@ -161,10 +159,10 @@ class SingleEvent extends React.Component {
     }).then(() => chatRef.child(`/users/${userId}`).set(true))
     .then(() => {
       const userRef = database.ref('users/' + userId);
-      const date = new Date().toDateString()
+      // const date = new Date().toDateString()
       userRef.update({
         pastMovies: {
-          [`${date}`]: {
+          [`${today}`]: {
             movie: this.state.movie,
             selectedTime: this.state.selectedTime,
             theater: this.state.theater,
@@ -182,7 +180,7 @@ class SingleEvent extends React.Component {
           selectedTime: this.state.selectedTime,
           theater: this.state.theater
         },
-        userChatId: chatId
+        chatId: chatId
       })
     })
     .catch(error => console.error(error))
