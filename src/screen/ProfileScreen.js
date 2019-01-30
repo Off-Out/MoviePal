@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import { auth, database } from '../firebase';
+import Stor from '../store/Stor'
+import { storage } from 'firebase';
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -66,12 +68,14 @@ export default class ProfileScreen extends Component {
   };
 
   render() {
-    const currentUser = auth.currentUser;
-    const isProvider = currentUser.providerData[0].providerId !== 'password';
-    const display = isProvider ? 'none' : 'flex';
+    let isProvider = false;
+    let currentUser = auth.currentUser || {};
+    if (currentUser.providerData) {
+      isProvider = currentUser.providerData[0].providerId !== 'password';
+    }
+    let display = isProvider ? 'none' : 'flex';
 
     const userId = this.props.screenProps;
-
     return (
       <Form style={styles.form}>
         <Image
@@ -132,7 +136,7 @@ export default class ProfileScreen extends Component {
         >
           <Text>LOG OUT</Text>
         </Button>
-          <Button
+          {/* <Button
           primary
           style={styles.button}
           onPress={() => {
@@ -141,7 +145,7 @@ export default class ProfileScreen extends Component {
           }}
         >
           <Text>Single Event Go!</Text>
-        </Button>
+        </Button> */}
       </Form>
     );
   }

@@ -6,6 +6,7 @@ import {
   createAppContainer,
 } from 'react-navigation';
 import {
+  AuthLoadingScreen,
   ProfileScreen,
   HomeScreen,
   MapScreen,
@@ -16,7 +17,6 @@ import {
   SingleEvent,
   FilterScreen,
   ListScreen,
-  SingleEvent,
 } from './src/screen/index';
 import { auth, database } from './src/firebase'
 import { Text } from 'native-base'
@@ -29,7 +29,6 @@ const MapStackNavigator = createStackNavigator({
   SingleTheater: SingleTheaterScreen,
   SingleEvent: SingleEvent,
   ListScreen: ListScreen,
-  SingleEvent: SingleEvent
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -101,8 +100,11 @@ class TabComponents extends React.Component {
 
 const AppContainer = createAppContainer(
   createSwitchNavigator({
-    Auth: AuthStack,
+    AuthLoading: AuthLoadingScreen,
     App: TabComponents,
+    Auth: AuthStack,
+  }, {
+    initialRouteName: 'AuthLoading'
   })
 );
 
@@ -119,7 +121,7 @@ export default class Application extends React.Component {
       if (snapshot.exists() && snapshot.val()[0] !== new Date().toDateString()) {
         database.ref('chatroom').remove()
       } else console.log('Welcome to MoviePal!')
-    })
+    });
   }
 
   render() {

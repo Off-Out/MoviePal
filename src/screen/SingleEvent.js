@@ -134,9 +134,6 @@ class SingleEvent extends React.Component {
   handlePress(selectedTime) {
     this.setState({ selectedTime });
   }
-  
-  // const movieTitle = 'Little Mermaid';
-  // const chatId = "a1234567bc";
 
   goToChatRoom = (userId) => {
     console.log('go to chat room!')
@@ -159,7 +156,6 @@ class SingleEvent extends React.Component {
     }).then(() => chatRef.child(`/users/${userId}`).set(true))
     .then(() => {
       const userRef = database.ref('users/' + userId);
-      // const date = new Date().toDateString()
       userRef.update({
         pastMovies: {
           [`${today}`]: {
