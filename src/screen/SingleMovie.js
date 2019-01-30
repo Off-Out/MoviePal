@@ -6,6 +6,7 @@ import {
   Picker,
   FlatList,
   SafeAreaView,
+  DatePickerIOS,
 } from 'react-native';
 import {
   Divider,
@@ -15,10 +16,11 @@ import {
   Card,
   Paragraph,
   List,
+  DataTable,
 } from 'react-native-paper';
+
 import { EventCard } from '../component';
 import axios from 'axios';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
 const isGraceNote =
@@ -135,6 +137,8 @@ class SingleEvent extends React.Component {
   }
   render() {
     const { navigation } = this.props;
+    const ticketQty = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    const ticketType = ['Adult Weekday', 'Adult Weekend', 'Child', 'Senior'];
 
     if (!this.state.shortDescription) {
       return <Text>...Loading</Text>;
@@ -187,45 +191,27 @@ class SingleEvent extends React.Component {
                   <Text style={{ margin: 10, alignSelf: 'center' }}>
                     Select Tickets {`&`} Quantities
                   </Text>
-
-                  <FlatList
-                    numColumns={3}
-                    alignContent="center"
-                    data={['qty', 'type', 'price']}
-                    renderItem={({ item }) => (
-                      <View>
-                        <Text
-                          style={{
-                            alignSelf: 'center',
-                            height: 20,
-                            width: 110,
-                          }}
-                          key={item}
-                          accessibilityLabel={item}
-                        >
-                          {item}
-                        </Text>
-                      </View>
-                    )}
-                  />
-
-                  {/* <List.Accordion
-                    title="0"
-                    left={props => <List.Icon {...props} icon="face" />}
-                  >
-                    <List.Item
-                      onPress={(itemValue, second) =>
-                        console.log(itemValue, second)
-                      }
-                      title="1"
-                      value={1}
-                    />
-                  </List.Accordion> */}
-
-                  <Paragraph>Adult Weekday</Paragraph>
-                  <Paragraph>Adult Weekend</Paragraph>
-                  <Paragraph>Child</Paragraph>
-                  <Paragraph>Vet/Senior </Paragraph>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Picker t style={{ width: 80 }}>
+                      <Picker.Item
+                        key="undelectable"
+                        label="qty"
+                        value={null}
+                      />
+                      {ticketQty.map(num => (
+                        <Picker.Item key={num} label={num} value={num} />
+                      ))}
+                    </Picker>
+                    <Picker style={{ width: 80 }}>
+                      <Picker.Item key="undelectable" label="type" />
+                      {ticketType.map(type => (
+                        <Picker.Item key={type} label={type} value={type} />
+                      ))}
+                    </Picker>
+                    <Picker key="undelectable" style={{ width: 80 }}>
+                      <Picker.Item label="price" />
+                    </Picker>
+                  </View>
 
                   <Button
                     onPress={() =>

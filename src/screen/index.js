@@ -10,7 +10,7 @@ export { default as ProfileScreen } from './ProfileScreen';
 export { default as HomeScreen } from './HomeScreen';
 export { default as ChatScreen } from './ChatScreen';
 export { default as AuthLoadingScreen } from './AuthLoadingScreen';
-export { default as SingleEvent } from './SingleEvent';
+export { default as SingleMovie } from './SingleMovie';
 
 //Map and its related Screen
 export { default as MapScreen } from './MapScreen';
