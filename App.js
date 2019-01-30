@@ -18,6 +18,8 @@ import {
   ListScreen,
 
 } from './src/screen/index';
+import { Text } from 'native-base'
+import IconBadge from 'react-native-icon-badge';
 import { Ionicons } from '@expo/vector-icons';
 
 const MapStackNavigator = createStackNavigator({
@@ -61,7 +63,13 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: 'CHAT',
       tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
+        // <IconBadge
+        //   MainElement = {
+            <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
+          // }
+          // BadgeElement={<Text style={{ color: 'white' }}>{screenProps.unreadMessagesCount}</Text>}
+          // Hidden={screenProps.unreadMessagesCount === 0}
+        // />
       ),
     },
   },
@@ -97,5 +105,6 @@ const AppContainer = createAppContainer(
     App: TabComponents,
   })
 );
+
 
 export default AppContainer;

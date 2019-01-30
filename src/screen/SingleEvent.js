@@ -144,12 +144,14 @@ class SingleEvent extends React.Component {
     const chatId = `${theater}${selectedTime}${movie.substr(movie.length - 5, movie.length - 1)}`
     console.log("chatId", chatId)
     const chatRef = database.ref('chatroom/' + chatId);
+    chatRef.remove()
 
     chatRef.once('value', snapshot => {
       if (snapshot.exists()) {
         chatRef.child('users' + userId)
       } else {
         chatRef.set({
+          createdTime: new Date().toDateString(),
           title: this.state.movie,
           selectedTime: this.state.selectedTime,
           theater: this.state.theater,
