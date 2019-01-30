@@ -37,16 +37,21 @@ class ListScreen extends React.Component {
 
                       <Title >{item.name}</Title >
                       <Text > {distance} miles away</Text >
+                      <Text>{`${item.location.address.street} ${
+                        item.location.address.city
+                        }, ${item.location.address.state}`} </Text>
                       {item.location.telephone ? (<Text > Phone Number: {item.location.telephone}</Text>) : <Text> Limited information </Text>}
 
                     </Card.Content>
                   </View>
                   <Card.Actions style={{ justifyContent: 'center' }}>
                     <Button
+                      style={{ margin: 20, align: 'left' }}
+                      mode="contained"
                       onPress={() =>
-                        Alert.alert(
-                          'You will see the selected theater page soon'
-                        )
+                        this.props.navigation.navigate('SingleTheater', {
+                          theatre: item,
+                        })
                       }
                     >
                       <Text> Go to Theater Page</Text>
