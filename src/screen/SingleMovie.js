@@ -1,23 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Alert,
-  Picker,
-  FlatList,
-  SafeAreaView,
-  DatePickerIOS,
-} from 'react-native';
-import {
-  Divider,
-  Text,
-  Title,
-  Button,
-  Card,
-  Paragraph,
-  List,
-  DataTable,
-} from 'react-native-paper';
+import { StyleSheet, View, Picker, FlatList, SafeAreaView } from 'react-native';
+import { Text, Title, Button } from 'react-native-paper';
 
 import { EventCard } from '../component';
 import axios from 'axios';
@@ -25,37 +8,6 @@ import axios from 'axios';
 const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
 const isGraceNote =
   'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&zip=78701&api_key=w8xkqtbg6vf3aj5vdxmc4zjj';
-
-const dummyDataGenre = {
-  genre: 'Horror',
-  id: 7,
-  genrePosterURI: 'https://picsum.photos/200/?',
-};
-
-const dummyDataTime = [
-  { time: 'morning', id: 1 },
-  { time: 'afternoon', id: 2 },
-  { time: 'evening', id: 3 },
-  { time: 'after hours', id: 4 },
-];
-
-const dummyUser = {
-  name: 'Cindy',
-  email: 'cindy@cindy.com',
-  id: 1,
-};
-const dummyTheater = {
-  theater: 'Logan Square Theater',
-  id: 1,
-  location: 'Logan Square, Chicago',
-};
-const dummyJoinTable = {
-  userId: 1,
-  genreId: 7,
-  timeId: 3,
-  theaterId: 1,
-};
-const dummyShowTimes = [{ time: `515` }, { time: '6:15' }, { time: `715` }];
 
 class SingleEvent extends React.Component {
   constructor() {
@@ -105,6 +57,8 @@ class SingleEvent extends React.Component {
       showtime: [],
       selectedTime: '',
       shortDescription: '',
+      quantity: '',
+      type: '',
     });
 
     await this.fetchTheaters();
@@ -139,6 +93,8 @@ class SingleEvent extends React.Component {
     const { navigation } = this.props;
     const ticketQty = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     const ticketType = ['Adult Weekday', 'Adult Weekend', 'Child', 'Senior'];
+    const movie = navigation.getParam('movie', null);
+    console.log('movie showtime and other details', movie);
 
     if (!this.state.shortDescription) {
       return <Text>...Loading</Text>;
@@ -192,7 +148,12 @@ class SingleEvent extends React.Component {
                     Select Tickets {`&`} Quantities
                   </Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Picker t style={{ width: 80 }}>
+                    <Picker
+                      style={{ width: 80 }}
+                      onValueChange={itemValue =>
+                        this.setState({ quantity: itemValue })
+                      }
+                    >
                       <Picker.Item
                         key="undelectable"
                         label="qty"

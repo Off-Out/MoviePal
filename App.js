@@ -23,6 +23,7 @@ const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
   Filter: FilterScreen,
   SingleTheater: SingleTheaterScreen,
+  SingleMovie: SingleMovie,
   ListScreen: ListScreen,
 });
 
