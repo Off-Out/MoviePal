@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Picker, FlatList, SafeAreaView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Picker,
+  FlatList,
+  SafeAreaView,
+  Alert,
+} from 'react-native';
 import { Text, Title, Button } from 'react-native-paper';
 
 import { EventCard } from '../component';
@@ -59,7 +66,7 @@ class SingleEvent extends React.Component {
       shortDescription: '',
       quantity: '',
       ticket: '',
-      priceOptions: '',
+      price: 0,
     });
 
     await this.fetchTheaters();
@@ -113,11 +120,11 @@ class SingleEvent extends React.Component {
           <View style={{ flex: 1 }}>
             <EventCard state={this.state} />
           </View>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 2, alignContent: 'center' }}>
             <Title style={{ alignSelf: 'center', marginTop: 10 }}>
               Show Times
             </Title>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', alignContent: 'center' }}>
               {!this.state.selectedTime ? (
                 <FlatList
                   numColumns={3}
@@ -169,31 +176,54 @@ class SingleEvent extends React.Component {
                     <Picker
                       style={{ width: 280 }}
                       selectedValue={this.state.ticketType}
-                      onValueChange={(itemValue, ind) =>
-                        this.setState({ ticketType: itemValue })
+                      onValueChange={(itemValue, ind, price) =>
+                        this.setState({ ticketType: itemValue, price })
                       }
                     >
                       <Picker.Item key="undselectable" label="type" />
                       {ticketType.map(type => (
-                        <Picker.Item key={type} label={type} value={type} />
+                        <Picker.Item
+                          key={type}
+                          label={type}
+                          value={type}
+                          price="12.50"
+                        />
                       ))}
                     </Picker>
-
-                    <Picker>
-                      <Picker.Item
-                        key="undelectable"
-                        label="price"
-                        style={{ width: 80 }}
-                      />
-                      <Picker.Item label={this.state.price} />
-                    </Picker>
                   </View>
-
+                  <Text>
+                    Total Price {'   ' + this.state.price * this.state.quantity}
+                  </Text>
                   <Button
                     onPress={() =>
-                      navigation.navigate('Chat', {
-                        state: this.state,
-                      })
+                      Alert.alert(
+                        'Thank you for your purchase!',
+                        'Where to next?',
+                        [
+                          {
+                            text: 'Chat',
+                            onPress: () =>
+                              navigation.navigate('Chat', {
+                                state: this.state,
+                              }),
+                          },
+                          {
+                            text: 'Home Page',
+                            onPress: () =>
+                              navigation.navigate('Home', {
+                                movie: this.state.movie,
+                              }),
+                          },
+                          {
+                            text: 'Trivia',
+                            onPress: () =>
+                              navigation.navigate('Home', {
+                                movie: this.state.movie,
+                              }),
+                          },
+                        ],
+                        { cancelable: true }
+                      )
                     }
                   >
                     Purchase Tickets!
