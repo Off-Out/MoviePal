@@ -21,7 +21,8 @@ export default class ChatScreen extends Component {
     const movieInfo = this.props.navigation.getParam("movieInfo")
     if (!movieInfo) {
       Alert.alert("Please join an event to enter the event's chatroom!")
-      return this.props.navigation.navigate("Map")
+      this.props.navigation.navigate("Map")
+      return null
     } else {
       return (
         <View style={styles.container}>

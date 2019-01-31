@@ -141,6 +141,7 @@ export default class ProfileScreen extends Component {
         >
           <Text>SAVE</Text>
         </Button>
+        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
         <Button
           transparent
           danger
@@ -149,6 +150,10 @@ export default class ProfileScreen extends Component {
         >
           <Text>LOG OUT</Text>
         </Button>
+        <Button style={{marginRight:15}} dark transparent onPress={() => this.props.navigation.navigate('History')}>
+          <Text style={{fontWeight: "bold"}}>🍿MY MOVIES</Text>
+        </Button>
+        </View>
       </Form>
     );
   }
@@ -176,7 +181,6 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     alignSelf: 'center',
-    marginTop: 100,
     marginBottom: 55,
   },
   input: {
