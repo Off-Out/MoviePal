@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text, Icon } from 'native-base';
 import { auth, database } from '../firebase';
-import Stor from '../store/Stor'
+import Stor from '../store/Stor';
 import { storage } from 'firebase';
 
 export default class ProfileScreen extends Component {
@@ -16,7 +16,7 @@ export default class ProfileScreen extends Component {
       password: '',
       photoUrl: '',
       hidePassword: true,
-      show: 'SHOW'
+      show: 'SHOW',
     };
   }
 
@@ -68,13 +68,13 @@ export default class ProfileScreen extends Component {
 
   showPassword = () => {
     if (!!this.state.hidePassword) {
-      this.setState({hidePassword: false})
-      this.setState({show: 'HIDE'})
+      this.setState({ hidePassword: false });
+      this.setState({ show: 'HIDE' });
     } else {
-      this.setState({hidePassword: true})
-      this.setState({show: 'SHOW'})
+      this.setState({ hidePassword: true });
+      this.setState({ show: 'SHOW' });
     }
-  }
+  };
 
   render() {
     const userId = this.props.screenProps;
@@ -110,7 +110,7 @@ export default class ProfileScreen extends Component {
             onChangeText={text => this.handleInput('email', text)}
           />
         </Item>
-        <Item stackedLabel style={[styles.item, {display}]}>
+        <Item stackedLabel style={[styles.item, { display }]}>
           <Label style={styles.label}>LOCATION</Label>
           <Input
             style={styles.input}
@@ -120,39 +120,53 @@ export default class ProfileScreen extends Component {
             onChangeText={text => this.handleInput('location', text)}
           />
         </Item>
-        <Item stackedLabel style={[styles.item, {display}]}>
-        <View style={styles.changepw}>
-        <Label style={styles.label}>CHANGE PASSWORD</Label>
-        <Button danger transparent small style={styles.showBtn} onPress={this.showPassword}><Text>{this.state.show}</Text></Button>
-        </View>
-        <Input
-          style={styles.input}
-          secureTextEntry={this.state.hidePassword}
-          name="password"
-          value={this.state.password}
-          onChangeText={text => this.handleInput('password', text)}/>
+        <Item stackedLabel style={[styles.item, { display }]}>
+          <View style={styles.changepw}>
+            <Label style={styles.label}>CHANGE PASSWORD</Label>
+            <Button
+              danger
+              transparent
+              small
+              style={styles.showBtn}
+              onPress={this.showPassword}
+            >
+              <Text>{this.state.show}</Text>
+            </Button>
+          </View>
+          <Input
+            style={styles.input}
+            secureTextEntry={this.state.hidePassword}
+            name="password"
+            value={this.state.password}
+            onChangeText={text => this.handleInput('password', text)}
+          />
         </Item>
         <Button
           danger
-          style={[{margin: 20}, { display }]}
+          style={[{ margin: 20 }, { display }]}
           onPress={() => {
             this.save(userId);
           }}
         >
           <Text>SAVE</Text>
         </Button>
-        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-        <Button
-          transparent
-          danger
-          style={{marginLeft: 10}}
-          onPress={() => this.logout()}
-        >
-          <Text>LOG OUT</Text>
-        </Button>
-        <Button style={{marginRight:15}} dark transparent onPress={() => this.props.navigation.navigate('History')}>
-          <Text style={{fontWeight: "bold"}}>🍿MY MOVIES</Text>
-        </Button>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Button
+            transparent
+            danger
+            style={{ marginLeft: 10 }}
+            onPress={() => this.logout()}
+          >
+            <Text>LOG OUT</Text>
+          </Button>
+          <Button
+            style={{ marginRight: 15 }}
+            dark
+            transparent
+            onPress={() => this.props.navigation.navigate('History')}
+          >
+            <Text style={{ fontWeight: 'bold' }}>🍿MY MOVIES</Text>
+          </Button>
         </View>
       </Form>
     );
@@ -202,16 +216,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
   },
   changepw: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignSelf: "stretch"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
   },
   showBtn: {
-    alignSelf:"center",
+    alignSelf: 'center',
     padding: -30,
     marginBottom: -20,
     marginRight: 10,
-    fontSize: 5
-  }
-
+    fontSize: 5,
+  },
 });

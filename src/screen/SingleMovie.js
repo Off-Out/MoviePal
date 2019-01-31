@@ -11,7 +11,7 @@ import {
 import { Text, Title, Button, Card } from 'react-native-paper';
 import { EventCard } from '../component';
 import axios from 'axios';
-import { database } from '../firebase'
+import { database } from '../firebase';
 import Stor from '../store/Stor';
 
 const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
@@ -48,55 +48,65 @@ class SingleEvent extends React.Component {
     this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
   }
 
-  goToChatRoom = (userId) => {
-    console.log('go to chat room!')
+  goToChatRoom = userId => {
+    console.log('go to chat room!');
     const { selectedTime } = this.state;
     const theater = this.props.navigation.getParam('theatre');
-    const {title} = this.props.navigation.getParam('movie', null);
+    const { title } = this.props.navigation.getParam('movie', null);
     const { preferredImage } = this.props.navigation.getParam('movie');
 
-    const chatId = `${theater}${selectedTime}${title}`
+    const chatId = `${theater}${selectedTime}${title}`;
     const today = new Date().toDateString();
-    const chatRef = database.ref(`chatroom/${today}/` +  chatId);
+    const chatRef = database.ref(`chatroom/${today}/` + chatId);
     const userRef = database.ref('users/' + userId);
 
-    chatRef.once('value', snapshot => {
-      if (snapshot.exists()) {
-        chatRef.child('users' + userId)
-      } else {
-        chatRef.set({
-          movie: title,
-          selectedTime,
-          theater,
-          users: userId,
+    chatRef
+      .once('value', snapshot => {
+        if (snapshot.exists()) {
+          chatRef.child('users' + userId);
+        } else {
+          chatRef.set({
+            movie: title,
+            selectedTime,
+            theater,
+            users: userId,
+          });
+        }
+      })
+      .then(() => chatRef.child(`/users/${userId}`).set(true))
+      .then(() => {
+        userRef.update({
+          pastMovies: {
+            [`${today}`]: {
+              movie: title,
+              selectedTime: this.state.selectedTime,
+              theater: theater,
+            },
+          },
+          chatId,
         });
-      }
-    }).then(() => chatRef.child(`/users/${userId}`).set(true))
-    .then(() => {
-      userRef.update({
-        pastMovies: {
-          [`${today}`]: {
+      })
+      .then(() => {
+        this.props.navigation.navigate('Chat', {
+          movieInfo: {
             movie: title,
             selectedTime: this.state.selectedTime,
             theater,
-            image: preferredImage.uri
-          }
-        }
-      });
-    })
-    .then(() => {
-      this.props.navigation.navigate('Chat'
-      , {
-        movieInfo: {
-          movie: title,
-          selectedTime: this.state.selectedTime,
-          theater: theater
-        },
-      }
-      )
-    })
-    .catch(error => console.error(error))
-  }
+            image: preferredImage.uri,
+          },
+        });
+      })
+      .then(() => {
+        this.props.navigation.navigate('Chat', {
+          movieInfo: {
+            movie: title,
+            selectedTime: this.state.selectedTime,
+            theater: theater,
+          },
+        });
+      })
+      .catch(error => console.error(error));
+  };
 
   render() {
     const { navigation } = this.props;
@@ -208,7 +218,7 @@ class SingleEvent extends React.Component {
                               icon="info"
                               onPress={() =>
                                 this.goToChatRoom(this.props.screenProps)
-                                }
+                              }
                             >
                               Chat!
                             </Button>

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
 import * as Expo from 'expo';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
-import { auth, database } from '../firebase'
+import { auth, database } from '../firebase';
 
 class SignUpScreen extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       name: '',
       location: '',
@@ -29,23 +29,23 @@ class SignUpScreen extends Component {
         database.ref(`users/${user.user.uid}`).set({
           name: this.state.name,
           location: this.state.location,
-          email: this.state.email
-        })
-        this.props.navigation.navigate('App', {userId: user.uid})
+          email: this.state.email,
+        });
+        this.props.navigation.navigate('App', { userId: user.uid });
       })
       .catch(error => Alert.alert(error.message));
   };
 
   render() {
-    const {name, email, location, password} = this.state
+    const { name, email, location, password } = this.state;
     return (
       <View style={styles.container}>
         <Text style={styles.header}> WELCOME PAL! </Text>
         <Form style={styles.form}>
-          <Item floatingLabel style={styles.item} >
-          <Label style={styles.label}>NAME</Label>
+          <Item floatingLabel style={styles.item}>
+            <Label style={styles.label}>NAME</Label>
             <Input
-            style={styles.input}
+              style={styles.input}
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
@@ -53,10 +53,10 @@ class SignUpScreen extends Component {
               }}
             />
           </Item>
-          <Item floatingLabel style={styles.item}  >
-          <Label style={styles.label}>ZIPCODE</Label>
+          <Item floatingLabel style={styles.item}>
+            <Label style={styles.label}>ZIPCODE</Label>
             <Input
-            style={styles.input}
+              style={styles.input}
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
@@ -64,10 +64,10 @@ class SignUpScreen extends Component {
               }}
             />
           </Item>
-          <Item floatingLabel style={styles.item}  >
-          <Label style={styles.label}>E-MAIL ADDRESS</Label>
+          <Item floatingLabel style={styles.item}>
+            <Label style={styles.label}>E-MAIL ADDRESS</Label>
             <Input
-            style={styles.input}
+              style={styles.input}
               autoCapitalize={'none'}
               autoCorrect={false}
               onChangeText={text => {
@@ -75,10 +75,10 @@ class SignUpScreen extends Component {
               }}
             />
           </Item>
-          <Item floatingLabel style={styles.item} >
-          <Label style={styles.label}>CREATE PASSWORD</Label>
+          <Item floatingLabel style={styles.item}>
+            <Label style={styles.label}>CREATE PASSWORD</Label>
             <Input
-            style={styles.input}
+              style={styles.input}
               autoCapitalize={'none'}
               autoCorrect={false}
               secureTextEntry={true}
@@ -88,14 +88,15 @@ class SignUpScreen extends Component {
             />
           </Item>
           <Button
-          outline danger
-          style={styles.createBtn}
-          onPress={() =>
-            this.createUserAccount(this.state.email, this.state.password)
-          }
-        >
-          <Text>Join MoviePal</Text>
-        </Button>
+            outline
+            danger
+            style={styles.createBtn}
+            onPress={() =>
+              this.createUserAccount(this.state.email, this.state.password)
+            }
+          >
+            <Text>Join MoviePal</Text>
+          </Button>
         </Form>
       </View>
     );
@@ -105,16 +106,16 @@ class SignUpScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginTop: 40
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 40,
   },
   item: {
-    borderColor: "transparent",
+    borderColor: 'transparent',
   },
   form: {
-    alignSelf: "stretch",
-    margin: 25
+    alignSelf: 'stretch',
+    margin: 25,
   },
   input: {
     fontSize: 17,
@@ -124,25 +125,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
   },
   label: {
-    // marginLeft: 13,
     fontSize: 12,
     marginRight: 10,
   },
   createBtn: {
     fontSize: 15,
     marginTop: 40,
-    alignSelf: "center"
+    alignSelf: 'center',
   },
   header: {
-    fontWeight: "bold",
-    alignSelf: "center",
+    fontWeight: 'bold',
+    alignSelf: 'center',
     fontSize: 20,
     marginTop: 30,
   },
-  image: {
-    maxHeight: 50,
-    maxWidth: 50,
-  }
 });
 
 export default SignUpScreen;

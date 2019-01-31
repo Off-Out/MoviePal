@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Form, Item, Input, Button, Text } from 'native-base';
 import { auth } from '../firebase';
 
@@ -15,8 +15,8 @@ class LoginForm extends Component {
 
     return (
       <View style={styles.container}>
-        <Form>
-          <Item block style={styles.item}>
+        <Form style={{ margin: 5 }}>
+          <Item block>
             <Input
               placeholder="EMAIL"
               autoCapitalize="none"
@@ -26,8 +26,7 @@ class LoginForm extends Component {
               }}
             />
           </Item>
-          <Item block style={styles.item}>
-          <View style={{flexDirection: "row", justifyContent: "space-between", }}>
+          <Item block>
             <Input
               placeholder="PASSWORD"
               autoCapitalize="none"
@@ -38,7 +37,10 @@ class LoginForm extends Component {
               }}
             />
             <Button
-              dark small transparent style={{alignSelf:"center"}}
+              dark
+              small
+              transparent
+              style={{ alignSelf: 'center' }}
               onPress={() => {
                 if (!credential.email) {
                   console.log('here');
@@ -50,58 +52,75 @@ class LoginForm extends Component {
                 }
               }}
             >
-              <Text style={{fontSize: 12.5, fontWeight: "bold"}}>Forgot Password?</Text>
+              <Text style={{ fontSize: 12.5, fontWeight: 'bold' }}>
+                Forgot Password?
+              </Text>
             </Button>
-            </View>
           </Item>
-          <Button
-            style={styles.button}
-            block
-            danger
+        </Form>
+        <Button
+          style={styles.button}
+          block
+          success
+          onPress={() => {
+            login(credential.email, credential.password);
+          }}
+        >
+          <Text>Login</Text>
+        </Button>
+
+        <Button
+          block
+          danger
+          style={styles.button}
+          onPress={() => signInWithGoogle()}
+        >
+          <Text>Google Login</Text>
+        </Button>
+
+        <Button
+          block
+          primary
+          style={styles.button}
+          onPress={() => signInWithFacebook()}
+        >
+          <Text>Facebook Login</Text>
+        </Button>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 30,
+          }}
+        >
+          <TouchableOpacity
             onPress={() => {
-              login(credential.email, credential.password);
+              if (!credential.email) {
+                console.log('here');
+                Alert.alert('Please enter your email');
+              } else {
+                auth
+                  .sendPasswordResetEmail(credential.email)
+                  .then(() => Alert.alert('Reset Password Email Sent!'));
+              }
             }}
           >
-            <Text>LOGIN</Text>
-          </Button>
-
-          <Button
-            block
-            success
-            style={styles.button}
-            onPress={() => signInWithGoogle()}
+            <Text style={{ color: '#A9A9A9' }}>Forgot Password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('SignUpScreen')}
           >
-            <Text>SIGN-IN WITH GOOGLE</Text>
-          </Button>
-
-          <Button
-            block
-            primary
-            style={styles.button}
-            onPress={() => signInWithFacebook()}
-          >
-            <Text>SIGN-IN WITH FACEBOOK</Text>
-          </Button>
-
-          <View>
-            <Button
-              block
-              warning
-              style={styles.button}
-              onPress={() => this.props.navigation.navigate('SignUpScreen')}
-            >
-              <Text>CREATE ACCOUNT</Text>
-            </Button>
-          </View>
-        </Form>
+            <Text style={{ color: '#A9A9A9' }}>Create Account</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'space-evenly' },
-  item: { marginLeft: 10, marginRight: 10, marginBottom: 10 },
-  button: { marginLeft: 10, marginRight: 10, marginBottom: 10 },
+  container: {},
+  button: { margin: 5 },
 });
 export default LoginForm;
