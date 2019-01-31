@@ -4,6 +4,7 @@ import {
   Text,
   View,
   Button,
+  StatusBar,
   ScrollView,
   Dimensions,
   TouchableOpacity
@@ -13,7 +14,6 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const { width, height } = Dimensions.get('window');
-// let quiz = [];
 
 export default class Trivia extends Component {
   static navigationOptions = () => {
@@ -33,7 +33,8 @@ export default class Trivia extends Component {
 
   componentDidMount = async () => {
     const response = await axios.get(
-      `https://opentdb.com/api.php?amount=20&category=11&type=multiple`
+      // `https://opentdb.com/api.php?amount=20&category=11&type=multiple`
+      `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
     );
     let quiz = response.data.results;
     console.log('quiz>>>>>', quiz);
@@ -103,7 +104,10 @@ export default class Trivia extends Component {
       );
     }
   };
-
+  onPressBack = () => {
+    const { goBack } = this.props.navigation;
+    goBack();
+  };
   render() {
     // because of the structure of the data , if I am not shuffle the order of array, the correct answer always be the last option
     function shuffle(array) {
@@ -126,6 +130,11 @@ export default class Trivia extends Component {
       return array;
     }
 
+    //removes the db typo mistakes
+    function removeSpecial(str) {
+      return str.replace(/[&\/\\#,+()$~%.'":*?<>{}039;]/g, '');
+    }
+
     let currentOptions = [];
     let currentQuestion = this.state.questions[this.state.qno];
     let singleQuestion;
@@ -136,7 +145,7 @@ export default class Trivia extends Component {
         currentQuestion.correct_answer
       ];
       currentOptions = shuffle(currentOptions);
-      singleQuestion = currentQuestion.question;
+      singleQuestion = removeSpecial(currentQuestion.question);
     }
 
     if (!currentOptions || currentOptions.length === 0) {
@@ -153,7 +162,14 @@ export default class Trivia extends Component {
       return (
         <ScrollView style={{ backgroundColor: 'lightblue', paddingTop: 10 }}>
           <View style={styles.container}>
-            <Title> Here you go!</Title>
+            <StatusBar barStyle="light-content" />
+            <View style={styles.toolbar}>
+              <TouchableOpacity onPress={() => this.onPressBack()}>
+                <Text style={styles.toolbarButton}>Back</Text>
+              </TouchableOpacity>
+              <Text style={styles.toolbarTitle}> HERE YOU GO!</Text>
+              <Text style={styles.toolbarButton} />
+            </View>
             <View
               style={{
                 flex: 1,
@@ -163,7 +179,7 @@ export default class Trivia extends Component {
               }}
             >
               <View style={styles.oval}>
-                <Text>{singleQuestion}</Text>
+                <Text style={styles.welcome}>{singleQuestion}</Text>
               </View>
 
               <View>
@@ -173,7 +189,16 @@ export default class Trivia extends Component {
                     style={styles.questions}
                     onPress={() => this.answerQuestion(item)}
                   >
-                    <Text style={styles.welcome}>{item} </Text>
+                    <Text
+                      style={{
+                        flexDirection: 'row',
+                        margin: 15,
+                        justifyContent: 'space-between',
+                        padding: 10
+                      }}
+                    >
+                      {item}{' '}
+                    </Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -189,7 +214,7 @@ const styles = StyleSheet.create({
   oval: {
     width: (width * 90) / 100,
     borderRadius: 20,
-    backgroundColor: 'skyblue'
+    backgroundColor: 'blue'
   },
   welcome: {
     fontSize: 20,
@@ -204,7 +229,7 @@ const styles = StyleSheet.create({
   questions: {
     width: (width * 80) / 100,
     borderRadius: 15,
-    backgroundColor: 'darkblue'
+    backgroundColor: 'skyblue'
   },
   score: {
     color: 'white',
@@ -229,5 +254,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
     // backgroundColor: '#F5FCFF'
+  },
+  toolbar: {
+    backgroundColor: 'lightpink',
+    paddingTop: 30,
+    paddingBottom: 10,
+    flexDirection: 'row'
+  },
+  toolbarButton: {
+    width: 55,
+    color: '#fff',
+    textAlign: 'center'
+  },
+  toolbarTitle: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    flex: 1
   }
 });
