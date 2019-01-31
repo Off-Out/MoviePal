@@ -15,8 +15,9 @@ import {
   SingleTheaterScreen,
   FilterScreen,
   ListScreen,
-  SingleEvent,
+
   TriviaQuestions,
+  SingleMovie,
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -24,7 +25,7 @@ const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
   Filter: FilterScreen,
   SingleTheater: SingleTheaterScreen,
-  SingleEvent: SingleEvent,
+  SingleMovie: SingleMovie,
   ListScreen: ListScreen,
   TriviaQuestions: TriviaQuestions
 });
@@ -78,13 +79,13 @@ const TabNavigator = createBottomTabNavigator({
 });
 
 const AuthStack = createStackNavigator(
-  {
-    LoginScreen: { screen: LoginScreen },
-    SignUpScreen: { screen: SignUpScreen },
-  },
-  { initialRouteName: 'LoginScreen' }
-  // { SingleEvent: { screen: SingleEvent } },
-  // { initialRouteName: 'SingleEvent' }
+  // {
+  //   LoginScreen: { screen: LoginScreen },
+  //   SignUpScreen: { screen: SignUpScreen },
+  // },
+  // { initialRouteName: 'LoginScreen' }
+  { MapScreen: { screen: MapScreen } },
+  { initialRouteName: 'MapScreen' }
 );
 
 class TabComponents extends React.Component {

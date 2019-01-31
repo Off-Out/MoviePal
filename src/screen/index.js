@@ -10,12 +10,11 @@ export { default as ProfileScreen } from './ProfileScreen';
 export { default as HomeScreen } from './HomeScreen';
 export { default as ChatScreen } from './ChatScreen';
 export { default as AuthLoadingScreen } from './AuthLoadingScreen';
-
-//Map and its related Screen
+export { default as SingleMovie } from './SingleMovie';
 export { default as MapScreen } from './MapScreen';
 export { default as SingleTheaterScreen } from './SingleTheaterScreen';
 export { default as FilterScreen } from './FilterScreen';
 export { default as ListScreen } from './ListScreen';
-export { default as SingleEvent } from './SingleEvent';
+
 export { default as Trivia } from './Trivia.js';
 export { default as TriviaQuestions } from './TriviaQuestions.js';

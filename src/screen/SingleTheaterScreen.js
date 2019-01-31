@@ -137,12 +137,13 @@ export default class SingleTheaterScreen extends Component {
                     <TouchableOpacity
                       key={movie.tmsId}
                       onPress={() =>
-                        navigation.navigate('SingleEvent', {
+                        navigation.navigate('SingleMovie', {
                           movie,
+                          theatre: theatre.name,
                         })
                       }
                     >
-                      <Text>{movie.title}</Text>
+                      <Text value={movie}>{movie.title}</Text>
                       <Text>{movie.releaseDate}</Text>
                       <Text>{movie.genres}</Text>
                       <Text>{movie.audience}</Text>
