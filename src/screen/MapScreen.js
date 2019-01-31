@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView, Button } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { Search } from '../component';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 
-export default class MapScreen extends Component {
+class MapScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,7 +14,7 @@ export default class MapScreen extends Component {
     };
   }
 
-  static navigationOptions = ({ navigation, tintColor }) => {
+  static navigationOptions = ({ navigation }) => {
     const theaters = navigation.getParam('theaters');
 
     return {
@@ -106,4 +106,4 @@ export default class MapScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+export default MapScreen;

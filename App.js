@@ -8,6 +8,7 @@ import {
 import {
   AuthLoadingScreen,
   ProfileScreen,
+  HistoryScreen,
   HomeScreen,
   MapScreen,
   ChatScreen,
@@ -28,32 +29,18 @@ import { SecureStore } from 'expo';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
-  Filter: FilterScreen,
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
   TriviaQuestions: TriviaQuestions
 });
 
+const ProfileStackNavigator = createStackNavigator({
+  Profile: ProfileScreen,
+  History: HistoryScreen,
+});
+
 const TabNavigator = createBottomTabNavigator({
-  Profile: {
-    screen: ProfileScreen,
-    navigationOptions: {
-      tabBarLabel: 'PROFILE',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-contact" color={tintColor} size={24} />
-      )
-    }
-  },
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      tabBarLabel: 'HOME',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-home" color={tintColor} size={24} />
-      )
-    }
-  },
   Map: {
     screen: MapStackNavigator,
     navigationOptions: {
@@ -63,6 +50,17 @@ const TabNavigator = createBottomTabNavigator({
       )
     }
   },
+
+  // Home: {
+  //   screen: HomeScreen,
+  //   navigationOptions: {
+  //     tabBarLabel: 'HOME',
+  //     tabBarIcon: ({ tintColor }) => (
+  //       <Ionicons name="ios-home" color={tintColor} size={24} />
+  //     ),
+  //   },
+  // },
+
   Chat: {
     screen: ChatScreen,
     navigationOptions: {
@@ -87,6 +85,15 @@ const TabNavigator = createBottomTabNavigator({
       )
     }
   }
+  Profile: {
+    screen: ProfileScreen,
+    navigationOptions: {
+      tabBarLabel: 'PROFILE',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-contact" color={tintColor} size={24} />
+      ),
+    },
+  },
 });
 
 const AuthStack = createStackNavigator(
@@ -114,10 +121,10 @@ const AppContainer = createAppContainer(
     {
       AuthLoading: AuthLoadingScreen,
       App: TabComponents,
-      Auth: AuthStack
+      Auth: AuthStack,
     },
     {
-      initialRouteName: 'AuthLoading'
+      initialRouteName: 'AuthLoading',
     }
   )
 );

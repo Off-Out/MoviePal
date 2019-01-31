@@ -6,12 +6,12 @@ import {
   Alert,
   Linking,
   ImageBackground,
-  Dimensions,
+  Dimensions
 } from 'react-native';
 import { Text, Title, Button, Card } from 'react-native-paper';
 import { EventCard } from '../component';
 import axios from 'axios';
-import { database } from '../firebase'
+import { database } from '../firebase';
 import Stor from '../store/Stor';
 
 const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
@@ -24,7 +24,7 @@ class SingleEvent extends React.Component {
     this.state = {
       selectedTime: '',
 
-      ticketURI: '',
+      ticketURI: ''
     };
 
     this.handlePress = this.handlePress.bind(this);
@@ -43,59 +43,62 @@ class SingleEvent extends React.Component {
   handlePress(selectedTime) {
     const movieShowtime = this.props.navigation
       .getParam('movie', null)
-      .showtimes.filter(movie => movie.dateTime.includes(selectedTime));
+      .showtimes.filter((movie) => movie.dateTime.includes(selectedTime));
     console.log('AFTER PRESSING TIME', movieShowtime);
     this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
   }
 
   goToChatRoom = (userId) => {
-    console.log('go to chat room!')
+    console.log('go to chat room!');
     const { selectedTime } = this.state;
     const theater = this.props.navigation.getParam('theatre');
     const { title } = this.props.navigation.getParam('movie', null);
 
-    const chatId = `${theater}${selectedTime}${title.substr(title.length - 5, title.length - 1)}`
+    const chatId = `${theater}${selectedTime}${title.substr(
+      title.length - 5,
+      title.length - 1
+    )}`;
     const today = new Date().toDateString();
     const chatRef = database.ref(`chatroom/${today}/` + chatId);
     const userRef = database.ref('users/' + userId);
 
-    chatRef.once('value', snapshot => {
-      if (snapshot.exists()) {
-        chatRef.child('users' + userId)
-      } else {
-        chatRef.set({
-          movie: title,
-          selectedTime,
-          theater,
-          users: userId,
-        });
-      }
-    }).then(() => chatRef.child(`/users/${userId}`).set(true))
+    chatRef
+      .once('value', (snapshot) => {
+        if (snapshot.exists()) {
+          chatRef.child('users' + userId);
+        } else {
+          chatRef.set({
+            movie: title,
+            selectedTime,
+            theater,
+            users: userId
+          });
+        }
+      })
+      .then(() => chatRef.child(`/users/${userId}`).set(true))
       .then(() => {
         userRef.update({
           pastMovies: {
             [`${today}`]: {
               movie: title,
               selectedTime: this.state.selectedTime,
-              theater: theater,
+              theater: theater
             }
           },
           chatId
         });
       })
       .then(() => {
-        this.props.navigation.navigate('Chat'
-          , {
-            movieInfo: {
-              movie: title,
-              selectedTime: this.state.selectedTime,
-              theater: theater
-            },
+        this.props.navigation.navigate('Chat', {
+          movieInfo: {
+            movie: title,
+            selectedTime: this.state.selectedTime,
+            theater: theater
           }
-        )
+        });
       })
-      .catch(error => console.error(error))
-  }
+      .catch((error) => console.error(error));
+  };
 
   render() {
     const { navigation } = this.props;
@@ -103,7 +106,9 @@ class SingleEvent extends React.Component {
 
     const movie = navigation.getParam('movie', null);
 
-    const showtimes = movie.showtimes.map(show => show.dateTime.split('T')[1]);
+    const showtimes = movie.showtimes.map(
+      (show) => show.dateTime.split('T')[1]
+    );
 
     if (!movie.shortDescription) {
       return <Text>...Loading</Text>;
@@ -115,7 +120,7 @@ class SingleEvent extends React.Component {
             uri:
               'http://developer.tmsimg.com/' +
               movie.preferredImage.uri +
-              '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+              '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
           }}
           style={{ width: '100%', height: '100%' }}
         >
@@ -125,7 +130,7 @@ class SingleEvent extends React.Component {
               flex: 1,
               justifyContent: 'flex-bottom',
               alignContent: 'center',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <View style={{ flex: 2 }}>
@@ -143,7 +148,7 @@ class SingleEvent extends React.Component {
                 style={{
                   backgroundColor: 'white',
                   width: this.vw(75),
-                  height: this.vh(30),
+                  height: this.vh(30)
                 }}
                 elevation={2}
               >
@@ -151,7 +156,7 @@ class SingleEvent extends React.Component {
                   <View
                     style={{
                       alignContent: 'center',
-                      alignItems: 'center',
+                      alignItems: 'center'
                     }}
                   >
                     {!this.state.selectedTime ? (
@@ -170,7 +175,7 @@ class SingleEvent extends React.Component {
                                 height: 40,
                                 width: 110,
                                 margin: 10,
-                                marginEnd: 10,
+                                marginEnd: 10
                               }}
                               key={item}
                               accessibilityLabel={item}
@@ -182,79 +187,79 @@ class SingleEvent extends React.Component {
                         />
                       </View>
                     ) : (
-                        <View style={{}}>
-                          <Button
-                            onPress={() => this.setState({ selectedTime: '' })}
-                          >
-                            All Showtimes
+                      <View style={{}}>
+                        <Button
+                          onPress={() => this.setState({ selectedTime: '' })}
+                        >
+                          All Showtimes
                         </Button>
-                          <Card
-                            style={{
-                              alignSelf: 'center',
-                              backgroundColor: 'white',
-                              width: this.vw(40),
-                              height: this.vh(15),
-                              /*  alignItems: 'center', */
-                              margin: 10,
-                            }}
-                            elevation={8}
+                        <Card
+                          style={{
+                            alignSelf: 'center',
+                            backgroundColor: 'white',
+                            width: this.vw(40),
+                            height: this.vh(15),
+                            /*  alignItems: 'center', */
+                            margin: 10
+                          }}
+                          elevation={8}
+                        >
+                          <Card.Content
+                            style={{ alignContent: 'space-around' }}
                           >
-                            <Card.Content
-                              style={{ alignContent: 'space-around' }}
+                            <Button
+                              mode="outlined"
+                              icon="info"
+                              onPress={() =>
+                                this.goToChatRoom(this.props.screenProps)
+                              }
                             >
-                              <Button
-                                mode="outlined"
-                                icon="info"
-                                onPress={() =>
-                                  this.goToChatRoom(this.props.screenProps)
-                                }
-                              >
-                                Chat!
+                              Chat!
                             </Button>
-                              <Button
-                                mode="outlined"
-                                icon="info"
-                                onPress={() => console.log('Play Trivia!')}
-                              >
-                                Play Trivia!
+                            <Button
+                              mode="outlined"
+                              icon="info"
+                              onPress={() => console.log('Play Trivia!')}
+                            >
+                              Play Trivia!
                             </Button>
-                            </Card.Content>
-                          </Card>
-                          <Button
-                            onPress={() =>
-                              Alert.alert(
-                                'Choose from one of our partners',
-                                'options below',
-                                [
-                                  {
-                                    text: 'Fandango',
-                                    icon: 'movie',
+                          </Card.Content>
+                        </Card>
+                        <Button
+                          onPress={() =>
+                            Alert.alert(
+                              'Choose from one of our partners',
+                              'options below',
+                              [
+                                {
+                                  text: 'Fandango',
+                                  icon: 'movie',
 
-                                    onPress: () =>
-                                      Linking.openURL(this.state.ticketURI),
-                                  },
-                                  {
-                                    text: 'Atom',
-                                    icon: 'react',
-                                    onPress: () => Linking.openURL('google.com'),
-                                  },
-                                  {
-                                    text: 'Friendship',
-                                    icon: 'paw',
-                                    onPress: () =>
-                                      navigation.navigate('Home', {
-                                        movie: movie,
-                                      }),
-                                  },
-                                ],
-                                { cancelable: true }
-                              )
-                            }
-                          >
-                            Purchase Tickets!
+                                  onPress: () =>
+                                    Linking.openURL(this.state.ticketURI)
+                                },
+                                {
+                                  text: 'Atom',
+                                  icon: 'react',
+                                  onPress: () => Linking.openURL('google.com')
+                                },
+                                {
+                                  text: 'Friendship',
+                                  icon: 'paw',
+                                  onPress: () =>
+                                    navigation.navigate('Home', {
+                                      movie: movie
+                                    })
+                                }
+                              ],
+                              { cancelable: true }
+                            )
+                          }
+                        >
+                          Purchase Tickets!
                         </Button>
-                        </View>
-                      )}
+                      </View>
+                    )}
                   </View>
                 </Card.Content>
               </Card>
