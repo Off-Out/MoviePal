@@ -13,7 +13,6 @@ import {
   LoginScreen,
   SignUpScreen,
   SingleTheaterScreen,
-  FilterScreen,
   ListScreen,
   SingleMovie,
 } from './src/screen/index';
@@ -21,31 +20,12 @@ import { Ionicons } from '@expo/vector-icons';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
-  Filter: FilterScreen,
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
 });
 
 const TabNavigator = createBottomTabNavigator({
-  Profile: {
-    screen: ProfileScreen,
-    navigationOptions: {
-      tabBarLabel: 'PROFILE',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-contact" color={tintColor} size={24} />
-      ),
-    },
-  },
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      tabBarLabel: 'HOME',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-home" color={tintColor} size={24} />
-      ),
-    },
-  },
   Map: {
     screen: MapStackNavigator,
     navigationOptions: {
@@ -55,6 +35,17 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
+
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: {
+      tabBarLabel: 'HOME',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-home" color={tintColor} size={24} />
+      ),
+    },
+  },
+
   Chat: {
     screen: ChatScreen,
     navigationOptions: {
@@ -64,17 +55,21 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
+  Profile: {
+    screen: ProfileScreen,
+    navigationOptions: {
+      tabBarLabel: 'PROFILE',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-contact" color={tintColor} size={24} />
+      ),
+    },
+  },
 });
 
-const AuthStack = createStackNavigator(
-  {
-    LoginScreen: { screen: LoginScreen },
-    SignUpScreen: { screen: SignUpScreen },
-  },
-  { initialRouteName: 'LoginScreen' }
-  // { SingleMovie: { screen: SingleMovie } },
-  // { initialRouteName: 'SingleMovie' }
-);
+const AuthStack = createStackNavigator({
+  LoginScreen: { screen: LoginScreen },
+  SignUpScreen: { screen: SignUpScreen },
+});
 
 class TabComponents extends React.Component {
   static router = TabNavigator.router;

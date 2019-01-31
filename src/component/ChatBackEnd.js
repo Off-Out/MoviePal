@@ -8,7 +8,7 @@ class ChatBackEnd {
   constructor() {
     auth.onAuthStateChanged(async user => {
       if (user) {
-        console.log('backend', user);
+        console.log('backend testing', user);
         this.setUid(user.uid);
         await database.ref(`/users/${user.uid}`).on('value', snapshot => {
           this.setName(snapshot.val().name);

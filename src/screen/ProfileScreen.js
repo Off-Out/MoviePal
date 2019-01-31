@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
+import { StyleSheet, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import { auth, database } from '../firebase';
 
@@ -17,12 +17,10 @@ export default class ProfileScreen extends Component {
 
   componentDidMount() {
     const userId = this.props.screenProps;
-    console.log('userId', userId);
-    console.log(this.props.screenProps, '>>>>screenProps');
+
     database.ref(`/users/${userId}`).on('value', snapshot => {
       let user = snapshot.val();
-      console.log('profilescreen', user);
-      console.log('profilescreen snapshot.val()', snapshot.val());
+
       this.setState({
         name: user.name,
         email: user.email,
