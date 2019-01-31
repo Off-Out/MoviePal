@@ -8,6 +8,7 @@ import {
 import {
   AuthLoadingScreen,
   ProfileScreen,
+  HistoryScreen,
   HomeScreen,
   MapScreen,
   ChatScreen,
@@ -30,6 +31,11 @@ const MapStackNavigator = createStackNavigator({
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
+});
+
+const ProfileStackNavigator = createStackNavigator({
+  Profile: ProfileScreen,
+  History: HistoryScreen,
 });
 
 const TabNavigator = createBottomTabNavigator({

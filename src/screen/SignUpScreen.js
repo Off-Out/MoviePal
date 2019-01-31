@@ -89,7 +89,7 @@ class SignUpScreen extends Component {
           </Item>
           <Button
             outline
-            success
+            danger
             style={styles.createBtn}
             onPress={() =>
               this.createUserAccount(this.state.email, this.state.password)

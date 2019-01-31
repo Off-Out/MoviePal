@@ -13,12 +13,12 @@ class ChatBackEnd {
         this.setUid(user.uid);
         await database.ref(`/users/${user.uid}`).on('value', snapshot => {
           this.setName(snapshot.val().name);
-          this.setChatId(snapshot.val().chatId)
+          this.setChatId(snapshot.val().chatId);
         });
       }
-    })
+    });
   }
-  
+
   setUid(value) {
     this.uid = value;
   }
@@ -35,12 +35,14 @@ class ChatBackEnd {
   }
 
   setChatId(value) {
-    this.chatId = value
+    this.chatId = value;
   }
   // retrieve the messages from the Backend
   loadMessages(callback) {
-    const today = new Date().toDateString()
-    this.messagesRef = database.ref(`/chatroom/${today}/${this.chatId}/messages`);
+    const today = new Date().toDateString();
+    this.messagesRef = database.ref(
+      `/chatroom/${today}/${this.chatId}/messages`
+    );
     this.messagesRef.off();
     const onReceive = data => {
       const message = data.val();

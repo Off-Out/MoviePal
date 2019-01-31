@@ -5,8 +5,18 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import { Form, Item, Picker, Card, CardItem, Body, Content } from 'native-base';
+import {
+  Form,
+  Item,
+  Picker,
+  Card,
+  CardItem,
+  Body,
+  Content,
+  H2,
+} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
 import axios from 'axios';
@@ -66,97 +76,96 @@ export default class SingleTheaterScreen extends Component {
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <Content>
-          <View style={{ flex: 1 }}>
-            <Form>
-              <Item picker>
-                <Picker
-                  mode="dropdown"
-                  style={{ width: undefined }}
-                  placeholder={`${format(new Date(), 'YYYY-MM-DD')}`}
-                  placeholderStyle={{ color: '#bfc6ea' }}
-                  placeholderIconColor="#007aff"
-                  selectedValue={this.state.selectedDate}
-                  onValueChange={this.onValueChange2.bind(this)}
-                >
-                  <Picker.Item
-                    label={format(addDays(new Date(), 1), 'YYYY-MM-DD')}
-                    value={format(addDays(new Date(), 1), 'YYYY-MM-DD')}
-                  />
-                  <Picker.Item
-                    label={format(addDays(new Date(), 2), 'YYYY-MM-DD')}
-                    value={format(addDays(new Date(), 2), 'YYYY-MM-DD')}
-                  />
-                  <Picker.Item
-                    label={format(addDays(new Date(), 3), 'YYYY-MM-DD')}
-                    value={format(addDays(new Date(), 3), 'YYYY-MM-DD')}
-                  />
-                  <Picker.Item
-                    label={format(addDays(new Date(), 4), 'YYYY-MM-DD')}
-                    value={format(addDays(new Date(), 4), 'YYYY-MM-DD')}
-                  />
-                  <Picker.Item
-                    label={format(addDays(new Date(), 5), 'YYYY-MM-DD')}
-                    value={format(addDays(new Date(), 5), 'YYYY-MM-DD')}
-                  />
-                  <Picker.Item
-                    label={format(addDays(new Date(), 6), 'YYYY-MM-DD')}
-                    value={format(addDays(new Date(), 6), 'YYYY-MM-DD')}
-                  />
-                  <Picker.Item
-                    label={format(addDays(new Date(), 7), 'YYYY-MM-DD')}
-                    value={format(addDays(new Date(), 7), 'YYYY-MM-DD')}
-                  />
-                </Picker>
-              </Item>
-            </Form>
+        <View style={{ flex: 1 }}>
+          <Form>
+            <Item picker>
+              <Picker
+                mode="dropdown"
+                iosIcon={<Ionicons name="ios-arrow-dropdown" />}
+                placeholder={`Date: ${format(new Date(), 'YYYY-MM-DD')}`}
+                placeholderStyle={{ color: 'black' }}
+                selectedValue={this.state.selectedDate}
+                onValueChange={this.onValueChange2.bind(this)}
+              >
+                <Picker.Item
+                  label={format(addDays(new Date(), 1), 'YYYY-MM-DD')}
+                  value={format(addDays(new Date(), 1), 'YYYY-MM-DD')}
+                />
+                <Picker.Item
+                  label={format(addDays(new Date(), 2), 'YYYY-MM-DD')}
+                  value={format(addDays(new Date(), 2), 'YYYY-MM-DD')}
+                />
+                <Picker.Item
+                  label={format(addDays(new Date(), 3), 'YYYY-MM-DD')}
+                  value={format(addDays(new Date(), 3), 'YYYY-MM-DD')}
+                />
+                <Picker.Item
+                  label={format(addDays(new Date(), 4), 'YYYY-MM-DD')}
+                  value={format(addDays(new Date(), 4), 'YYYY-MM-DD')}
+                />
+                <Picker.Item
+                  label={format(addDays(new Date(), 5), 'YYYY-MM-DD')}
+                  value={format(addDays(new Date(), 5), 'YYYY-MM-DD')}
+                />
+                <Picker.Item
+                  label={format(addDays(new Date(), 6), 'YYYY-MM-DD')}
+                  value={format(addDays(new Date(), 6), 'YYYY-MM-DD')}
+                />
+                <Picker.Item
+                  label={format(addDays(new Date(), 7), 'YYYY-MM-DD')}
+                  value={format(addDays(new Date(), 7), 'YYYY-MM-DD')}
+                />
+              </Picker>
+            </Item>
+          </Form>
 
-            <Card>
-              <CardItem>
-                <Body>
-                  <Text>{theatre.name}</Text>
-                  <Text>{`${theatre.location.address.street} ${
+          <Card>
+            <CardItem>
+              <Body>
+                <H2>{theatre.name}</H2>
+                <Text>
+                  {`${theatre.location.address.street} ${
                     theatre.location.address.city
-                  }, ${theatre.location.address.state}`}</Text>
-                </Body>
-              </CardItem>
-            </Card>
+                  }, ${theatre.location.address.state}`}
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
 
-            <Card>
-              <CardItem>
-                <Body>
-                  <Text>SHOWTIMES</Text>
-                </Body>
-              </CardItem>
-            </Card>
-
-            <Card>
-              <CardItem>
-                <Body>
-                  {this.state.theater.map(movie => (
-                    <TouchableOpacity
-                      key={movie.tmsId}
-                      onPress={() =>
-                        navigation.navigate('SingleMovie', {
-                          movie,
-                          theatre: theatre.name,
-                        })
-                      }
-                    >
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <H2>In Theater</H2>
+          </View>
+          <ScrollView>
+            {this.state.theater.map(movie => (
+              <TouchableOpacity
+                key={movie.tmsId}
+                onPress={() =>
+                  navigation.navigate('SingleMovie', {
+                    movie,
+                    theatre: theatre.name,
+                  })
+                }
+              >
+                <Card>
+                  <CardItem>
+                    <Body>
                       <Text value={movie}>{movie.title}</Text>
                       <Text>{movie.releaseDate}</Text>
-                      <Text>{movie.genres}</Text>
+                      <Text>{movie.genres ? movie.genres[0] : null}</Text>
                       <Text>{movie.audience}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </Body>
-              </CardItem>
-            </Card>
-          </View>
-        </Content>
+                    </Body>
+                  </CardItem>
+                </Card>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
       </SafeAreaView>
     );
   }
 }
-
-const styles = StyleSheet.create({});

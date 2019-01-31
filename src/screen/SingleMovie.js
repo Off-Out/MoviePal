@@ -53,11 +53,9 @@ class SingleEvent extends React.Component {
     const { selectedTime } = this.state;
     const theater = this.props.navigation.getParam('theatre');
     const { title } = this.props.navigation.getParam('movie', null);
+    const { preferredImage } = this.props.navigation.getParam('movie');
 
-    const chatId = `${theater}${selectedTime}${title.substr(
-      title.length - 5,
-      title.length - 1
-    )}`;
+    const chatId = `${theater}${selectedTime}${title}`;
     const today = new Date().toDateString();
     const chatRef = database.ref(`chatroom/${today}/` + chatId);
     const userRef = database.ref('users/' + userId);
@@ -86,6 +84,16 @@ class SingleEvent extends React.Component {
             },
           },
           chatId,
+        });
+      })
+      .then(() => {
+        this.props.navigation.navigate('Chat', {
+          movieInfo: {
+            movie: title,
+            selectedTime: this.state.selectedTime,
+            theater,
+            image: preferredImage.uri,
+          },
         });
       })
       .then(() => {

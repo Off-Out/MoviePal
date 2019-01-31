@@ -36,6 +36,26 @@ class LoginForm extends Component {
                 handleUserInput('password', text);
               }}
             />
+            <Button
+              dark
+              small
+              transparent
+              style={{ alignSelf: 'center' }}
+              onPress={() => {
+                if (!credential.email) {
+                  console.log('here');
+                  Alert.alert('Please enter your email');
+                } else {
+                  auth
+                    .sendPasswordResetEmail(credential.email)
+                    .then(() => Alert.alert('Reset Password Email Sent!'));
+                }
+              }}
+            >
+              <Text style={{ fontSize: 12.5, fontWeight: 'bold' }}>
+                Forgot Password?
+              </Text>
+            </Button>
           </Item>
         </Form>
         <Button
