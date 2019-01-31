@@ -23,6 +23,7 @@ import { auth, database } from './src/firebase'
 import { Text } from 'native-base'
 import IconBadge from 'react-native-icon-badge';
 import { Ionicons } from '@expo/vector-icons';
+import { SecureStore } from 'expo';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
@@ -123,6 +124,10 @@ export default class Application extends React.Component {
   //   //   } else console.log('Welcome to MoviePal!')
   //   });
   // }
+
+  componentDidMount() {
+
+  }
 
   render() {
     return (

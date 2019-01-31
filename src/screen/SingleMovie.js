@@ -133,13 +133,13 @@ class SingleEvent extends React.Component {
     })
     .then(() => {
       this.props.navigation.navigate('Chat'
-      // , {
-      //   movieInfo: {
-      //     movie: this.state.movie,
-      //     selectedTime: this.state.selectedTime,
-      //     theater: this.state.theater
-      //   },
-      // }
+      , {
+        movieInfo: {
+          movie: this.state.movie,
+          selectedTime: this.state.selectedTime,
+          theater: this.state.theater
+        },
+      }
       )
     })
     .catch(error => console.error(error))

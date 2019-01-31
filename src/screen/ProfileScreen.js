@@ -19,12 +19,8 @@ export default class ProfileScreen extends Component {
 
   componentDidMount() {
     const userId = this.props.screenProps;
-    console.log('userId', userId);
-    console.log(this.props.screenProps, '>>>>screenProps');
     database.ref(`/users/${userId}`).on('value', snapshot => {
       let user = snapshot.val();
-      console.log('profilescreen', user);
-      console.log('profilescreen snapshot.val()', snapshot.val());
       this.setState({
         name: user.name,
         email: user.email,
@@ -68,6 +64,7 @@ export default class ProfileScreen extends Component {
   };
 
   render() {
+    const userId = this.props.screenProps;
     let isProvider = false;
     let currentUser = auth.currentUser || {};
     if (currentUser.providerData) {
@@ -75,7 +72,6 @@ export default class ProfileScreen extends Component {
     }
     let display = isProvider ? 'none' : 'flex';
 
-    const userId = this.props.screenProps;
     return (
       <Form style={styles.form}>
         <Image

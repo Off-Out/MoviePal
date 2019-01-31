@@ -5,7 +5,7 @@ class ChatBackEnd {
   name = '';
   chatId = '';
   messagesRef = null;
-  // initialize Firebase Backend
+
   constructor() {
     auth.onAuthStateChanged(async user => {
       if (user) {
@@ -15,16 +15,10 @@ class ChatBackEnd {
           this.setName(snapshot.val().name);
           this.setChatId(snapshot.val().chatId)
         });
-      } else {
-        firebase
-          .auth()
-          .signInAnonymously()
-          .catch(error => {
-            alert(error.message);
-          });
       }
-    });
+    })
   }
+  
   setUid(value) {
     this.uid = value;
   }

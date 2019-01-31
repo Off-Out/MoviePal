@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, Alert } from 'react-native';
 import { Asset, AppLoading } from 'expo';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { auth, database } from '../firebase';
@@ -8,11 +8,8 @@ import ChatNavBar from '../component/ChatNavBar';
 import Stor from '../store/Stor';
 
 export default class ChatScreen extends Component {
-  
   constructor(props) {
     super(props);
-    
-    // Stor('chatroom').then(result => console.log("store", result))
 
     this.state = {
       messages: [],
@@ -21,17 +18,14 @@ export default class ChatScreen extends Component {
   }
 
   render () {
-
-    if (false) {
-      return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Text>Please join an event to enter the event's chatroom!</Text>
-        </View>
-      );
+    const movieInfo = this.props.navigation.getParam("movieInfo")
+    if (!movieInfo) {
+      Alert.alert("Please join an event to enter the event's chatroom!")
+      return this.props.navigation.navigate("Map")
     } else {
       return (
         <View style={styles.container}>
-          {/* <ChatNavBar /> */}
+          <ChatNavBar movieInfo={movieInfo}/>
           <GiftedChat
             messages={this.state.messages}
             onSend={message => {
