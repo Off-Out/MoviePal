@@ -37,7 +37,7 @@ export default class MapScreen extends Component {
   componentDidMount = async () => {
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres?zip=${
-        this.state.zipCode
+      this.state.zipCode
       }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
     this.props.navigation.setParams({
@@ -57,7 +57,7 @@ export default class MapScreen extends Component {
   handleZipCodeSubmit = async () => {
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres?zip=${
-        this.state.zipCode
+      this.state.zipCode
       }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
     this.setState({

@@ -16,6 +16,7 @@ import {
   FilterScreen,
   ListScreen,
   SingleEvent,
+  TriviaQuestions,
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -25,6 +26,7 @@ const MapStackNavigator = createStackNavigator({
   SingleTheater: SingleTheaterScreen,
   SingleEvent: SingleEvent,
   ListScreen: ListScreen,
+  TriviaQuestions: TriviaQuestions
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -61,6 +63,15 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'CHAT',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
+      ),
+    },
+  },
+  Trivia: {
+    screen: TriviaQuestions,
+    navigationOptions: {
+      tabBarLabel: 'GAME',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-game" color={tintColor} size={24} />
       ),
     },
   },

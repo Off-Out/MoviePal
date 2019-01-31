@@ -17,3 +17,5 @@ export { default as SingleTheaterScreen } from './SingleTheaterScreen';
 export { default as FilterScreen } from './FilterScreen';
 export { default as ListScreen } from './ListScreen';
 export { default as SingleEvent } from './SingleEvent';
+export { default as Trivia } from './Trivia.js';
+export { default as TriviaQuestions } from './TriviaQuestions.js';
