@@ -23,13 +23,16 @@ export default class Trivia extends Component {
   };
   constructor(props) {
     super(props);
-    this.score = 0;
-    this.qno = 0;
+
     this.state = {
-      question: '',
-      options: [],
-      correct_answer: '',
-      countCheck: 0
+      score: 0,
+      qno: 0,
+      questions: [],
+      // question: '',
+      // options: [],
+      // correct_answer: '',
+      // countCheck: 0,
+      isFinished: false
     };
   }
 
@@ -38,50 +41,35 @@ export default class Trivia extends Component {
       `https://opentdb.com/api.php?amount=20&category=11&type=multiple`
     );
     let quiz = response.data.results;
+    console.log('quiz>>>>>', quiz);
+
     // the reason putting data.results is all about the trivia questions data structure which is coming from axios request
     this.setState({
-      question: quiz[this.qno].question,
-      options: [
-        ...quiz[this.qno].incorrect_answers,
-        quiz[this.qno].correct_answer
-      ],
-      correct_answer: quiz[this.qno].correct_answer
+      questions: quiz
     });
   };
 
-  // next = () => {
-  //   if (this.qno < quiz.length - 1) {
-  //     this.qno++
-  //     this.setState({
-  //       countCheck: 0,
-  //       question: quiz[this.qno].question,
-  //       options: [...quiz[this.qno].incorrect_answers, quiz[this.qno].correct_answer],
-  //       correct_answer: quiz[this.qno].correct_answer,
-  //     })
-  //   } else {
-  //     this.props.getScore(this.score * 100 / 20)
-  //   }
-  // }
+  answerQuestion = (item) => {
+    console.log('What is my answer>>>>>', item);
+    let increment = 0;
 
-  // answerQuestion = (status, answer) => {
-  //   if (status === true) {
-  //     const count = this.state.countCheck + 1;
-  //     this.setState({ countCheck: count })
-  //     if (answer === this.state.correct_answer) {
-  //       this.score += 1
-  //     }
-  //   } else {
-  //     const count = this.state.countCheck - 1;
-  //     this.setState({ countCheck: count })
-  //     if (this.state.countCheck < 1 || answer !== this.state.correct_answer) {
-  //       this.score -= 1
-  //     }
-  //   }
-  // }
+    if (item === this.state.questions[this.state.qno].correct_answer) {
+      increment += 5;
+    }
+    if (this.state.qno === this.state.questions.length - 1) {
+      this.setState({
+        score: this.state.score,
+        isFinished: true
+      });
+    } else {
+      this.setState({
+        score: this.state.score + increment,
+        qno: this.state.qno + 1
+      });
+    }
+  };
 
   render() {
-    // console.log('what is our current state >>>', this.state.quiz.results)
-    // console.log(typeof this.state.quiz.results)
     // because of the structure of the data , if I am not shuffle the order of array, the correct answer always be the last option
     function shuffle(array) {
       var currentIndex = array.length,
@@ -102,14 +90,23 @@ export default class Trivia extends Component {
 
       return array;
     }
-    let currentOptions = this.state.options;
-    currentOptions = shuffle(currentOptions);
-    console.log('what is my current options', currentOptions);
+    let currentOptions = [];
+    if (this.state.questions.length) {
+      let currentQuestion = this.state.questions[this.state.qno];
+      currentOptions = [
+        ...currentQuestion.incorrect_answers,
+        currentQuestion.correct_answer
+      ];
+      currentOptions = shuffle(currentOptions);
+    }
+    // console.log('what is my current options', currentOptions);
 
     // console.log('what is the answer', this.props.answerQuestion);
 
     if (!currentOptions || currentOptions === []) {
       return <Text>...Loading</Text>;
+    } else if (this.state.isFinished) {
+      return <Text> {this.state.score} </Text>;
     } else {
       return (
         <ScrollView style={{ backgroundColor: 'lightblue', paddingTop: 10 }}>
@@ -129,9 +126,13 @@ export default class Trivia extends Component {
 
               <View>
                 {currentOptions.map((item, i) => (
-                  <View key={i} style={styles.questions}>
-                    <Text style={styles.welcome}>{currentOptions[i]} </Text>
-                  </View>
+                  <TouchableOpacity
+                    key={i}
+                    style={styles.questions}
+                    onPress={() => this.answerQuestion(item)}
+                  >
+                    <Text style={styles.welcome}>{item} </Text>
+                  </TouchableOpacity>
                 ))}
               </View>
             </View>
