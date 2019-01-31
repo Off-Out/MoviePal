@@ -83,8 +83,6 @@ const AuthStack = createStackNavigator(
     SignUpScreen: { screen: SignUpScreen },
   },
   { initialRouteName: 'LoginScreen' }
-  // { SingleMovie: { screen: SingleMovie } },
-  // { initialRouteName: 'SingleMovie' }
 );
 
 class TabComponents extends React.Component {
@@ -112,18 +110,19 @@ const AppContainer = createAppContainer(
 
 export default class Application extends React.Component {
 
-  async componentDidMount() {
-    // await database.ref('chatroom').once('value', snapshot => {
-    //   if (snapshot.exists() && snapshot.val()[0] !== new Date(2018, 0, 31).toDateString()) {
-    //     database.ref('chatroom').remove()
-    //   } else console.log('enter!')
-    // })
-    await database.ref('chatroom').once('value', snapshot => {
-      if (snapshot.exists() && snapshot.val()[0] !== new Date().toDateString()) {
-        database.ref('chatroom').remove()
-      } else console.log('Welcome to MoviePal!')
-    });
-  }
+  // async componentDidMount() {
+  //   // await database.ref('chatroom').once('value', snapshot => {
+  //   //   if (snapshot.exists() && snapshot.val()[0] !== new Date(2018, 0, 31).toDateString()) {
+  //   //     database.ref('chatroom').remove()
+  //   //   } else console.log('enter!')
+  //   // })
+  //   await database.ref('chatroom').on('value', snapshot => {
+  //     // if (snapshot.exists() && snapshot.val()[0] !== new Date().toDateString()) {
+  //       console.log("WHAT????", snapshot.val()[0] )
+  //   //     database.ref('chatroom').remove()
+  //   //   } else console.log('Welcome to MoviePal!')
+  //   });
+  // }
 
   render() {
     return (

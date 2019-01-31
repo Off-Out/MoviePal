@@ -11,6 +11,8 @@ import { Text, Title, Button } from 'react-native-paper';
 
 import { EventCard } from '../component';
 import axios from 'axios';
+import { database } from '../firebase'
+import Stor from '../store/Stor';
 
 const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
 const isGraceNote =
@@ -102,23 +104,23 @@ class SingleEvent extends React.Component {
     console.log('go to chat room!')
     const { movie, selectedTime, theater } = this.state
     const chatId = `${theater}${selectedTime}${movie.substr(movie.length - 5, movie.length - 1)}`
-    console.log("chatId", chatId)
     const today = new Date().toDateString();
     const chatRef = database.ref(`chatroom/${today}/` +  chatId);
+    const userRef = database.ref('users/' + userId);
+
     chatRef.once('value', snapshot => {
       if (snapshot.exists()) {
         chatRef.child('users' + userId)
       } else {
         chatRef.set({
-          title: this.state.movie,
-          selectedTime: this.state.selectedTime,
-          theater: this.state.theater,
+          movie,
+          selectedTime,
+          theater,
           users: userId,
         });
       }
     }).then(() => chatRef.child(`/users/${userId}`).set(true))
     .then(() => {
-      const userRef = database.ref('users/' + userId);
       userRef.update({
         pastMovies: {
           [`${today}`]: {
@@ -126,21 +128,19 @@ class SingleEvent extends React.Component {
             selectedTime: this.state.selectedTime,
             theater: this.state.theater,
           }
-        },
-      chatId: chatId
+        }
       });
     })
     .then(() => {
-      database.ref('users/' + userId);
-      console.log('here???')
-      this.props.navigation.navigate('Chat', {
-        movieInfo: {
-          movie: this.state.movie,
-          selectedTime: this.state.selectedTime,
-          theater: this.state.theater
-        },
-        chatId: chatId
-      })
+      this.props.navigation.navigate('Chat'
+      // , {
+      //   movieInfo: {
+      //     movie: this.state.movie,
+      //     selectedTime: this.state.selectedTime,
+      //     theater: this.state.theater
+      //   },
+      // }
+      )
     })
     .catch(error => console.error(error))
   }
@@ -243,9 +243,6 @@ class SingleEvent extends React.Component {
                     Total Price {'   ' + this.state.price * this.state.quantity}
                   </Text>
                   <Button
-<<<<<<< HEAD:src/screen/SingleEvent.js
-                    onPress={() => this.goToChatRoom(this.props.screenProps)}
-=======
                     onPress={() =>
                       Alert.alert(
                         'Thank you for your purchase!',
@@ -253,10 +250,7 @@ class SingleEvent extends React.Component {
                         [
                           {
                             text: 'Chat',
-                            onPress: () =>
-                              navigation.navigate('Chat', {
-                                state: this.state,
-                              }),
+                            onPress: () => this.goToChatRoom(this.props.screenProps),
                           },
                           {
                             text: 'Home Page',
@@ -276,7 +270,6 @@ class SingleEvent extends React.Component {
                         { cancelable: true }
                       )
                     }
->>>>>>> 5761fb85d23faceff4d0f51f3c0c7a66a97daa7b:src/screen/SingleMovie.js
                   >
                     Purchase Tickets!
                   </Button>

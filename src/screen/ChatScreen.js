@@ -4,12 +4,15 @@ import { Asset, AppLoading } from 'expo';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { auth, database } from '../firebase';
 import ChatBackEnd from '../component/ChatBackEnd';
-import LoginScreen from './LoginScreen';
 import ChatNavBar from '../component/ChatNavBar';
+import Stor from '../store/Stor';
 
 export default class ChatScreen extends Component {
+  
   constructor(props) {
     super(props);
+    
+    // Stor('chatroom').then(result => console.log("store", result))
 
     this.state = {
       messages: [],
@@ -18,11 +21,8 @@ export default class ChatScreen extends Component {
   }
 
   render () {
-    const userId = this.props.screenProps;
-    const movieInfo = this.props.navigation.getParam('movieInfo')
-    const chatId = this.props.navigation.getParam('chatId')
 
-    if (!chatId) {
+    if (false) {
       return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
           <Text>Please join an event to enter the event's chatroom!</Text>
@@ -31,7 +31,7 @@ export default class ChatScreen extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <ChatNavBar movieInfo={movieInfo} />
+          {/* <ChatNavBar /> */}
           <GiftedChat
             messages={this.state.messages}
             onSend={message => {
