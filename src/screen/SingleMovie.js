@@ -50,8 +50,11 @@ class SingleEvent extends React.Component {
 
   goToChatRoom = (userId) => {
     console.log('go to chat room!')
-    const { movie, selectedTime, theater } = this.state
-    const chatId = `${theater}${selectedTime}${movie.substr(movie.length - 5, movie.length - 1)}`
+    const { selectedTime } = this.state;
+    const theater = this.props.navigation.getParam('theatre');
+    const {title} = this.props.navigation.getParam('movie', null);
+
+    const chatId = `${theater}${selectedTime}${title.substr(title.length - 5, title.length - 1)}`
     const today = new Date().toDateString();
     const chatRef = database.ref(`chatroom/${today}/` +  chatId);
     const userRef = database.ref('users/' + userId);
@@ -61,7 +64,7 @@ class SingleEvent extends React.Component {
         chatRef.child('users' + userId)
       } else {
         chatRef.set({
-          movie,
+          movie: title,
           selectedTime,
           theater,
           users: userId,
@@ -72,9 +75,9 @@ class SingleEvent extends React.Component {
       userRef.update({
         pastMovies: {
           [`${today}`]: {
-            movie: this.state.movie,
+            movie: title,
             selectedTime: this.state.selectedTime,
-            theater: this.state.theater,
+            theater: theater,
           }
         }
       });
@@ -83,9 +86,9 @@ class SingleEvent extends React.Component {
       this.props.navigation.navigate('Chat'
       , {
         movieInfo: {
-          movie: this.state.movie,
+          movie: title,
           selectedTime: this.state.selectedTime,
-          theater: this.state.theater
+          theater: theater
         },
       }
       )
@@ -202,19 +205,15 @@ class SingleEvent extends React.Component {
                               mode="outlined"
                               icon="info"
                               onPress={() =>
-                                navigation.navigate('Chat', {
-                                  state: this.state,
-                                })
-                              }
+                                this.goToChatRoom(this.props.screenProps)
+                                }
                             >
                               Chat!
                             </Button>
                             <Button
                               mode="outlined"
                               icon="info"
-                              onPress={() =>
-                                this.goToChatRoom(this.props.screenProps)
-                              }
+                              onPress={() => console.log('Play Trivia!')}
                             >
                               Play Trivia!
                             </Button>
@@ -243,7 +242,7 @@ class SingleEvent extends React.Component {
                                   icon: 'paw',
                                   onPress: () =>
                                     navigation.navigate('Home', {
-                                      movie: this.state.movie,
+                                      movie: movie,
                                     }),
                                 },
                               ],
