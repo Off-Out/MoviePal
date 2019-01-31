@@ -6,6 +6,7 @@ import {
   createAppContainer,
 } from 'react-navigation';
 import {
+  AuthLoadingScreen,
   ProfileScreen,
   HomeScreen,
   MapScreen,
@@ -13,10 +14,16 @@ import {
   LoginScreen,
   SignUpScreen,
   SingleTheaterScreen,
+  SingleEvent,
+  FilterScreen,
   ListScreen,
   SingleMovie,
 } from './src/screen/index';
+import { auth, database } from './src/firebase';
+import { Text } from 'native-base';
+import IconBadge from 'react-native-icon-badge';
 import { Ionicons } from '@expo/vector-icons';
+import { SecureStore } from 'expo';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
@@ -51,7 +58,13 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: 'CHAT',
       tabBarIcon: ({ tintColor }) => (
+        // <IconBadge
+        //   MainElement = {
         <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
+        // }
+        // BadgeElement={<Text style={{ color: 'white' }}>{screenProps.unreadMessagesCount}</Text>}
+        // Hidden={screenProps.unreadMessagesCount === 0}
+        // />
       ),
     },
   },
@@ -66,10 +79,13 @@ const TabNavigator = createBottomTabNavigator({
   },
 });
 
-const AuthStack = createStackNavigator({
-  LoginScreen: { screen: LoginScreen },
-  SignUpScreen: { screen: SignUpScreen },
-});
+const AuthStack = createStackNavigator(
+  {
+    LoginScreen: { screen: LoginScreen },
+    SignUpScreen: { screen: SignUpScreen },
+  },
+  { initialRouteName: 'LoginScreen' }
+);
 
 class TabComponents extends React.Component {
   static router = TabNavigator.router;
@@ -84,10 +100,36 @@ class TabComponents extends React.Component {
 }
 
 const AppContainer = createAppContainer(
-  createSwitchNavigator({
-    Auth: AuthStack,
-    App: TabComponents,
-  })
+  createSwitchNavigator(
+    {
+      AuthLoading: AuthLoadingScreen,
+      App: TabComponents,
+      Auth: AuthStack,
+    },
+    {
+      initialRouteName: 'AuthLoading',
+    }
+  )
 );
 
-export default AppContainer;
+export default class Application extends React.Component {
+  // async componentDidMount() {
+  //   // await database.ref('chatroom').once('value', snapshot => {
+  //   //   if (snapshot.exists() && snapshot.val()[0] !== new Date(2018, 0, 31).toDateString()) {
+  //   //     database.ref('chatroom').remove()
+  //   //   } else console.log('enter!')
+  //   // })
+  //   await database.ref('chatroom').on('value', snapshot => {
+  //     // if (snapshot.exists() && snapshot.val()[0] !== new Date().toDateString()) {
+  //       console.log("WHAT????", snapshot.val()[0] )
+  //   //     database.ref('chatroom').remove()
+  //   //   } else console.log('Welcome to MoviePal!')
+  //   });
+  // }
+
+  componentDidMount() {}
+
+  render() {
+    return <AppContainer />;
+  }
+}

@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, Alert } from 'react-native';
 import { LoginForm } from '../component';
 import firebase, { auth, database } from '../firebase';
 import axios from 'axios';
+import Stor from '../store/Stor';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -22,9 +23,9 @@ class LoginScreen extends Component {
   login = (email, password) => {
     auth
       .signInWithEmailAndPassword(email, password)
-      .then(result =>
-        this.props.navigation.navigate('App', { userId: result.user.uid })
-      )
+      .then(result => {
+        this.props.navigation.navigate('App', { userId: result.user.uid });
+      })
       .catch(error => Alert.alert(error.message));
   };
 
@@ -57,7 +58,6 @@ class LoginScreen extends Component {
             }
             if (!snapshot.exists()) {
               console.log('doesnt exist!');
-              console.log('loginscreen user', user);
 
               database.ref(`users/${user.uid}`).set({
                 name: user.providerData[0].displayName,

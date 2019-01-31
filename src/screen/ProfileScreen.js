@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text } from 'native-base';
 import { auth, database } from '../firebase';
+import Stor from '../store/Stor';
+import { storage } from 'firebase';
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -17,10 +19,8 @@ export default class ProfileScreen extends Component {
 
   componentDidMount() {
     const userId = this.props.screenProps;
-
     database.ref(`/users/${userId}`).on('value', snapshot => {
       let user = snapshot.val();
-
       this.setState({
         name: user.name,
         email: user.email,
@@ -64,39 +64,13 @@ export default class ProfileScreen extends Component {
   };
 
   render() {
-    const currentUser = auth.currentUser;
-    const isProvider = currentUser.providerData[0].providerId !== 'password';
-    const display = isProvider ? 'none' : 'flex';
-
     const userId = this.props.screenProps;
-
-    const movieTitle = 'Little Mermaid';
-    const chatId = 'a1234567bc';
-
-    const goToChatRoom = userId => {
-      const chatRef = database.ref('chatroom/' + chatId);
-      const userRef = database.ref('users/' + userId);
-      chatRef
-        .update({
-          title: movieTitle,
-          users: userId,
-        })
-        .then(() => chatRef.child(`/users/${userId}`).set(true))
-        // .then(() => userRef.update({
-        //   movie: movieTitle,
-        //   chatId: chatId
-        // }))
-        .then(() => {
-          console.log('here???');
-          this.props.navigation.navigate('Chat', {
-            info: {
-              movie: movieTitle,
-              chatId: chatId,
-              user: userId,
-            },
-          });
-        });
-    };
+    let isProvider = false;
+    let currentUser = auth.currentUser || {};
+    if (currentUser.providerData) {
+      isProvider = currentUser.providerData[0].providerId !== 'password';
+    }
+    let display = isProvider ? 'none' : 'flex';
 
     return (
       <Form style={styles.form}>
@@ -158,16 +132,16 @@ export default class ProfileScreen extends Component {
         >
           <Text>LOG OUT</Text>
         </Button>
-        <Button
+        {/* <Button
           primary
           style={styles.button}
           onPress={() => {
-            console.log('Pressed Add Event Button');
-            goToChatRoom(userId);
+            console.log('Pressed Go To Single Event Button');
+            this.props.navigation.navigate('SingleEvent', {userId})
           }}
         >
-          <Text>Add Event</Text>
-        </Button>
+          <Text>Single Event Go!</Text>
+        </Button> */}
       </Form>
     );
   }

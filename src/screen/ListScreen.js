@@ -1,70 +1,80 @@
 import React, { Component } from 'react';
-import { Text, ScrollView, View, Alert } from 'react-native';
-import { Button, Card, Title, Paragraph } from 'react-native-paper';
-import MapScreen from './MapScreen';
+import { Text, ScrollView, View, SafeAreaView, StyleSheet } from 'react-native';
+import { Button, Card, Title } from 'react-native-paper';
 
-class ListScreen extends React.Component {
+class ListScreen extends Component {
   render() {
     const { navigation } = this.props;
     const theaters = navigation.getParam('theaters');
-    if (!theaters) {
-      return <Text>...Loading</Text>;
-    } else {
-      return (
-        <ScrollView>
-          <Title> Theaters  </Title>
-          {/* {theaters.map(item => (<Text key={item.theaterId}>{item.name}</Text> ))} */}
 
-          {
-            theaters.map((item, i) => {
-              const distance = item.location.distance.toString().slice(0, 4);
-              return (
-                <Card style={{
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <View style={styles.title}>
+            <Title> Theaters </Title>
+          </View>
+
+          {theaters.map((item, i) => {
+            const distance = item.location.distance.toString().slice(0, 4);
+            return (
+              <Card
+                style={{
                   backgroundColor: 'white',
                   width: 400,
                   height: 200,
                   alignItems: 'left',
                 }}
-                  key={i} >
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginHorizontal: 40,
-                      backgroundColor: 'white',
-                    }}
-                  >
-                    <Card.Content style={{ marginTop: 25 }}>
-
-                      <Title >{item.name}</Title >
-                      <Text > {distance} miles away</Text >
-                      <Text>{`${item.location.address.street} ${
+                key={i}
+              >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginHorizontal: 40,
+                    backgroundColor: 'white',
+                  }}
+                >
+                  <Card.Content style={{ marginTop: 25 }}>
+                    <Title>{item.name}</Title>
+                    <Text> {distance} miles away</Text>
+                    <Text>
+                      {`${item.location.address.street} ${
                         item.location.address.city
-                        }, ${item.location.address.state}`} </Text>
-                      {item.location.telephone ? (<Text > Phone Number: {item.location.telephone}</Text>) : <Text> Limited information </Text>}
-
-                    </Card.Content>
-                  </View>
-                  <Card.Actions style={{ justifyContent: 'center' }}>
-                    <Button
-                      style={{ margin: 20, align: 'left' }}
-                      mode="contained"
-                      onPress={() =>
-                        this.props.navigation.navigate('SingleTheater', {
-                          theatre: item,
-                        })
-                      }
-                    >
-                      <Text> Go to Theater Page</Text>
-                    </Button>
-                  </Card.Actions>
-                </Card>
-              );
-            })
-          }
-        </ScrollView>
-      );
-    }
+                      }, ${item.location.address.state}`}{' '}
+                    </Text>
+                    {item.location.telephone ? (
+                      <Text> Phone Number: {item.location.telephone}</Text>
+                    ) : (
+                      <Text> Limited information </Text>
+                    )}
+                  </Card.Content>
+                </View>
+                <Card.Actions style={{ justifyContent: 'center' }}>
+                  <Button
+                    style={{ margin: 20, align: 'left' }}
+                    mode="contained"
+                    onPress={() =>
+                      this.props.navigation.navigate('SingleTheater', {
+                        theatre: item,
+                      })
+                    }
+                  >
+                    <Text> Go to Theater Page</Text>
+                  </Button>
+                </Card.Actions>
+              </Card>
+            );
+          })}
+        </View>
+      </SafeAreaView>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  title: { justifyContent: 'center', alignItems: 'center' },
+});
 
 export default ListScreen;
