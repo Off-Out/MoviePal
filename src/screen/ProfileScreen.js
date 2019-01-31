@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
-import { Form, Item, Label, Input, Button, Text } from 'native-base';
+import { Form, Item, Label, Input, Button, Text, Icon } from 'native-base';
 import { auth, database } from '../firebase';
 import Stor from '../store/Stor'
 import { storage } from 'firebase';
@@ -14,6 +14,9 @@ export default class ProfileScreen extends Component {
       email: '',
       location: '',
       password: '',
+      photoUrl: '',
+      hidePassword: true,
+      show: 'SHOW'
     };
   }
 
@@ -63,6 +66,16 @@ export default class ProfileScreen extends Component {
       .catch(error => Alert.alert(error.message));
   };
 
+  showPassword = () => {
+    if (!!this.state.hidePassword) {
+      this.setState({hidePassword: false})
+      this.setState({show: 'HIDE'})
+    } else {
+      this.setState({hidePassword: true})
+      this.setState({show: 'SHOW'})
+    }
+  }
+
   render() {
     const userId = this.props.screenProps;
     let isProvider = false;
@@ -97,7 +110,7 @@ export default class ProfileScreen extends Component {
             onChangeText={text => this.handleInput('email', text)}
           />
         </Item>
-        <Item stackedLabel style={styles.item}>
+        <Item stackedLabel style={[styles.item, {display}]}>
           <Label style={styles.label}>LOCATION</Label>
           <Input
             style={styles.input}
@@ -107,17 +120,21 @@ export default class ProfileScreen extends Component {
             onChangeText={text => this.handleInput('location', text)}
           />
         </Item>
+        <Item stackedLabel style={[styles.item, {display}]}>
+        <View style={styles.changepw}>
+        <Label style={styles.label}>CHANGE PASSWORD</Label>
+        <Button danger transparent small style={styles.showBtn} onPress={this.showPassword}><Text>{this.state.show}</Text></Button>
+        </View>
         <Input
-          style={[styles.input, { display }]}
-          secureTextEntry={true}
+          style={styles.input}
+          secureTextEntry={this.state.hidePassword}
           name="password"
           value={this.state.password}
-          onChangeText={text => this.handleInput('password', text)}
-        />
+          onChangeText={text => this.handleInput('password', text)}/>
+        </Item>
         <Button
-          transparent
           danger
-          style={[styles.saveBtn, { display }]}
+          style={[{margin: 20}, { display }]}
           onPress={() => {
             this.save(userId);
           }}
@@ -127,21 +144,11 @@ export default class ProfileScreen extends Component {
         <Button
           transparent
           danger
-          style={styles.button}
+          style={{marginLeft: 10}}
           onPress={() => this.logout()}
         >
           <Text>LOG OUT</Text>
         </Button>
-          {/* <Button
-          primary
-          style={styles.button}
-          onPress={() => {
-            console.log('Pressed Go To Single Event Button');
-            this.props.navigation.navigate('SingleEvent', {userId})
-          }}
-        >
-          <Text>Single Event Go!</Text>
-        </Button> */}
       </Form>
     );
   }
@@ -160,6 +167,11 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     marginBottom: 10,
   },
+  labelPassword: {
+    fontSize: 13,
+    marginLeft: 7,
+    marginBottom: -5,
+  },
   image: {
     width: 150,
     height: 150,
@@ -167,7 +179,6 @@ const styles = StyleSheet.create({
     marginTop: 100,
     marginBottom: 55,
   },
-
   input: {
     marginLeft: 7,
     fontSize: 17,
@@ -177,8 +188,26 @@ const styles = StyleSheet.create({
     borderColor: 'indianred',
     borderBottomWidth: 0.5,
   },
-
-  saveBtn: {
-    margin: 7,
+  inputPassword: {
+    marginLeft: 7,
+    fontSize: 13,
+    paddingTop: 1,
+    marginRight: 20,
+    marginTop: -15,
+    borderColor: 'indianred',
+    borderBottomWidth: 0.5,
   },
+  changepw: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "stretch"
+  },
+  showBtn: {
+    alignSelf:"center",
+    padding: -30,
+    marginBottom: -20,
+    marginRight: 10,
+    fontSize: 5
+  }
+
 });

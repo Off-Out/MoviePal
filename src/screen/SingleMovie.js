@@ -53,6 +53,7 @@ class SingleEvent extends React.Component {
     const { selectedTime } = this.state;
     const theater = this.props.navigation.getParam('theatre');
     const {title} = this.props.navigation.getParam('movie', null);
+    const { preferredImage } = this.props.navigation.getParam('movie');
 
     const chatId = `${theater}${selectedTime}${title}`
     const today = new Date().toDateString();
@@ -77,7 +78,8 @@ class SingleEvent extends React.Component {
           [`${today}`]: {
             movie: title,
             selectedTime: this.state.selectedTime,
-            theater: theater,
+            theater,
+            image: preferredImage.uri
           }
         }
       });
