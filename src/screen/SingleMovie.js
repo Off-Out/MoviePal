@@ -10,6 +10,13 @@ import {
 } from 'react-native';
 import { Text, Title, Button, Card } from 'react-native-paper';
 import { EventCard } from '../component';
+import axios from 'axios';
+import { database } from '../firebase'
+import Stor from '../store/Stor';
+
+const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
+const isGraceNote =
+  'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&zip=78701&api_key=w8xkqtbg6vf3aj5vdxmc4zjj';
 
 class SingleEvent extends React.Component {
   constructor() {
@@ -40,6 +47,56 @@ class SingleEvent extends React.Component {
     console.log('AFTER PRESSING TIME', movieShowtime);
     this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
   }
+
+  goToChatRoom = (userId) => {
+    console.log('go to chat room!')
+    const { selectedTime } = this.state;
+    const theater = this.props.navigation.getParam('theatre');
+    const { title } = this.props.navigation.getParam('movie', null);
+
+    const chatId = `${theater}${selectedTime}${title.substr(title.length - 5, title.length - 1)}`
+    const today = new Date().toDateString();
+    const chatRef = database.ref(`chatroom/${today}/` + chatId);
+    const userRef = database.ref('users/' + userId);
+
+    chatRef.once('value', snapshot => {
+      if (snapshot.exists()) {
+        chatRef.child('users' + userId)
+      } else {
+        chatRef.set({
+          movie: title,
+          selectedTime,
+          theater,
+          users: userId,
+        });
+      }
+    }).then(() => chatRef.child(`/users/${userId}`).set(true))
+      .then(() => {
+        userRef.update({
+          pastMovies: {
+            [`${today}`]: {
+              movie: title,
+              selectedTime: this.state.selectedTime,
+              theater: theater,
+            }
+          },
+          chatId
+        });
+      })
+      .then(() => {
+        this.props.navigation.navigate('Chat'
+          , {
+            movieInfo: {
+              movie: title,
+              selectedTime: this.state.selectedTime,
+              theater: theater
+            },
+          }
+        )
+      })
+      .catch(error => console.error(error))
+  }
+
   render() {
     const { navigation } = this.props;
     const theatre = this.props.navigation.getParam('theatre');
@@ -125,87 +182,79 @@ class SingleEvent extends React.Component {
                         />
                       </View>
                     ) : (
-                      <View style={{}}>
-                        <Button
-                          onPress={() => this.setState({ selectedTime: '' })}
-                        >
-                          All Showtimes
-                        </Button>
-                        <Card
-                          style={{
-                            alignSelf: 'center',
-                            backgroundColor: 'white',
-                            width: this.vw(40),
-                            height: this.vh(15),
-                            /*  alignItems: 'center', */
-                            margin: 10,
-                          }}
-                          elevation={8}
-                        >
-                          <Card.Content
-                            style={{ alignContent: 'space-around' }}
+                        <View style={{}}>
+                          <Button
+                            onPress={() => this.setState({ selectedTime: '' })}
                           >
-                            <Button
-                              mode="outlined"
-                              icon="info"
-                              onPress={() =>
-                                navigation.navigate('Chat', {
-                                  state: this.state,
-                                })
-                              }
-                            >
-                              Chat!
-                            </Button>
-                            <Button
-                              mode="outlined"
-                              icon="info"
-                              onPress={() =>
-                                navigation.navigate('Chat', {
-                                  movie: movie.tittle,
-                                  showtime: this.state.selectedTime,
-                                  theatre,
-                                })
-                              }
-                            >
-                              Play Trivia!
-                            </Button>
-                          </Card.Content>
-                        </Card>
-                        <Button
-                          onPress={() =>
-                            Alert.alert(
-                              'Choose from one of our partners',
-                              'options below',
-                              [
-                                {
-                                  text: 'Fandango',
-                                  icon: 'movie',
-
-                                  onPress: () =>
-                                    Linking.openURL(this.state.ticketURI),
-                                },
-                                {
-                                  text: 'Atom',
-                                  icon: 'react',
-                                  onPress: () => Linking.openURL('google.com'),
-                                },
-                                {
-                                  text: 'Friendship',
-                                  icon: 'paw',
-                                  onPress: () =>
-                                    navigation.navigate('Home', {
-                                      movie: this.state.movie,
-                                    }),
-                                },
-                              ],
-                              { cancelable: true }
-                            )
-                          }
-                        >
-                          Purchase Tickets!
+                            All Showtimes
                         </Button>
-                      </View>
-                    )}
+                          <Card
+                            style={{
+                              alignSelf: 'center',
+                              backgroundColor: 'white',
+                              width: this.vw(40),
+                              height: this.vh(15),
+                              /*  alignItems: 'center', */
+                              margin: 10,
+                            }}
+                            elevation={8}
+                          >
+                            <Card.Content
+                              style={{ alignContent: 'space-around' }}
+                            >
+                              <Button
+                                mode="outlined"
+                                icon="info"
+                                onPress={() =>
+                                  this.goToChatRoom(this.props.screenProps)
+                                }
+                              >
+                                Chat!
+                            </Button>
+                              <Button
+                                mode="outlined"
+                                icon="info"
+                                onPress={() => console.log('Play Trivia!')}
+                              >
+                                Play Trivia!
+                            </Button>
+                            </Card.Content>
+                          </Card>
+                          <Button
+                            onPress={() =>
+                              Alert.alert(
+                                'Choose from one of our partners',
+                                'options below',
+                                [
+                                  {
+                                    text: 'Fandango',
+                                    icon: 'movie',
+
+                                    onPress: () =>
+                                      Linking.openURL(this.state.ticketURI),
+                                  },
+                                  {
+                                    text: 'Atom',
+                                    icon: 'react',
+                                    onPress: () => Linking.openURL('google.com'),
+                                  },
+                                  {
+                                    text: 'Friendship',
+                                    icon: 'paw',
+                                    onPress: () =>
+                                      navigation.navigate('Home', {
+                                        movie: movie,
+                                      }),
+                                  },
+                                ],
+                                { cancelable: true }
+                              )
+                            }
+                          >
+                            Purchase Tickets!
+                        </Button>
+                        </View>
+                      )}
                   </View>
                 </Card.Content>
               </Card>

@@ -1,22 +1,26 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
-
+import { View, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
+import { auth } from '../firebase'
 class AuthLoadingScreen extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.verifyAccount();
   }
 
   // Fetch the token from storage then navigate to our appropriate place
   verifyAccount = () => {
-    const { navigation } = this.props;
-    console.log(navigation);
-    const userID = navigation.getParam('userID', null);
-    console.log(userID);
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
     console.log('I am at the AuthLoading Page');
-    this.props.navigation.navigate(userId ? 'App' : 'Auth');
+
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        console.log('authloading', user)
+        this.props.navigation.navigate('App', {userId: user.uid})
+      } else {
+        this.props.navigation.navigate('Auth')
+      }
+    });
   };
 
   // Render any loading content that you like here

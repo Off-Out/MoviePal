@@ -1,7 +1,7 @@
 // https://opentdb.com/api.php?amount=20&category=11&type=multiple
 
 import React, { Component } from 'react';
-import Quiz from './TriviaQuestions';
+import Trivia from './TriviaQuestions';
 import {
   StyleSheet,
   StatusBar,
@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-export default class Playquiz extends Component {
+export default class Score extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -20,14 +20,14 @@ export default class Playquiz extends Component {
       score: 0
     }
   }
-  onPressBack() {
+  onPressBack = () => {
     const { goBack } = this.props.navigation
     goBack()
   }
-  quizFinish(score) {
+  getScore = (score) => {
     this.setState({ quizFinish: true, score: score })
   }
-  scoreMessage(score) {
+  scoreMessage = (score) => {
     if (score <= 30) {
       return (<View style={styles.innerContainer} >
         <View style={{ flexDirection: "row" }} >
@@ -73,7 +73,7 @@ export default class Playquiz extends Component {
             {this.scoreMessage(this.state.score)}
           </View>
 
-        </View> : <Quiz quizFinish={(score) => this.quizFinish(score)} />}
+        </View> : <Trivia quizFinish={(score) => this.getScore(score)} />}
 
       </View>
     );

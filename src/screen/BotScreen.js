@@ -5,7 +5,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 // Sentry is a crash reporting and aggregation platform that provides you with "real-time insight into production deployments with info to reproduce and fix crashes"
 // import Sentry from 'sentry-expo';
 import LoginScreen from './LoginScreen';
-import NavBar from '../component/NavBar';
+import ChatNavBar from '../component/ChatNavBar';
 
 const messagesData = [
   {
@@ -166,7 +166,7 @@ export default class ChatScreen extends Component {
         accessibilityLabel="main"
         testID="main"
       >
-        <NavBar />
+        <ChatNavBar />
         <GiftedChat
           messages={this.state.messages}
           onSend={this.onSend}
