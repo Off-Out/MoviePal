@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
   createStackNavigator,
   createSwitchNavigator,
-  createAppContainer,
+  createAppContainer
 } from 'react-navigation';
 import {
   AuthLoadingScreen,
@@ -17,12 +17,11 @@ import {
   SingleEvent,
   FilterScreen,
   ListScreen,
-
   TriviaQuestions,
-  SingleMovie,
+  SingleMovie
 } from './src/screen/index';
-import { auth, database } from './src/firebase'
-import { Text } from 'native-base'
+import { auth, database } from './src/firebase';
+import { Text } from 'native-base';
 import IconBadge from 'react-native-icon-badge';
 import { Ionicons } from '@expo/vector-icons';
 import { SecureStore } from 'expo';
@@ -43,8 +42,8 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'PROFILE',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-contact" color={tintColor} size={24} />
-      ),
-    },
+      )
+    }
   },
   Home: {
     screen: HomeScreen,
@@ -52,8 +51,8 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'HOME',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-home" color={tintColor} size={24} />
-      ),
-    },
+      )
+    }
   },
   Map: {
     screen: MapStackNavigator,
@@ -61,8 +60,8 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'MAP',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-map" color={tintColor} size={24} />
-      ),
-    },
+      )
+    }
   },
   Chat: {
     screen: ChatScreen,
@@ -71,13 +70,13 @@ const TabNavigator = createBottomTabNavigator({
       tabBarIcon: ({ tintColor }) => (
         // <IconBadge
         //   MainElement = {
-            <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
-          // }
-          // BadgeElement={<Text style={{ color: 'white' }}>{screenProps.unreadMessagesCount}</Text>}
-          // Hidden={screenProps.unreadMessagesCount === 0}
+        <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
+        // }
+        // BadgeElement={<Text style={{ color: 'white' }}>{screenProps.unreadMessagesCount}</Text>}
+        // Hidden={screenProps.unreadMessagesCount === 0}
         // />
-      ),
-    },
+      )
+    }
   },
   Trivia: {
     screen: TriviaQuestions,
@@ -85,15 +84,15 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'GAME',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-game" color={tintColor} size={24} />
-      ),
-    },
-  },
+      )
+    }
+  }
 });
 
 const AuthStack = createStackNavigator(
   {
     LoginScreen: { screen: LoginScreen },
-    SignUpScreen: { screen: SignUpScreen },
+    SignUpScreen: { screen: SignUpScreen }
   },
   { initialRouteName: 'LoginScreen' }
 );
@@ -111,18 +110,19 @@ class TabComponents extends React.Component {
 }
 
 const AppContainer = createAppContainer(
-  createSwitchNavigator({
-    AuthLoading: AuthLoadingScreen,
-    App: TabComponents,
-    Auth: AuthStack,
-  }, {
-    initialRouteName: 'AuthLoading'
-  })
+  createSwitchNavigator(
+    {
+      AuthLoading: AuthLoadingScreen,
+      App: TabComponents,
+      Auth: AuthStack
+    },
+    {
+      initialRouteName: 'AuthLoading'
+    }
+  )
 );
 
-
 export default class Application extends React.Component {
-
   // async componentDidMount() {
   //   // await database.ref('chatroom').once('value', snapshot => {
   //   //   if (snapshot.exists() && snapshot.val()[0] !== new Date(2018, 0, 31).toDateString()) {
@@ -137,13 +137,9 @@ export default class Application extends React.Component {
   //   });
   // }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   render() {
-    return (
-      <AppContainer />
-    )
+    return <AppContainer />;
   }
 }
