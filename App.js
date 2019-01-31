@@ -8,6 +8,7 @@ import {
 import {
   AuthLoadingScreen,
   ProfileScreen,
+  HistoryScreen,
   HomeScreen,
   MapScreen,
   ChatScreen,
@@ -33,9 +34,14 @@ const MapStackNavigator = createStackNavigator({
   ListScreen: ListScreen,
 });
 
+const ProfileStackNavigator = createStackNavigator({
+  Profile: ProfileScreen,
+  History: HistoryScreen
+})
+
 const TabNavigator = createBottomTabNavigator({
   Profile: {
-    screen: ProfileScreen,
+    screen: ProfileStackNavigator,
     navigationOptions: {
       tabBarLabel: 'PROFILE',
       tabBarIcon: ({ tintColor }) => (

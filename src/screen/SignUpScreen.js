@@ -40,7 +40,6 @@ class SignUpScreen extends Component {
     const {name, email, location, password} = this.state
     return (
       <View style={styles.container}>
-        <Image style={styles.image} source={require('../image/epLogo.png')} />
         <Text style={styles.header}> WELCOME PAL! </Text>
         <Form style={styles.form}>
           <Item floatingLabel style={styles.item} >
@@ -95,7 +94,7 @@ class SignUpScreen extends Component {
             this.createUserAccount(this.state.email, this.state.password)
           }
         >
-          <Text>Join EventPal</Text>
+          <Text>Join MoviePal</Text>
         </Button>
         </Form>
       </View>

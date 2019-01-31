@@ -27,6 +27,7 @@ class LoginForm extends Component {
             />
           </Item>
           <Item block style={styles.item}>
+          <View style={{flexDirection: "row", justifyContent: "space-between", }}>
             <Input
               placeholder="PASSWORD"
               autoCapitalize="none"
@@ -36,6 +37,22 @@ class LoginForm extends Component {
                 handleUserInput('password', text);
               }}
             />
+            <Button
+              dark small transparent style={{alignSelf:"center"}}
+              onPress={() => {
+                if (!credential.email) {
+                  console.log('here');
+                  Alert.alert('Please enter your email');
+                } else {
+                  auth
+                    .sendPasswordResetEmail(credential.email)
+                    .then(() => Alert.alert('Reset Password Email Sent!'));
+                }
+              }}
+            >
+              <Text style={{fontSize: 12.5, fontWeight: "bold"}}>Forgot Password?</Text>
+            </Button>
+            </View>
           </Item>
           <Button
             style={styles.button}
@@ -67,23 +84,6 @@ class LoginForm extends Component {
           </Button>
 
           <View>
-            <Button
-              block
-              danger
-              style={styles.button}
-              onPress={() => {
-                if (!credential.email) {
-                  console.log('here');
-                  Alert.alert('Please enter your email');
-                } else {
-                  auth
-                    .sendPasswordResetEmail(credential.email)
-                    .then(() => Alert.alert('Reset Password Email Sent!'));
-                }
-              }}
-            >
-              <Text>FORGOT PASSWORD?</Text>
-            </Button>
             <Button
               block
               warning
