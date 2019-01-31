@@ -139,10 +139,11 @@ export default class SingleTheaterScreen extends Component {
                       onPress={() =>
                         navigation.navigate('SingleMovie', {
                           movie,
+                          theatre: theatre.name,
                         })
                       }
                     >
-                      <Text>{movie.title}</Text>
+                      <Text value={movie}>{movie.title}</Text>
                       <Text>{movie.releaseDate}</Text>
                       <Text>{movie.genres}</Text>
                       <Text>{movie.audience}</Text>

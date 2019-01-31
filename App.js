@@ -36,15 +36,15 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
 
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      tabBarLabel: 'HOME',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-home" color={tintColor} size={24} />
-      ),
-    },
-  },
+  // Home: {
+  //   screen: HomeScreen,
+  //   navigationOptions: {
+  //     tabBarLabel: 'HOME',
+  //     tabBarIcon: ({ tintColor }) => (
+  //       <Ionicons name="ios-home" color={tintColor} size={24} />
+  //     ),
+  //   },
+  // },
 
   Chat: {
     screen: ChatScreen,
