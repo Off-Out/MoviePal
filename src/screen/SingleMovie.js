@@ -10,6 +10,13 @@ import {
 } from 'react-native';
 import { Text, Title, Button, Card } from 'react-native-paper';
 import { EventCard } from '../component';
+import axios from 'axios';
+import { database } from '../firebase'
+import Stor from '../store/Stor';
+
+const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
+const isGraceNote =
+  'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&zip=78701&api_key=w8xkqtbg6vf3aj5vdxmc4zjj';
 
 class SingleEvent extends React.Component {
   constructor() {
@@ -40,6 +47,55 @@ class SingleEvent extends React.Component {
     console.log('AFTER PRESSING TIME', movieShowtime);
     this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
   }
+
+  goToChatRoom = (userId) => {
+    console.log('go to chat room!')
+    const { selectedTime } = this.state;
+    const theater = this.props.navigation.getParam('theatre');
+    const {title} = this.props.navigation.getParam('movie', null);
+
+    const chatId = `${theater}${selectedTime}${title.substr(title.length - 5, title.length - 1)}`
+    const today = new Date().toDateString();
+    const chatRef = database.ref(`chatroom/${today}/` +  chatId);
+    const userRef = database.ref('users/' + userId);
+
+    chatRef.once('value', snapshot => {
+      if (snapshot.exists()) {
+        chatRef.child('users' + userId)
+      } else {
+        chatRef.set({
+          movie: title,
+          selectedTime,
+          theater,
+          users: userId,
+        });
+      }
+    }).then(() => chatRef.child(`/users/${userId}`).set(true))
+    .then(() => {
+      userRef.update({
+        pastMovies: {
+          [`${today}`]: {
+            movie: title,
+            selectedTime: this.state.selectedTime,
+            theater: theater,
+          }
+        }
+      });
+    })
+    .then(() => {
+      this.props.navigation.navigate('Chat'
+      , {
+        movieInfo: {
+          movie: title,
+          selectedTime: this.state.selectedTime,
+          theater: theater
+        },
+      }
+      )
+    })
+    .catch(error => console.error(error))
+  }
+
   render() {
     const { navigation } = this.props;
     const theatre = this.props.navigation.getParam('theatre');
@@ -149,23 +205,15 @@ class SingleEvent extends React.Component {
                               mode="outlined"
                               icon="info"
                               onPress={() =>
-                                navigation.navigate('Chat', {
-                                  state: this.state,
-                                })
-                              }
+                                this.goToChatRoom(this.props.screenProps)
+                                }
                             >
                               Chat!
                             </Button>
                             <Button
                               mode="outlined"
                               icon="info"
-                              onPress={() =>
-                                navigation.navigate('Chat', {
-                                  movie: movie.tittle,
-                                  showtime: this.state.selectedTime,
-                                  theatre,
-                                })
-                              }
+                              onPress={() => console.log('Play Trivia!')}
                             >
                               Play Trivia!
                             </Button>
@@ -194,7 +242,7 @@ class SingleEvent extends React.Component {
                                   icon: 'paw',
                                   onPress: () =>
                                     navigation.navigate('Home', {
-                                      movie: this.state.movie,
+                                      movie: movie,
                                     }),
                                 },
                               ],

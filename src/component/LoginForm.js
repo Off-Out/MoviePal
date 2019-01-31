@@ -12,7 +12,6 @@ class LoginForm extends Component {
       signInWithGoogle,
       signInWithFacebook,
     } = this.props;
-    console.log('what is this?', this.props);
 
     return (
       <View style={styles.container}>
