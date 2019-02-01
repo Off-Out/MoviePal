@@ -6,10 +6,12 @@ import {
   Button,
   StatusBar,
   ScrollView,
+  SafeAreaView,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  ImageBackground
 } from 'react-native';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { Card, Title, Paragraph, Chip } from 'react-native-paper';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -29,6 +31,14 @@ export default class Trivia extends Component {
       questions: [],
       isFinished: false
     };
+  }
+
+  vw(percentageWidth) {
+    return Dimensions.get('window').width * (percentageWidth / 100);
+  }
+
+  vh(percentageHeight) {
+    return Dimensions.get('window').height * (percentageHeight / 100);
   }
 
   componentDidMount = async () => {
@@ -165,51 +175,65 @@ export default class Trivia extends Component {
       );
     } else {
       return (
-        <ScrollView style={{ backgroundColor: 'lightblue', paddingTop: 10 }}>
-          <View style={styles.container}>
-            <StatusBar barStyle="light-content" />
-            <View style={styles.toolbar}>
-              <TouchableOpacity onPress={() => this.onPressBack()}>
-                <Text style={styles.toolbarButton}>Back</Text>
-              </TouchableOpacity>
-              <Text style={styles.toolbarTitle}> HERE YOU GO!</Text>
-              <Text style={styles.toolbarButton} />
-            </View>
+        <ImageBackground
+          resizeMode="cover"
+          source={require('../image/questionPic.jpg')}
+          style={{ width: '100%', height: '100%' }}
+        >
+          <SafeAreaView>
             <View
               style={{
-                flex: 1,
                 flexDirection: 'column',
-                justifyContent: 'space-between',
+                flex: 1,
+                justifyContent: 'flex-bottom',
+                alignContent: 'center',
                 alignItems: 'center'
               }}
             >
-              <View style={styles.oval}>
-                <Text style={styles.welcome}>{singleQuestion}</Text>
-              </View>
-
-              <View>
-                {currentOptions.map((item, i) => (
-                  <TouchableOpacity
-                    key={i}
-                    style={styles.questions}
-                    onPress={() => this.answerQuestion(item)}
-                  >
-                    <Text
-                      style={{
-                        flexDirection: 'row',
-                        margin: 15,
-                        justifyContent: 'space-between',
-                        padding: 10
-                      }}
+              <View style={{ flex: 2 }}>
+                <Card
+                  style={{
+                    backgroundColor: 'white',
+                    width: this.vw(75),
+                    height: this.vh(80),
+                    /*  alignItems: 'center', */
+                    margin: 10
+                  }}
+                  elevation={4}
+                >
+                  <Card.Content>
+                    <Title style={{ alignSelf: 'center' }} numberOfLines={1}>
+                      {' '}
+                      Question {this.state.qno + 1}
+                    </Title>
+                    <Paragraph
+                      style={{ alignSelf: 'center', fontSize: 20 }}
+                      numberOfLines={7}
                     >
-                      {convert(item)}{' '}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      {singleQuestion}
+                    </Paragraph>
+                  </Card.Content>
+                  <Card.Actions
+                    style={{
+                      flex: 0.5,
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}
+                  >
+                    {currentOptions.map((item, i) => (
+                      <Chip key={i} onPress={() => this.answerQuestion(item)}>
+                        <Text style={{ alignSelf: 'center', fontSize: 15 }}>
+                          {convert(item)}{' '}
+                        </Text>
+                      </Chip>
+                    ))}
+                  </Card.Actions>
+                </Card>
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </SafeAreaView>
+        </ImageBackground>
       );
     }
   }
