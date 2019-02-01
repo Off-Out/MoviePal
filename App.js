@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
   createStackNavigator,
   createSwitchNavigator,
-  createAppContainer,
+  createAppContainer
 } from 'react-navigation';
 import {
   AuthLoadingScreen,
@@ -18,7 +18,8 @@ import {
   SingleEvent,
   FilterScreen,
   ListScreen,
-  SingleMovie,
+  TriviaQuestions,
+  SingleMovie
 } from './src/screen/index';
 import { auth, database } from './src/firebase';
 import { Text } from 'native-base';
@@ -31,11 +32,12 @@ const MapStackNavigator = createStackNavigator({
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
+  Trivia: TriviaQuestions
 });
 
 const ProfileStackNavigator = createStackNavigator({
   Profile: ProfileScreen,
-  History: HistoryScreen,
+  History: HistoryScreen
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -45,8 +47,8 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'MAP',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-map" color={tintColor} size={24} />
-      ),
-    },
+      )
+    }
   },
 
   // Home: {
@@ -71,24 +73,25 @@ const TabNavigator = createBottomTabNavigator({
         // BadgeElement={<Text style={{ color: 'white' }}>{screenProps.unreadMessagesCount}</Text>}
         // Hidden={screenProps.unreadMessagesCount === 0}
         // />
-      ),
-    },
+      )
+    }
   },
+
   Profile: {
     screen: ProfileScreen,
     navigationOptions: {
       tabBarLabel: 'PROFILE',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-contact" color={tintColor} size={24} />
-      ),
-    },
-  },
+      )
+    }
+  }
 });
 
 const AuthStack = createStackNavigator(
   {
     LoginScreen: { screen: LoginScreen },
-    SignUpScreen: { screen: SignUpScreen },
+    SignUpScreen: { screen: SignUpScreen }
   },
   { initialRouteName: 'LoginScreen' }
 );
@@ -110,10 +113,10 @@ const AppContainer = createAppContainer(
     {
       AuthLoading: AuthLoadingScreen,
       App: TabComponents,
-      Auth: AuthStack,
+      Auth: AuthStack
     },
     {
-      initialRouteName: 'AuthLoading',
+      initialRouteName: 'AuthLoading'
     }
   )
 );
