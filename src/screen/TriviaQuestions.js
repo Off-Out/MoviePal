@@ -15,14 +15,16 @@ import { Card, Title, Paragraph, Chip } from 'react-native-paper';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const { width, height } = Dimensions.get('window');
+// const { width, height } = Dimensions.get('window');
 
 export default class Trivia extends Component {
-  static navigationOptions = () => {
+  static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: 'MOVIE QUIZ'
+      headerTitle: '¿ Trivia ?'
+      // header: <Button onPress={() => navigation.goBack()} title="BACK" />
     };
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -114,10 +116,10 @@ export default class Trivia extends Component {
       );
     }
   };
-  onPressBack = () => {
-    const { goBack } = this.props.navigation;
-    goBack();
-  };
+  // onPressBack = () => {
+  //   const { goBack } = this.props.navigation;
+  //   goBack();
+  // };
   render() {
     // because of the structure of the data , if I am not shuffle the order of array, the correct answer always be the last option
     function shuffle(array) {
@@ -147,7 +149,9 @@ export default class Trivia extends Component {
         .replace(/&gt;/g, '>')
         .replace(/&lt;/g, '<')
         .replace(/&quot;/g, '')
-        .replace(/&#039;/g, "'");
+        .replace(/&#039;/g, "'")
+        .replace(/&Idquo;/g, ' ')
+        .replace(/&rdquo;/g, ' ');
     }
 
     let currentOptions = [];
@@ -175,12 +179,12 @@ export default class Trivia extends Component {
       );
     } else {
       return (
-        <ImageBackground
-          resizeMode="cover"
-          source={require('../image/questionPic.jpg')}
-          style={{ width: '100%', height: '100%' }}
-        >
-          <SafeAreaView>
+        <SafeAreaView>
+          <ImageBackground
+            resizeMode="cover"
+            source={require('../image/questionPic.jpg')}
+            style={{ width: '100%', height: '100%' }}
+          >
             <View
               style={{
                 flexDirection: 'column',
@@ -195,14 +199,19 @@ export default class Trivia extends Component {
                   style={{
                     backgroundColor: 'white',
                     width: this.vw(75),
-                    height: this.vh(80),
+                    height: this.vh(70),
                     /*  alignItems: 'center', */
-                    margin: 10
+                    margin: 10,
+                    marginTop: 50,
+                    marginBottom: 50
                   }}
                   elevation={4}
                 >
                   <Card.Content>
-                    <Title style={{ alignSelf: 'center' }} numberOfLines={1}>
+                    <Title
+                      style={{ alignSelf: 'center', color: 'red' }}
+                      numberOfLines={1}
+                    >
                       {' '}
                       Question {this.state.qno + 1}
                     </Title>
@@ -218,12 +227,16 @@ export default class Trivia extends Component {
                       flex: 0.5,
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      margin: 20
                     }}
                   >
                     {currentOptions.map((item, i) => (
                       <Chip key={i} onPress={() => this.answerQuestion(item)}>
-                        <Text style={{ alignSelf: 'center', fontSize: 15 }}>
+                        <Text
+                          style={{ alignSelf: 'center', fontSize: 15 }}
+                          numberOfLines={3}
+                        >
                           {convert(item)}{' '}
                         </Text>
                       </Chip>
@@ -232,34 +245,14 @@ export default class Trivia extends Component {
                 </Card>
               </View>
             </View>
-          </SafeAreaView>
-        </ImageBackground>
+          </ImageBackground>
+        </SafeAreaView>
       );
     }
   }
 }
 const scoreCircleSize = 300;
 const styles = StyleSheet.create({
-  oval: {
-    width: (width * 90) / 100,
-    borderRadius: 20,
-    backgroundColor: 'blue'
-  },
-  welcome: {
-    fontSize: 20,
-    margin: 15,
-    color: 'white'
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5
-  },
-  questions: {
-    width: (width * 80) / 100,
-    borderRadius: 15,
-    backgroundColor: 'skyblue'
-  },
   score: {
     color: 'white',
     fontSize: 20,
@@ -285,8 +278,8 @@ const styles = StyleSheet.create({
     // backgroundColor: '#F5FCFF'
   },
   toolbar: {
-    backgroundColor: 'lightpink',
-    paddingTop: 30,
+    backgroundColor: 'white',
+    // paddingTop: 30,
     paddingBottom: 10,
     flexDirection: 'row'
   },
@@ -296,7 +289,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   toolbarTitle: {
-    color: '#fff',
+    color: 'blue',
     textAlign: 'center',
     fontWeight: 'bold',
     flex: 1

@@ -32,7 +32,7 @@ const MapStackNavigator = createStackNavigator({
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
-  TriviaQuestions: TriviaQuestions
+  Trivia: TriviaQuestions
 });
 
 const ProfileStackNavigator = createStackNavigator({
@@ -76,15 +76,7 @@ const TabNavigator = createBottomTabNavigator({
       )
     }
   },
-  Trivia: {
-    screen: TriviaQuestions,
-    navigationOptions: {
-      tabBarLabel: 'GAME',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-game" color={tintColor} size={24} />
-      )
-    }
-  },
+
   Profile: {
     screen: ProfileScreen,
     navigationOptions: {

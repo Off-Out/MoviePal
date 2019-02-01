@@ -17,16 +17,16 @@ export default class ChatScreen extends Component {
     };
   }
 
-  render () {
-    const movieInfo = this.props.navigation.getParam("movieInfo")
+  render() {
+    const movieInfo = this.props.navigation.getParam('movieInfo');
     if (!movieInfo) {
-      Alert.alert("Please join an event to enter the event's chatroom!")
-      this.props.navigation.navigate("Map")
-      return null
+      Alert.alert("Please join an event to enter the event's chatroom!");
+      this.props.navigation.navigate('Map');
+      return null;
     } else {
       return (
         <View style={styles.container}>
-          <ChatNavBar movieInfo={movieInfo}/>
+          <ChatNavBar movieInfo={movieInfo} />
           <GiftedChat
             messages={this.state.messages}
             onSend={message => {
