@@ -7,7 +7,7 @@
 // import Geocoder from 'react-native-geocoding';
 // import { Location, Permissions } from 'expo';
 
-// THIS WILL ONLY WORK WITH A REAL PHONE!!!!!!!!
+// //THIS WILL ONLY WORK WITH A REAL PHONE!!!!!!!!
 
 // class MapScreen extends Component {
 //   constructor(props) {
