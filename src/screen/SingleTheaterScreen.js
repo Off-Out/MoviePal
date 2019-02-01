@@ -24,7 +24,7 @@ import axios from 'axios';
 export default class SingleTheaterScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: 'THEATER DETAILS',
+      headerTitle: 'Theater Details',
     };
   };
   constructor(props) {
