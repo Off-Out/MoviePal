@@ -37,7 +37,7 @@ const MapStackNavigator = createStackNavigator({
 
 const ProfileStackNavigator = createStackNavigator({
   Profile: ProfileScreen,
-  History: HistoryScreen,
+  History: HistoryScreen
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -84,16 +84,16 @@ const TabNavigator = createBottomTabNavigator({
         <Ionicons name="ios-game" color={tintColor} size={24} />
       )
     }
-  }
+  },
   Profile: {
     screen: ProfileScreen,
     navigationOptions: {
       tabBarLabel: 'PROFILE',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-contact" color={tintColor} size={24} />
-      ),
-    },
-  },
+      )
+    }
+  }
 });
 
 const AuthStack = createStackNavigator(
@@ -121,10 +121,10 @@ const AppContainer = createAppContainer(
     {
       AuthLoading: AuthLoadingScreen,
       App: TabComponents,
-      Auth: AuthStack,
+      Auth: AuthStack
     },
     {
-      initialRouteName: 'AuthLoading',
+      initialRouteName: 'AuthLoading'
     }
   )
 );

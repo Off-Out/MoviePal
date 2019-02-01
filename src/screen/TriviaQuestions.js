@@ -130,9 +130,14 @@ export default class Trivia extends Component {
       return array;
     }
 
-    //removes the db typo mistakes
-    function removeSpecial(str) {
-      return str.replace(/[&\/\\#,+()$~%.'":*?<>{}039;]/g, '');
+    //converts html characters to javascript (using for the info coming from api)
+    function convert(str) {
+      return str
+        .replace(/&amp;/g, '&')
+        .replace(/&gt;/g, '>')
+        .replace(/&lt;/g, '<')
+        .replace(/&quot;/g, '')
+        .replace(/&#039;/g, "'");
     }
 
     let currentOptions = [];
@@ -145,7 +150,7 @@ export default class Trivia extends Component {
         currentQuestion.correct_answer
       ];
       currentOptions = shuffle(currentOptions);
-      singleQuestion = removeSpecial(currentQuestion.question);
+      singleQuestion = convert(currentQuestion.question);
     }
 
     if (!currentOptions || currentOptions.length === 0) {
@@ -197,7 +202,7 @@ export default class Trivia extends Component {
                         padding: 10
                       }}
                     >
-                      {item}{' '}
+                      {convert(item)}{' '}
                     </Text>
                   </TouchableOpacity>
                 ))}
