@@ -52,21 +52,7 @@ class FeedBackEnd {
         userName: feed.userName,
       });
     };
-    const onChange = (data) => {
-      const feed = data.val();
-      console.log('likes', feed.likes);
-      callback({
-        _id: data.key,
-        context: feed.context,
-        // comments: feed.comments,
-        likes: feed.likes,
-        createdAt: new Date(feed.createdAt),
-        userId: feed.userId,
-        userName: feed.userName,
-      });
-    }
     this.feedRef.limitToLast(50).on('child_added', onReceive);
-    this.feedRef.on('child_changed', onChange);
   }
   // send the feed to the Backend
   postFeed(feed) {
@@ -94,11 +80,10 @@ class FeedBackEnd {
 
   likePost(key) {
     // for (let i = 0; i < like.length; i++) {
-      console.log('pressing LIKE')
-      console.log(key)
-      this.feedRef.child(key).child('likes')
-        .transaction((likes) => (likes ||0) + 1)
-    // }
+    console.log('pressing LIKE')
+    console.log(key)
+    this.feedRef.child(key).child('likes')
+      .transaction((likes) => (likes || 0) + 1)
   }
 
   // close the connection to the Backend

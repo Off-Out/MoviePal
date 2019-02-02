@@ -1,9 +1,31 @@
 import React, { Component } from 'react';
 import { View } from 'react-native'
+import { Chip } from 'react-native-paper'
 import { Container, Header, Title, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import FeedBackEnd from './FeedBackEnd';
+import {database} from '../firebase'
 
 export default class Feed extends Component {
+  constructor(props) {
+    super(props)
+
+    const {feed} = this.props
+
+    this.state = {
+      feed: {
+        likes: feed.likes || '',
+      }
+    }
+  }
+
+  componentDidMount () {
+    database.ref(`/feeds/${this.props.feed._id}`).on('value', snapshot => {
+      this.setState({feed: {
+        likes: snapshot.val().likes
+      } })
+    })
+  }
+
   render() {
     const {feed} = this.props;
     console.log("feedProps", feed);
@@ -25,10 +47,11 @@ export default class Feed extends Component {
           <Left>
             <Button
             transparent
+            // bordered
             onPress={() => FeedBackEnd.likePost(feed._id)}
             >
               <Icon active name="thumbs-up" />
-              <Text>{feed.likes} Likes</Text>
+              <Text>{this.state.feed.likes} Likes</Text>
             </Button>
           </Left>
           {/* <Body>
