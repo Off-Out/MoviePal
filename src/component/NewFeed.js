@@ -59,11 +59,6 @@ export default class NewFeed extends Component {
 }
 
 const styles = StyleSheet.create({
-  // label: {
-  //   fontSize: 13,
-  //   marginLeft: 7,
-  //   marginBottom: 10,
-  // },
   postInput: {
     marginLeft: 7,
     fontSize: 17,

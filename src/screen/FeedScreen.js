@@ -24,7 +24,7 @@ export default class FeedScreen extends Component {
     return (
       <Container>
         <Header>
-          <Title>Movie Reel 🎞</Title>
+          <Title>Movie Reel 🎥</Title>
         </Header>
         <Content>
           {

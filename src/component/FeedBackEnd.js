@@ -64,18 +64,18 @@ class FeedBackEnd {
         context: feed.context,
         userId: feed.userId,
         userName: feed.userName,
-        // comments: feed[i].comments,
+        comments: feed.comments,
         likes: feed.likes,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
       });
   }
 
-  // postComment(key, comment) {
-  //   for (let i = 0; i < comment.length; i++) {
-  //     this.feedRef.child(key).update({
-  //       comments: comment
-  //     });
-  //   }
+  postComment(key, comment) {
+    // for (let i = 0; i < comment.length; i++) {
+      this.feedRef.child(key).push({
+        comments: comment
+      });
+    }
   // }
 
   likePost(key) {
