@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Chip } from 'react-native-paper'
 import { Container, Header, Title, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import FeedBackEnd from './FeedBackEnd';
@@ -32,18 +32,13 @@ export default class Feed extends Component {
     return (
       <Card>
         <CardItem>
-          <Left>
-            <Thumbnail 
-            source={{uri: '../image/user-account-icon-13.jpg'}}
-            />
-              <Text>{feed.userName}</Text>
-              <Text note>GeekyAnts</Text>
-          </Left>
+          <Text>{feed.userName}</Text>
+          <Text note>GeekyAnts</Text>
         </CardItem>
-        <CardItem cardBody>
+        <CardItem >
           <Text>{feed.context}</Text>
         </CardItem>
-        <CardItem>
+        <CardItem style={styles.footer} footer bordered>
           <Left>
             <Button
             transparent
@@ -71,3 +66,11 @@ export default class Feed extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  footer: {
+    margin: 0,
+    padding: 0,
+    height: "75%"
+  }
+})
