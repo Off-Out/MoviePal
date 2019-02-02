@@ -19,6 +19,7 @@ import {
   FilterScreen,
   ListScreen,
   SingleMovie,
+  FeedScreen
 } from './src/screen/index';
 import { auth, database } from './src/firebase';
 import { Text } from 'native-base';
@@ -75,9 +76,18 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
   Profile: {
-    screen: ProfileScreen,
+    screen: ProfileStackNavigator,
     navigationOptions: {
       tabBarLabel: 'PROFILE',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-contact" color={tintColor} size={24} />
+      ),
+    },
+  },
+  Feed: {
+    screen: FeedScreen,
+    navigationOptions: {
+      tabBarLabel: 'FEED',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-contact" color={tintColor} size={24} />
       ),
