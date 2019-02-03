@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
+  Alert,
   ImageBackground
 } from 'react-native';
 import { Card, Title, Paragraph, Chip } from 'react-native-paper';
@@ -62,6 +63,14 @@ export default class Trivia extends Component {
 
     if (item === this.state.questions[this.state.qno].correct_answer) {
       increment += 5;
+
+      Alert.alert('¿ Trivia ?', 'You are correct!');
+    } else {
+      Alert.alert(
+        '¿ Trivia ?',
+        `Nope!, correct answer is:
+        ${this.state.questions[this.state.qno].correct_answer}`
+      );
     }
     if (this.state.qno === this.state.questions.length - 1) {
       this.setState({
