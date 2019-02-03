@@ -1,21 +1,69 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
+import { format } from 'date-fns';
 import { auth } from '../firebase';
+import { Location, Permissions } from 'expo';
+import axios from 'axios';
+
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.verifyAccount();
+    this.state = {
+      date: format(new Date(), 'YYYY-MM-DD'),
+      latitude: null,
+      longitude: null,
+      movies: [],
+      loading: true,
+      userID: null,
+    };
+
+    //this.verifyAccount();
   }
 
-  // Fetch the token from storage then navigate to our appropriate place
-  verifyAccount = () => {
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
-    //console.log('I am at the AuthLoading Page');
+  getLocationAndMovieAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      console.log('Access denied');
+    }
 
+    let location = await Location.getCurrentPositionAsync({});
+    const response = await axios.get(
+      `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
+        this.state.date
+      }&lat=${location.coords.latitude}&lng=-${
+        location.coords.longitude
+      }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    );
+
+    const sortedMovie = response.data.sort(function(a, b) {
+      return a.releaseDate < b.releaseDate;
+    });
+    const { navigation } = this.props;
+    const userID = navigation.getParam('userId');
+
+    this.setState(
+      {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        movies: sortedMovie,
+        userID: userID,
+        loading: false,
+      },
+      () => {
+        this.props.navigation.navigate('App', {
+          state: 123,
+        });
+      }
+    );
+  };
+
+  componentDidMount = async () => {
+    await this.getLocationAndMovieAsync();
+  };
+
+  verifyAccount = () => {
     auth.onAuthStateChanged(async user => {
       if (user) {
-        //console.log('authloading', user)
         this.props.navigation.navigate('App', { userId: user.uid });
       } else {
         this.props.navigation.navigate('Auth');

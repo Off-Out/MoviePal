@@ -9,22 +9,16 @@ import {
   AuthLoadingScreen,
   ProfileScreen,
   HistoryScreen,
-  HomeScreen,
+  MovieScreen,
   MapScreen,
   ChatScreen,
   LoginScreen,
   SignUpScreen,
   SingleTheaterScreen,
-  SingleEvent,
-  FilterScreen,
   ListScreen,
   SingleMovie,
 } from './src/screen/index';
-import { auth, database } from './src/firebase';
-import { Text } from 'native-base';
-import IconBadge from 'react-native-icon-badge';
 import { Ionicons } from '@expo/vector-icons';
-import { SecureStore } from 'expo';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
@@ -39,6 +33,16 @@ const ProfileStackNavigator = createStackNavigator({
 });
 
 const TabNavigator = createBottomTabNavigator({
+  Movie: {
+    screen: MovieScreen,
+    navigationOptions: {
+      tabBarLabel: 'MOVIES',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-play" color={tintColor} size={24} />
+      ),
+    },
+  },
+
   Map: {
     screen: MapStackNavigator,
     navigationOptions: {
@@ -49,28 +53,12 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
 
-  // Home: {
-  //   screen: HomeScreen,
-  //   navigationOptions: {
-  //     tabBarLabel: 'HOME',
-  //     tabBarIcon: ({ tintColor }) => (
-  //       <Ionicons name="ios-home" color={tintColor} size={24} />
-  //     ),
-  //   },
-  // },
-
   Chat: {
     screen: ChatScreen,
     navigationOptions: {
       tabBarLabel: 'CHAT',
       tabBarIcon: ({ tintColor }) => (
-        // <IconBadge
-        //   MainElement = {
         <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
-        // }
-        // BadgeElement={<Text style={{ color: 'white' }}>{screenProps.unreadMessagesCount}</Text>}
-        // Hidden={screenProps.unreadMessagesCount === 0}
-        // />
       ),
     },
   },
@@ -108,9 +96,9 @@ class TabComponents extends React.Component {
 const AppContainer = createAppContainer(
   createSwitchNavigator(
     {
+      Auth: AuthStack,
       AuthLoading: AuthLoadingScreen,
       App: TabComponents,
-      Auth: AuthStack,
     },
     {
       initialRouteName: 'AuthLoading',
@@ -118,24 +106,4 @@ const AppContainer = createAppContainer(
   )
 );
 
-export default class Application extends React.Component {
-  // async componentDidMount() {
-  //   // await database.ref('chatroom').once('value', snapshot => {
-  //   //   if (snapshot.exists() && snapshot.val()[0] !== new Date(2018, 0, 31).toDateString()) {
-  //   //     database.ref('chatroom').remove()
-  //   //   } else console.log('enter!')
-  //   // })
-  //   await database.ref('chatroom').on('value', snapshot => {
-  //     // if (snapshot.exists() && snapshot.val()[0] !== new Date().toDateString()) {
-  //       console.log("WHAT????", snapshot.val()[0] )
-  //   //     database.ref('chatroom').remove()
-  //   //   } else console.log('Welcome to MoviePal!')
-  //   });
-  // }
-
-  componentDidMount() {}
-
-  render() {
-    return <AppContainer />;
-  }
-}
+export default AppContainer;
