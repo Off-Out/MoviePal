@@ -72,8 +72,7 @@ export class MovieScreen extends Component {
 
   render() {
     const movies = this.state.movies;
-    console.log(this.props.latitude);
-    console.log(this.props.longitude);
+
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
@@ -150,6 +149,7 @@ const mapStateToProps = state => {
     favoriteAnimal: state.favoriteAnimal,
     latitude: state.latitude,
     longitude: state.longitude,
+    movies: state.movies,
   };
 };
 

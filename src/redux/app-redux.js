@@ -20,6 +20,7 @@ const initialState = {
 // Action Creators
 //
 const SET_GEOLOCATION = 'SET_GEOLOCATION';
+const SET_MOVIES = 'SET_MOVIES';
 
 //
 // Action Creators
@@ -27,7 +28,14 @@ const SET_GEOLOCATION = 'SET_GEOLOCATION';
 export const setGeoLocation = location => {
   return {
     type: SET_GEOLOCATION,
-    value: location,
+    location,
+  };
+};
+
+export const setMovies = movies => {
+  return {
+    type: SET_MOVIES,
+    movies,
   };
 };
 
@@ -40,8 +48,13 @@ const reducer = (state = initialState, action) => {
     case SET_GEOLOCATION:
       return {
         ...state,
-        latitude: action.value.latitude,
-        longitude: action.value.longitude,
+        latitude: action.location.latitude,
+        longitude: action.location.longitude,
+      };
+    case SET_MOVIES:
+      return {
+        ...state,
+        movies: [...state.movies, action.movies],
       };
     default:
       return state;
