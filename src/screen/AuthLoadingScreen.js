@@ -4,6 +4,8 @@ import { format } from 'date-fns';
 import { auth } from '../firebase';
 import { Location, Permissions } from 'expo';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setGeoLocation } from '../redux/app-redux';
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -27,6 +29,11 @@ class AuthLoadingScreen extends React.Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
+    const geoLocation = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    };
+    this.props.setGeoLocation(geoLocation);
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
         this.state.date
@@ -90,4 +97,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AuthLoadingScreen;
+const mapStateToProps = state => {
+  return {
+    favoriteAnimal: state.favoriteAnimal,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setGeoLocation: location => dispatch(setGeoLocation(location)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthLoadingScreen);

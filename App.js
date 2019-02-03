@@ -19,6 +19,8 @@ import {
   SingleMovie,
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/app-redux';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
@@ -106,4 +108,14 @@ const AppContainer = createAppContainer(
   )
 );
 
-export default AppContainer;
+class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    );
+  }
+}
+
+export default App;

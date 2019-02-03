@@ -13,6 +13,7 @@ import { scaleVertical } from '../utility/duc';
 import { Location, Permissions } from 'expo';
 import { format } from 'date-fns';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 export class MovieScreen extends Component {
   static navigationOptions = {
@@ -61,12 +62,6 @@ export class MovieScreen extends Component {
 
   componentDidMount = async () => {
     //await this.getLocationAndMovieAsync();
-    const { navigation } = this.props;
-    console.log('look for this', this.props);
-    const state = navigation.getParam('state', null);
-    console.log('state passed down', state);
-    console.log(state.latitude);
-    console.log(state.longitude);
   };
 
   handleSearchChange = (stateField, text) => {
@@ -77,6 +72,8 @@ export class MovieScreen extends Component {
 
   render() {
     const movies = this.state.movies;
+    console.log(this.props.latitude);
+    console.log(this.props.longitude);
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
@@ -147,4 +144,20 @@ const styles = RkStyleSheet.create({
     flex: 1,
   },
 });
-export default MovieScreen;
+
+const mapStateToProps = state => {
+  return {
+    favoriteAnimal: state.favoriteAnimal,
+    latitude: state.latitude,
+    longitude: state.longitude,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MovieScreen);
