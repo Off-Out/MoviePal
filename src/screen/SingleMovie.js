@@ -217,43 +217,29 @@ class SingleEvent extends React.Component {
                           >
                             All Showtimes
                           </Button>
-                          <Card
-                            style={{
-                              alignSelf: 'center',
-                              backgroundColor: 'white',
-                              width: this.vw(40),
-                              height: this.vh(80),
-                              /*  alignItems: 'center', */
-                              margin: 10,
-                            }}
-                            elevation={8}
+
+                          <Button
+                            mode="outlined"
+                            icon="info"
+                            onPress={() =>
+                              this.goToChatRoom(this.props.screenProps)
+                            }
                           >
-                            <Card.Content
-                              style={{ alignContent: 'space-around' }}
-                            >
-                              <Button
-                                mode="outlined"
-                                icon="info"
-                                onPress={() =>
-                                  this.goToChatRoom(this.props.screenProps)
-                                }
-                              >
-                                Chat!
-                              </Button>
-                              <Button
-                                mode="outlined"
-                                icon="info"
-                                // onPress={() =>
-                                //   this.props.navigation.navigate('Trivia')
-                                // }
-                                onPress={() =>
-                                  this.props.navigation.navigate('Trivia')
-                                }
-                              >
-                                Play Trivia!
-                              </Button>
-                            </Card.Content>
-                          </Card>
+                            Chat!
+                          </Button>
+                          <Button
+                            mode="outlined"
+                            icon="info"
+                            // onPress={() =>
+                            //   this.props.navigation.navigate('Trivia')
+                            // }
+                            onPress={() =>
+                              this.props.navigation.navigate('Trivia')
+                            }
+                          >
+                            Play Trivia!
+                          </Button>
+
                           <Button
                             onPress={() =>
                               Alert.alert(
@@ -280,6 +266,13 @@ class SingleEvent extends React.Component {
                                       navigation.navigate('Home', {
                                         movie: movie,
                                       }),
+                                  },
+                                  {
+                                    text: 'Cancel',
+
+                                    onPress: () =>
+                                      console.log('Cancel Pressed'),
+                                    style: 'cancel',
                                   },
                                 ],
                                 { cancelable: true }
