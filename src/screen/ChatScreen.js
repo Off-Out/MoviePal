@@ -23,8 +23,7 @@ export default class ChatScreen extends Component {
       Alert.alert("Please join an event to enter the event's chatroom!");
       this.props.navigation.navigate('Map');
       return null;
-      /*  } else if (!this.state.messages.length) {
-      return <View />; */
+
     } else {
       return (
         <View style={styles.container}>

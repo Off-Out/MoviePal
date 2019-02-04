@@ -141,19 +141,19 @@
 import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { Search } from '../component';
+//import { Search } from '../component';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
 class MapScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      zipCode: '60606',
-      theaters: [],
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     zipCode: '60606',
+  //     theaters: [],
+  //   };
+  // }
 
   static navigationOptions = ({ navigation }) => {
     const theaters = navigation.getParam('theaters');
@@ -176,17 +176,20 @@ class MapScreen extends Component {
   };
 
   componentDidMount = async () => {
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres?zip=${
-        this.state.zipCode
-      }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-    this.props.navigation.setParams({
-      theaters: response.data,
-    });
-    this.setState({
-      theaters: response.data,
-    });
+    // const response = await axios.get(
+    //   `http://data.tmsapi.com/v1.1/theatres?zip=${
+    //     this.state.zipCode
+    //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    // );
+    // this.props.navigation.setParams({
+    //   theaters: response.data,
+    // });
+    // this.setState({
+    //   theaters: response.data,
+    // });
+    // this.setState({
+    //   theaters: this.props.theaters,
+    // });
   };
 
   handleZipCodeChange = text => {
@@ -207,7 +210,8 @@ class MapScreen extends Component {
   };
 
   render() {
-    console.log('look for this', this.props.theaters);
+    console.log('where is this data', this.props.theaters);
+
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <MapView
@@ -222,7 +226,7 @@ class MapScreen extends Component {
           showsUserLocation
           showsMyLocationButton={true}
         >
-          {this.state.theaters.map(marker => (
+          {this.props.theaters.map(marker => (
             <Marker
               key={marker.theatreId}
               coordinate={{
@@ -239,10 +243,6 @@ class MapScreen extends Component {
             />
           ))}
         </MapView>
-        <Search
-          handleZipCodeChange={this.handleZipCodeChange}
-          handleZipCodeSubmit={this.handleZipCodeSubmit}
-        />
       </SafeAreaView>
     );
   }
@@ -250,7 +250,7 @@ class MapScreen extends Component {
 
 const mapStateToProps = state => {
   return {
-    theater: state.theater,
+    theaters: state.theaters,
   };
 };
 

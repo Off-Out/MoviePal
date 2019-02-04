@@ -12,7 +12,6 @@ class AuthLoadingScreen extends React.Component {
     this.state = {
       loading: true,
     };
-    this.verifyAccount();
   }
 
   getLocationAndMovieAsync = async () => {
@@ -25,35 +24,22 @@ class AuthLoadingScreen extends React.Component {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
-    console.log('location', location);
-    console.log('lat', location.coords.latitude);
-    console.log('lng', location.coords.longitude);
-    console.log('date', this.props.date);
+
     this.props.setGeoLocation(geoLocation);
 
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
         this.props.date
-      }&lat=${location.coords.latitude}&lng=${
+      }&lat=${location.coords.latitude}&lng=-${
         location.coords.longitude
       }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
-    console.log('where is this data', response.data);
 
     this.props.setMovies(response.data);
-
-    this.setState(
-      {
-        loading: false,
-      },
-      () => {
-        this.props.navigation.navigate('App');
-      }
-    );
   };
 
   verifyAccount = () => {
-    auth.onAuthStateChanged(async user => {
+    auth.onAuthStateChanged(user => {
       if (user) {
         this.props.navigation.navigate('App', { userId: user.uid });
       } else {
@@ -64,6 +50,7 @@ class AuthLoadingScreen extends React.Component {
 
   componentDidMount = async () => {
     await this.getLocationAndMovieAsync();
+    this.verifyAccount();
   };
 
   render() {

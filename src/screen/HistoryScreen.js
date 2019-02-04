@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ImageBackground,
   Dimensions,
+  Animated,
 } from 'react-native';
 import {
   Container,
@@ -30,6 +31,10 @@ const dummyMovieData = {
   movie: 'Spider-Man: Into the Spider-Verse',
 };
 
+const arr = [];
+for (var i = 0; i < 500; i++) {
+  arr.push(i);
+}
 export default class HistoryScreen extends Component {
   constructor(screenProps) {
     super(screenProps);
@@ -51,6 +56,10 @@ export default class HistoryScreen extends Component {
       ],
       selectedMovie: '',
     };
+    this.animatedValue = [];
+    this.state.movies.forEach(value => {
+      this.animatedValue[value.movie] = new Animated.Value(0);
+    });
   }
 
   // async componentDidMount () {
@@ -63,6 +72,25 @@ export default class HistoryScreen extends Component {
   //   })
   // }
 
+  componentDidMount() {
+    this.animate();
+  }
+
+  animate() {
+    i = 0.01;
+    const animations = arr.map(item => {
+      return Animated.timing(this.animatedValue[item.movieImage], {
+        toValue: {
+          x: Math.random(),
+          y: Math.random(),
+          z: i,
+        },
+        duration: 4000,
+      });
+    });
+    Animated.stagger(5, animations).start();
+    i--;
+  }
   vw(percentageWidth) {
     return Dimensions.get('window').width * (percentageWidth / 100);
   }
