@@ -68,7 +68,6 @@ export const fetchTheaters = theaterID => {
       const { data: theater } = await axios.get(
         `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
       );
-
       return theater;
     });
 

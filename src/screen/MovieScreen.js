@@ -36,7 +36,7 @@ export class MovieScreen extends Component {
     showtimes.forEach(theater => theaterArray.push(theater.theatre.id));
     const uniqueTheaters = [...new Set(theaterArray)];
     this.props.fetchTheaters(uniqueTheaters);
-    console.log(this.props.navigation.navigate('Map'));
+    this.props.navigation.navigate('Map');
   };
 
   render() {

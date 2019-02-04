@@ -187,6 +187,9 @@ class MapScreen extends Component {
     // this.setState({
     //   theaters: response.data,
     // });
+    // this.setState({
+    //   theaters: this.props.theaters,
+    // });
   };
 
   handleZipCodeChange = text => {
@@ -222,23 +225,24 @@ class MapScreen extends Component {
           }}
           showsUserLocation
           showsMyLocationButton={true}
-        />
-        {this.props.theaters.map(marker => (
-          <Marker
-            key={marker.theatreId}
-            coordinate={{
-              latitude: parseFloat(marker.location.geoCode.latitude),
-              longitude: parseFloat(marker.location.geoCode.longitude),
-            }}
-            title={marker.name}
-            description={marker.location.address.street}
-            onPress={() =>
-              this.props.navigation.navigate('SingleTheater', {
-                theatre: marker,
-              })
-            }
-          />
-        ))}
+        >
+          {this.props.theaters.map(marker => (
+            <Marker
+              key={marker.theatreId}
+              coordinate={{
+                latitude: parseFloat(marker.location.geoCode.latitude),
+                longitude: parseFloat(marker.location.geoCode.longitude),
+              }}
+              title={marker.name}
+              description={marker.location.address.street}
+              onPress={() =>
+                this.props.navigation.navigate('SingleTheater', {
+                  theatre: marker,
+                })
+              }
+            />
+          ))}
+        </MapView>
       </SafeAreaView>
     );
   }
