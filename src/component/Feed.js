@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native'
 import { Chip } from 'react-native-paper'
-import { Container, Header, Title, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { Container, Header, Title, Content, Card, CardItem, Thumbnail, Text, Input, Button, Icon, Left, Body, Right } from 'native-base';
 import FeedBackEnd from './FeedBackEnd';
 import Comment from '../component/Comment'
 import {database} from '../firebase'
@@ -15,7 +15,7 @@ export default class Feed extends Component {
     this.state = {
       feed: {
         likes: feed.likes || '',
-        comments: feed.comments || [],
+        comments: [],
       },
       showComment: 'none',
       newComment: ''
@@ -58,8 +58,8 @@ export default class Feed extends Component {
   render() {
     const {feed} = this.props;
     const postTime = this.timeSince(feed.createdAt);
+    let display = this.state.showComment
 
-    console.log("feedProps", feed);
     return (
       <Card>
         <CardItem>
@@ -73,28 +73,37 @@ export default class Feed extends Component {
           <Left>
             <Button
             transparent
-            // bordered
             onPress={() => FeedBackEnd.likePost(feed._id)}
             >
               <Icon active name="thumbs-up" />
-              <Text style={{padding: 5}}>{this.state.feed.likes} Likes</Text>
+              <Text style={{paddingLeft: 8}}>{this.state.feed.likes} Likes</Text>
             </Button>
-          </Left>
-          <Body>
             <Button
+            style={{paddingTop: 3}}
             transparent
               onPress={() => {
-                this.state.showCommment === 'none' ? this.setState({showComment: 'flex'}) : this.setState({showComment : 'none'})
+                if (this.state.showCommment === 'none') {
+                  console.log("pressing COMMENT, none")
+                  console.log(this.state.showComment)
+                  this.setState({showComment: 'flex'})
+                } else {
+                  console.log("pressing COMMENT, flex", this.state.showComment)
+                  this.setState({showComment : 'none'})
+                }
               }}
             >
               <Icon active name="chatbubbles" />
-              <Text>{feed.comments.length} Comments</Text>
+              <Text style={{paddingLeft: 6, paddingTop: 1}}> 3 Comments</Text>
             </Button>
-            <CardItem style={{display: this.state.showComment}}>
-            {
-            this.state.feeds.comments(comment => (<Comment key={this.props.feed._id} feedComments={this.state.feed.comments} feedId={this.props.feed._id}/> )
-          )}
-          <Input
+            <CardItem style={{display}}>
+
+            {/* {this.state.feeds.comments.map(comment => ( */}
+            <Comment 
+            key={this.props.feed._id} feedComments={this.state.feed.comments} feedId={this.props.feed._id}
+            /> 
+            {/* )
+          )} */}
+          {/* <Input
           style={styles.postInput}
           placeholder='Share comments...'
           onChangeText={text => this.handleInput(text)}
@@ -110,9 +119,9 @@ export default class Feed extends Component {
           }}
         >
           <Text>COMMENT</Text>
-        </Button>
+        </Button> */}
             </CardItem>
-          </Body>
+            </Left>
           <Right>
             <Text style={{fontSize: 12}}>{postTime}</Text>
           </Right>

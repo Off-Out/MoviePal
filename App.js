@@ -89,7 +89,7 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: 'FEED',
       tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-contact" color={tintColor} size={24} />
+        <Ionicons name="ios-paper" color={tintColor} size={24} />
       ),
     },
   },
