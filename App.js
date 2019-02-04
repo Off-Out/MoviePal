@@ -22,7 +22,7 @@ import {
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'react-redux';
-import { store } from './src/redux/app-redux';
+import store from './src/redux/app-redux';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
@@ -33,8 +33,8 @@ const MapStackNavigator = createStackNavigator({
 });
 
 const ProfileStackNavigator = createStackNavigator({
-  Profile: ProfileScreen,
   History: HistoryScreen,
+  Profile: ProfileScreen,
 });
 
 
@@ -73,6 +73,15 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
+/*   History: {
+    screen: HistoryScreen,
+    navigationOptions: {
+      tabBarLabel: 'HISTORY',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-map" color={tintColor} size={24} />
+      ),
+    },
+  }, */
 
   Trivia: {
     screen: TriviaQuestions,

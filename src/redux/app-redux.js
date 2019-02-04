@@ -12,10 +12,10 @@ const initialState = {
   latitude: null,
   longitude: null,
   movies: [],
+  theaters: [],
   loading: true,
   userID: null,
   zipCode: null,
-  theaters: [],
   favoriteAnimal: 'dog',
 };
 
@@ -24,7 +24,7 @@ const initialState = {
 //
 const SET_GEOLOCATION = 'SET_GEOLOCATION';
 const SET_MOVIES = 'SET_MOVIES';
-const SET_THEATERS = 'FETCH_THEATERS';
+const SET_THEATERS = 'SET_THEATERS';
 const SET_ZIPCODE = 'SET_ZIPCODE';
 
 //
@@ -46,7 +46,7 @@ export const setMovies = movies => {
 
 export const setTheaters = theaters => {
   return {
-    type: SET_MOVIES,
+    type: SET_THEATERS,
     theaters,
   };
 };
@@ -62,22 +62,21 @@ export const setZipCode = zipcode => {
 // Thunk Creators
 //
 //
-export const fetchTheaters = async theaterID => {
-  const theaterInfo = theaterID.map(async id => {
-    const { data: theater } = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-    //console.log('single theater location', theater);
-    console.log('single data location', theater);
-    return theater;
-  });
+export const fetchTheaters = theaterID => {
+  return async dispatch => {
+    const theaterInfo = theaterID.map(async id => {
+      const { data: theater } = await axios.get(
+        `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+      );
+      return theater;
+    });
 
-  const theaterDetails = await Promise.all(theaterInfo);
-  console.log('please work', theaterDetails);
-  // return dispatch => {
-  //   dispatch(setTheaters(theaterInfo));
-  // };
+    const theaterDetails = await Promise.all(theaterInfo);
+    dispatch(setTheaters(theaterDetails));
+  };
 };
+
+//
 // Reducer...
 //
 
@@ -97,7 +96,7 @@ const reducer = (state = initialState, action) => {
     case SET_THEATERS:
       return {
         ...state,
-        theaters: [action.theaters],
+        theaters: action.theaters,
       };
     default:
       return state;
@@ -108,6 +107,10 @@ const reducer = (state = initialState, action) => {
 // Store
 //
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware));
+const store = createStore(
+  reducer,
 
-export { store };
+  applyMiddleware(thunkMiddleware)
+);
+
+export default store;

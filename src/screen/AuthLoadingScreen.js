@@ -12,7 +12,10 @@ class AuthLoadingScreen extends React.Component {
     this.state = {
       loading: true,
     };
+<<<<<<< HEAD
     this.verifyAccount();
+=======
+>>>>>>> c47b1e6a13c2e3de2b8c13e47e1cacd6544ab5cd
   }
 
   getLocationAndMovieAsync = async () => {
@@ -25,6 +28,7 @@ class AuthLoadingScreen extends React.Component {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
+
     this.props.setGeoLocation(geoLocation);
 
     const response = await axios.get(
@@ -36,21 +40,10 @@ class AuthLoadingScreen extends React.Component {
     );
 
     this.props.setMovies(response.data);
-    // const { navigation } = this.props;
-    // const userID = navigation.getParam('userId');
-
-    this.setState(
-      {
-        loading: false,
-      },
-      () => {
-        this.props.navigation.navigate('App');
-      }
-    );
   };
 
   verifyAccount = () => {
-    auth.onAuthStateChanged(async user => {
+    auth.onAuthStateChanged(user => {
       if (user) {
         this.props.navigation.navigate('App', { userId: user.uid });
       } else {
@@ -61,6 +54,7 @@ class AuthLoadingScreen extends React.Component {
 
   componentDidMount = async () => {
     await this.getLocationAndMovieAsync();
+    this.verifyAccount();
   };
 
   render() {
