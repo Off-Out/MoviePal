@@ -6,6 +6,8 @@ import {
   Image,
   Alert,
   SafeAreaView,
+  ImageBackground,
+  Dimensions,
 } from 'react-native';
 import {
   Container,
@@ -33,7 +35,21 @@ export default class HistoryScreen extends Component {
     super(screenProps);
 
     this.state = {
-      movies: [],
+      movies: [
+        {
+          movie: 'Spider-Man: Into the Spider-Verse',
+          movieImage: 'assets/p14939602_v_v5_aa.jpg',
+          review: 'family fun!',
+          rating: '☆☆☆☆☆',
+        },
+        {
+          movie: 'Glass',
+          movieImage: 'assets/p14087450_v_v6_aa.jpg',
+          review: 'absolutely terrifying. no thank you.',
+          rating: '☆',
+        },
+      ],
+      selectedMovie: '',
     };
   }
 
@@ -47,6 +63,14 @@ export default class HistoryScreen extends Component {
   //   })
   // }
 
+  vw(percentageWidth) {
+    return Dimensions.get('window').width * (percentageWidth / 100);
+  }
+
+  vh(percentageHeight) {
+    return Dimensions.get('window').height * (percentageHeight / 100);
+  }
+
   render() {
     console.log('what are my movies', this.state.movies);
     return (
@@ -58,39 +82,76 @@ export default class HistoryScreen extends Component {
           </Title>
           {/* </Header> */}
           <Content padder>
-            <Card>
-              <CardItem header bordered>
-                <Text style={{ color: 'darkred' }}>
-                  Spider-Man: Into the Spider-Verse
-                </Text>
-              </CardItem>
-              <CardItem bordered style={{ width: 200, height: 100 }}>
-                <Body style={{ flexDirection: 'row' }}>
-                  <Image
+            {this.state.movies.map(movie => (
+              <Card
+                key={movie.movie}
+                style={{
+                  alignSelf: 'center',
+                  width: this.vw(75),
+                  height: this.vh(50),
+                  borderRadius: 4,
+                  borderWidth: 2,
+                  borderColor: 'red',
+                  elevation: 4,
+                }}
+              >
+                <Card.Content>
+                  <Title
+                    numberOfLines={1}
+                    style={{
+                      alignSelf: 'center',
+                      color: 'darkred',
+                      width: this.vw(70),
+                    }}
+                    ellipsizeMode="tail"
+                    onPress={e => {
+                      this.props.navigation.navigate('SingleMovie', {
+                        history: true,
+                        movie: dummyMovieData.movie,
+                        image: dummyMovieData.movieImage,
+                      });
+                    }}
+                  >
+                    Spider-Man: Into the Spider-Verse
+                  </Title>
+                  <Card.Cover
                     source={{
                       uri:
                         'http://developer.tmsimg.com/' +
                         'assets/p14939602_v_v5_aa.jpg' +
                         '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
                     }}
-                    style={{ width: '45%', height: '65%' }}
                   />
+
+                  {/*  <Image
+                      source={{
+                        uri:
+                        'http://developer.tmsimg.com/' +
+                        'assets/p14939602_v_v5_aa.jpg' +
+                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                      }}
+                      style={{ width: '45%', height: '65%' }}
+                    /> */}
                   <View style={{ display: 'flex' }}>
                     <Label style={{ fontSize: 12 }}>Your Review:</Label>
                     {/* <Input /> */}
                     <View style={{ flexDirection: 'row' }}>
-                      <Label style={{ fontSize: 12 }}>Your Rating:</Label>
+                      <Label style={{ fontSize: 12 }}>Your Rating: {}</Label>
                       <Text>☆☆☆☆☆</Text>
                     </View>
+                    <Paragraph
+                      style={{
+                        fontSize: 10,
+                        color: 'darkred',
+                      }}
+                    >
+                      AMC 600 North Michigan 9{'\n'}
+                      15:00 on Wed Jan 30 2019
+                    </Paragraph>
                   </View>
-                </Body>
-              </CardItem>
-              <CardItem footer bordered>
-                <Text style={{ fontSize: 10, color: 'darkred' }}>
-                  AMC 600 North Michigan 9, 15:00 on Wed Jan 30 2019
-                </Text>
-              </CardItem>
-            </Card>
+                </Card.Content>
+              </Card>
+            ))}
           </Content>
         </View>
       </SafeAreaView>
