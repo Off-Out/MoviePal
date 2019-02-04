@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 //
 // Initial State
@@ -13,6 +14,8 @@ const initialState = {
   movies: [],
   loading: true,
   userID: null,
+  zipCode: null,
+  theaters: [],
   favoriteAnimal: 'dog',
 };
 
@@ -21,6 +24,8 @@ const initialState = {
 //
 const SET_GEOLOCATION = 'SET_GEOLOCATION';
 const SET_MOVIES = 'SET_MOVIES';
+const SET_THEATERS = 'FETCH_THEATERS';
+const SET_ZIPCODE = 'SET_ZIPCODE';
 
 //
 // Action Creators
@@ -39,7 +44,40 @@ export const setMovies = movies => {
   };
 };
 
+export const setTheaters = theaters => {
+  return {
+    type: SET_MOVIES,
+    theaters,
+  };
+};
+
+export const setZipCode = zipcode => {
+  return {
+    type: SET_ZIPCODE,
+    zipcode,
+  };
+};
+
 //
+// Thunk Creators
+//
+//
+export const fetchTheaters = async theaterID => {
+  const theaterInfo = theaterID.map(async id => {
+    const { data: theater } = await axios.get(
+      `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    );
+    //console.log('single theater location', theater);
+    console.log('single data location', theater);
+    return theater;
+  });
+
+  const theaterDetails = await Promise.all(theaterInfo);
+  console.log('please work', theaterDetails);
+  // return dispatch => {
+  //   dispatch(setTheaters(theaterInfo));
+  // };
+};
 // Reducer...
 //
 
@@ -54,7 +92,12 @@ const reducer = (state = initialState, action) => {
     case SET_MOVIES:
       return {
         ...state,
-        movies: [...state.movies, action.movies],
+        movies: [...action.movies],
+      };
+    case SET_THEATERS:
+      return {
+        ...state,
+        theaters: [action.theaters],
       };
     default:
       return state;

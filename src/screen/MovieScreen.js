@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import {
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  ActivityIndicator,
-} from 'react-native';
+import { View, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 import { Item, Input, Button, Text, Card, CardItem, Body } from 'native-base';
 import { RkStyleSheet } from 'react-native-ui-kitten';
 import { scaleVertical } from '../utility/duc';
-import { Location, Permissions } from 'expo';
 import { format } from 'date-fns';
-import axios from 'axios';
 import { connect } from 'react-redux';
+import { fetchTheaters } from '../redux/app-redux';
+import axios from 'axios';
 
 export class MovieScreen extends Component {
   static navigationOptions = {
@@ -23,46 +16,12 @@ export class MovieScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: format(new Date(), 'YYYY-MM-DD'),
-      zipCode: null,
-      latitude: null,
-      longitude: null,
-      movies: [],
+      zipCode: '',
       movieSearch: '',
-      loading: false,
     };
   }
 
-  getLocationAndMovieAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      console.log('Access denied');
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
-        this.state.date
-      }&lat=${location.coords.latitude}&lng=-${
-        location.coords.longitude
-      }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-
-    const sortedMovie = response.data.sort(function(a, b) {
-      return a.releaseDate < b.releaseDate;
-    });
-
-    this.setState({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-      movies: sortedMovie,
-      loading: false,
-    });
-  };
-
-  componentDidMount = async () => {
-    //await this.getLocationAndMovieAsync();
-  };
+  componentDidMount = async () => {};
 
   handleSearchChange = (stateField, text) => {
     this.setState({
@@ -70,8 +29,24 @@ export class MovieScreen extends Component {
     });
   };
 
+  zipCodeSubmit = () => {};
+
+  fetchAndNavigate = showtimes => {
+    const theaterArray = [];
+    showtimes.forEach(theater => theaterArray.push(theater.theatre.id));
+    const uniqueTheaters = [...new Set(theaterArray)];
+    //console.log(uniqueTheaters);
+
+    this.props.fetchTheaters(uniqueTheaters);
+  };
+
   render() {
-    const movies = this.state.movies;
+    const movies = this.props.movies;
+    const sortedMovie = movies.sort(function(a, b) {
+      return a.releaseDate < b.releaseDate;
+    });
+
+    console.log('look for this', this.props.theaters);
 
     return (
       <SafeAreaView style={styles.container}>
@@ -94,35 +69,40 @@ export class MovieScreen extends Component {
               />
             </Item>
           </View>
-          {this.state.loading ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : (
-            <ScrollView style={styles.content}>
-              {movies.map(movie => (
-                <TouchableOpacity key={movie.tmsId}>
-                  <Card>
-                    <CardItem header bordered>
-                      <Text>{movie.title}</Text>
-                    </CardItem>
-                    <CardItem bordered cardBody>
-                      <Image
-                        source={{
-                          uri:
-                            'http://developer.tmsimg.com/' +
-                            movie.preferredImage.uri +
-                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                        }}
-                        style={{ width: 120, height: 180 }}
-                      />
-                    </CardItem>
-                    <CardItem footer bordered>
-                      <Text>{format(movie.releaseDate, 'MM-DD-YYYY')}</Text>
-                    </CardItem>
-                  </Card>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          )}
+          <Button
+            rounded
+            block
+            light
+            style={{ marginTop: 5 }}
+            onPress={() => {
+              this.zipCodeSubmit();
+            }}
+          >
+            <Text>Search</Text>
+          </Button>
+          <ScrollView>
+            {movies.map(movie => (
+              <TouchableOpacity
+                key={movie.tmsId}
+                onPress={() => this.fetchAndNavigate(movie.showtimes)}
+              >
+                <Card>
+                  <CardItem header>
+                    <Text>{movie.title}</Text>
+                  </CardItem>
+                  <CardItem>
+                    <Body>
+                      <Text>{movie.shortDescription}</Text>
+                    </Body>
+                  </CardItem>
+                  <CardItem footer style={{ justifyContent: 'space-between' }}>
+                    <Text>{format(movie.releaseDate, 'MM-DD-YYYY')}</Text>
+                    <Text>{movie.audience}</Text>
+                  </CardItem>
+                </Card>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
       </SafeAreaView>
     );
@@ -133,7 +113,6 @@ const styles = RkStyleSheet.create({
   container: {
     padding: scaleVertical(10),
     flex: 1,
-    justifyContent: 'space-between',
   },
   filter: {
     flexDirection: 'row',
@@ -141,6 +120,12 @@ const styles = RkStyleSheet.create({
   },
   item: {
     flex: 1,
+  },
+  card: {
+    marginVertical: 8,
+  },
+  post: {
+    marginTop: 13,
   },
 });
 
@@ -150,11 +135,12 @@ const mapStateToProps = state => {
     latitude: state.latitude,
     longitude: state.longitude,
     movies: state.movies,
+    theater: state.theater,
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return { fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)) };
 };
 
 export default connect(

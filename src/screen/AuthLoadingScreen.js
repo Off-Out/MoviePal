@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
-import { format } from 'date-fns';
+import { View, ActivityIndicator } from 'react-native';
 import { auth } from '../firebase';
 import { Location, Permissions } from 'expo';
 import axios from 'axios';
@@ -13,7 +12,6 @@ class AuthLoadingScreen extends React.Component {
     this.state = {
       loading: true,
     };
-
     //this.verifyAccount();
   }
 
@@ -22,13 +20,13 @@ class AuthLoadingScreen extends React.Component {
     if (status !== 'granted') {
       console.log('Access denied');
     }
-
     let location = await Location.getCurrentPositionAsync({});
     const geoLocation = {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
     this.props.setGeoLocation(geoLocation);
+
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
         this.props.date
@@ -36,10 +34,8 @@ class AuthLoadingScreen extends React.Component {
         location.coords.longitude
       }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
-    const sortedMovie = response.data.sort(function(a, b) {
-      return a.releaseDate < b.releaseDate;
-    });
-    this.props.setMovies(sortedMovie);
+
+    this.props.setMovies(response.data);
     // const { navigation } = this.props;
     // const userID = navigation.getParam('userId');
 
@@ -53,10 +49,6 @@ class AuthLoadingScreen extends React.Component {
     );
   };
 
-  componentDidMount = async () => {
-    await this.getLocationAndMovieAsync();
-  };
-
   verifyAccount = () => {
     auth.onAuthStateChanged(async user => {
       if (user) {
@@ -67,23 +59,18 @@ class AuthLoadingScreen extends React.Component {
     });
   };
 
-  // Render any loading content that you like here
+  componentDidMount = async () => {
+    await this.getLocationAndMovieAsync();
+  };
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 const mapStateToProps = state => {
   return {
