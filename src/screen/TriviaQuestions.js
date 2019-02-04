@@ -256,14 +256,23 @@ export default class Trivia extends Component {
                 >
                   <Card.Content>
                     <Title
-                      style={{ alignSelf: 'center', color: 'red' }}
+                      style={{
+                        alignSelf: 'center',
+                        color: 'red',
+                        fontStyle: 'italic'
+                      }}
                       numberOfLines={1}
                     >
                       {' '}
                       Question {this.state.qno + 1}
                     </Title>
                     <Paragraph
-                      style={{ alignSelf: 'center', fontSize: 20 }}
+                      style={{
+                        alignSelf: 'center',
+                        fontSize: 20,
+                        marginTop: 30,
+                        fontStyle: 'italic'
+                      }}
                       numberOfLines={7}
                     >
                       {singleQuestion}
@@ -275,32 +284,29 @@ export default class Trivia extends Component {
                       flexDirection: 'column',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      margin: 20
+
+                      marginTop: 50,
+                      marginBottom: 50
                     }}
                   >
                     {currentOptions.map((item, i) => (
-                      <Chip key={i} onPress={() => this.answerQuestion(item)}>
+                      <Chip
+                        key={i}
+                        style={{ margin: 20 }}
+                        onPress={() => this.answerQuestion(item)}
+                      >
                         <Text
-                          style={{ alignSelf: 'center', fontSize: 15 }}
+                          style={{
+                            alignSelf: 'center',
+                            fontSize: 15,
+                            fontStyle: 'italic'
+                          }}
                           numberOfLines={3}
                         >
                           {convert(item)}{' '}
                         </Text>
                       </Chip>
                     ))}
-
-                    {/* {this.state.isCorrect ? (
-                      <Text style={{ color: 'green' }}>
-                        {' '}
-                        Your answer is correct !
-                      </Text>
-                    ) : (
-                      <Text style={{ color: 'red' }}>
-                        {' '}
-                        Nope!, correct answer is:
-                        {this.state.questions[this.state.qno].correct_answer}
-                      </Text>
-                    )} */}
                   </Card.Actions>
 
                   {/* <Button
