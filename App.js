@@ -33,8 +33,8 @@ const MapStackNavigator = createStackNavigator({
 });
 
 const ProfileStackNavigator = createStackNavigator({
-  History: HistoryScreen,
   Profile: ProfileScreen,
+  History: HistoryScreen,
 });
 
 

@@ -12,10 +12,7 @@ class AuthLoadingScreen extends React.Component {
     this.state = {
       loading: true,
     };
-<<<<<<< HEAD
-    this.verifyAccount();
-=======
->>>>>>> c47b1e6a13c2e3de2b8c13e47e1cacd6544ab5cd
+    // this.verifyAccount();
   }
 
   getLocationAndMovieAsync = async () => {

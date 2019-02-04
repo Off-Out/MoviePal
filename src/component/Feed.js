@@ -12,7 +12,6 @@ export default class Feed extends Component {
     super(props)
 
     const {feed} = this.props
-    console.log(this.props, "I AM LOOKING FOR THIS")
 
     this.state = {
       feed: {
