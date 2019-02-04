@@ -3,17 +3,19 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   ScrollView,
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
   Alert,
+  Button,
   ImageBackground
 } from 'react-native';
+// import { Button } from 'react-native-elements';
 import { Card, Title, Paragraph, Chip } from 'react-native-paper';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Ionicons } from '@expo/vector-icons';
 
 // const { width, height } = Dimensions.get('window');
 
@@ -31,6 +33,7 @@ export default class Trivia extends Component {
       qno: 0,
       questions: [],
       isFinished: false
+      // isCorrect: false
     };
   }
 
@@ -44,8 +47,9 @@ export default class Trivia extends Component {
 
   componentDidMount = async () => {
     const response = await axios.get(
-      // `https://opentdb.com/api.php?amount=20&category=11&type=multiple`
-      `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
+      // `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
+      //only five questions for demo purposes
+      `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
     );
     let quiz = response.data.results;
     console.log('quiz>>>>>', quiz);
@@ -60,19 +64,23 @@ export default class Trivia extends Component {
     let increment = 0;
 
     if (item === this.state.questions[this.state.qno].correct_answer) {
-      increment += 5;
-
-      Alert.alert('¿ Trivia ?', 'You are correct!');
-    } else {
-      Alert.alert(
-        '¿ Trivia ?',
-        `Nope!, correct answer is:
-        ${this.state.questions[this.state.qno].correct_answer}`
-      );
+      //increment += number will change based on how many questions
+      increment += 100 / this.state.questions.length;
+      this.setState({
+        score: this.state.score + increment
+      });
+      // Alert.alert('¿ Trivia ?', 'You are correct!');
     }
+    //else {
+    //   Alert.alert(
+    //     '¿ Trivia ?',
+    //     `Nope!, correct answer is:
+    //     ${this.state.questions[this.state.qno].correct_answer}`
+    //   );
+    // }
     if (this.state.qno === this.state.questions.length - 1) {
       this.setState({
-        score: this.state.score,
+        score: this.state.score + increment,
         isFinished: true
       });
     } else {
@@ -82,6 +90,20 @@ export default class Trivia extends Component {
       });
     }
   };
+
+  // if we want use next button
+  // next = () => {
+  //   if (this.state.qno === this.state.questions.length - 1) {
+  //     this.setState({
+  //       score: this.state.score,
+  //       isFinished: true
+  //     });
+  //   } else {
+  //     this.setState({
+  //       qno: this.state.qno + 1
+  //     });
+  //   }
+  // };
 
   scoreMessage = (score) => {
     if (this.state.score <= 30) {
@@ -123,10 +145,12 @@ export default class Trivia extends Component {
       );
     }
   };
+
   onPressBack = () => {
     const { goBack } = this.props.navigation;
     goBack();
   };
+
   render() {
     // because of the structure of the data , if I am not shuffle the order of array, the correct answer always be the last option
     function shuffle(array) {
@@ -264,7 +288,26 @@ export default class Trivia extends Component {
                         </Text>
                       </Chip>
                     ))}
+
+                    {/* {this.state.isCorrect ? (
+                      <Text style={{ color: 'green' }}>
+                        {' '}
+                        Your answer is correct !
+                      </Text>
+                    ) : (
+                      <Text style={{ color: 'red' }}>
+                        {' '}
+                        Nope!, correct answer is:
+                        {this.state.questions[this.state.qno].correct_answer}
+                      </Text>
+                    )} */}
                   </Card.Actions>
+
+                  {/* <Button
+                    buttonStyle={{ backgroundColor: 'lightgreen' }}
+                    title="Next"
+                    onPress={() => this.next()}
+                  /> */}
                 </Card>
               </View>
             </View>
@@ -274,6 +317,7 @@ export default class Trivia extends Component {
     }
   }
 }
+
 const scoreCircleSize = 300;
 const styles = StyleSheet.create({
   score: {
