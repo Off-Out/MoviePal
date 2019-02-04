@@ -37,6 +37,12 @@ const ProfileStackNavigator = createStackNavigator({
   History: HistoryScreen,
 });
 
+
+const FeedStackNavigator = createStackNavigator({
+  Feed: FeedScreen,
+  Chat: ChatScreen,
+});
+
 const TabNavigator = createBottomTabNavigator({
   Movie: {
     screen: MovieScreen,
@@ -58,12 +64,12 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
 
-  Chat: {
-    screen: ChatScreen,
+  Feed: {
+    screen: FeedStackNavigator,
     navigationOptions: {
-      tabBarLabel: 'CHAT',
+      tabBarLabel: 'FEED',
       tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
+        <Ionicons name="ios-paper" color={tintColor} size={24} />
       ),
     },
   },
