@@ -62,20 +62,18 @@ export const setZipCode = zipcode => {
 // Thunk Creators
 //
 //
-export const fetchTheaters = async theaterID => {
-  const theaterInfo = theaterID.map(async id => {
-    const { data: theater } = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-    console.log('single data location', theater);
-    return theater;
-  });
+export const fetchTheaters = theaterID => {
+  return async dispatch => {
+    const theaterInfo = theaterID.map(async id => {
+      const { data: theater } = await axios.get(
+        `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+      );
 
-  const theaterDetails = await Promise.all(theaterInfo);
-  console.log('theater details', theaterDetails);
-  const customarray = [1, 2, 3, 4, 5];
-  return dispatch => {
-    dispatch(setTheaters(customarray));
+      return theater;
+    });
+
+    const theaterDetails = await Promise.all(theaterInfo);
+    dispatch(setTheaters(theaterDetails));
   };
 };
 
@@ -112,8 +110,8 @@ const reducer = (state = initialState, action) => {
 
 const store = createStore(
   reducer,
-  undefined,
-  applyMiddleware(thunkMiddleware.withExtraArgument({ axios }))
+
+  applyMiddleware(thunkMiddleware)
 );
 
 export default store;

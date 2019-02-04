@@ -207,7 +207,7 @@ class MapScreen extends Component {
   };
 
   render() {
-    console.log('look for this', this.props.theaters);
+    console.log('where is this data', this.props.theaters);
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <MapView
@@ -250,7 +250,7 @@ class MapScreen extends Component {
 
 const mapStateToProps = state => {
   return {
-    theater: state.theater,
+    theaters: state.theaters,
   };
 };
 
