@@ -21,7 +21,7 @@ import {
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'react-redux';
-import { store } from './src/redux/app-redux';
+import store from './src/redux/app-redux';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
