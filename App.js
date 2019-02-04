@@ -44,16 +44,6 @@ const FeedStackNavigator = createStackNavigator({
 });
 
 const TabNavigator = createBottomTabNavigator({
-  Feed: {
-    screen: FeedStackNavigator,
-    navigationOptions: {
-      tabBarLabel: 'FEED',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-paper" color={tintColor} size={24} />
-      ),
-    },
-  },
-
   Movie: {
     screen: MovieScreen,
     navigationOptions: {
@@ -90,6 +80,15 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'PROFILE',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-contact" color={tintColor} size={24} />
+      ),
+    },
+  },
+  Feed: {
+    screen: FeedStackNavigator,
+    navigationOptions: {
+      tabBarLabel: 'FEED',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-paper" color={tintColor} size={24} />
       ),
     },
   },
