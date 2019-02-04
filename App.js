@@ -16,6 +16,7 @@ import {
   SignUpScreen,
   SingleTheaterScreen,
   ListScreen,
+  TriviaQuestions,
   SingleMovie,
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,6 +28,7 @@ const MapStackNavigator = createStackNavigator({
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
+  // Trivia: TriviaQuestions
 });
 
 const ProfileStackNavigator = createStackNavigator({
@@ -64,6 +66,16 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
+  Trivia: {
+    screen: TriviaQuestions,
+    navigationOptions: {
+      tabBarLabel: 'TRIVIA',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-trophy" color={tintColor} size={24} />
+      ),
+    },
+  },
+
   Profile: {
     screen: ProfileScreen,
     navigationOptions: {
