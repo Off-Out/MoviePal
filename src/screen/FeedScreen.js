@@ -36,12 +36,11 @@ export default class FeedScreen extends Component {
   };
 
   render () {
-    console.log(this.state.feeds, "<<<<<feeds")
     return (
       <Container>
         <Content>
           {
-            this.state.feeds.map(feed => (<Feed key={feed._id} feed={feed} /> )
+            this.state.feeds.map(feed => (<Feed key={feed._id} feed={feed} userId={this.props.screenProps}/> )
           )}
         </Content>
         <NewFeed />
@@ -59,9 +58,9 @@ export default class FeedScreen extends Component {
     });
   }
   
-  componentWillUnmount() {
-    FeedBackEnd.closeChat();
-  }
+  // componentWillUnmount() {
+  //   FeedBackEnd.closeChat();
+  // }
 }
 
 

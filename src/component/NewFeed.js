@@ -17,15 +17,11 @@ export default class NewFeed extends Component {
     }
   }
 
-  componentDidMount() {
-    // const userId = this.props.screenProps;
-    // database.ref(`/users/${userId}`).on('value', snapshot => {
-    //   let user = snapshot.val();
-      this.setState({
-        userId: FeedBackEnd.getUid(),
-        userName: FeedBackEnd.getName(),
-      });
-    // });
+  async componentDidMount() {
+   await this.setState({
+      userId: FeedBackEnd.getUid(),
+    });
+    await this.setState({userName: FeedBackEnd.getName()})
   }
 
   handleInput = (text) => {

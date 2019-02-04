@@ -12,6 +12,7 @@ export default class Feed extends Component {
     super(props)
 
     const {feed} = this.props
+    console.log(this.props, "I AM LOOKING FOR THIS")
 
     this.state = {
       feed: {
@@ -19,7 +20,9 @@ export default class Feed extends Component {
         comments: [],
       },
       displayComment: false,
-      newComment: ''
+      newComment: '',
+      userId: FeedBackEnd.getUid(),
+      userName: FeedBackEnd.getName()
     }
   }
 
@@ -49,7 +52,7 @@ export default class Feed extends Component {
         likes: snapshot.val().likes,
         comments: snapshot.val().comments,
       } })
-    })
+    });
   }
 
   handleInput = (text) => {
@@ -115,7 +118,7 @@ export default class Feed extends Component {
           small
           style={styles.postBtn}
           onPress={() => {
-            FeedBackEnd.postComment(this.props.feed._id, this.state.newComment, this)
+            FeedBackEnd.postComment(this.props.feed._id, this.state.newComment, this.state.userId, this.state.userName)
             this.setState({newComment: ''})
           }}
         >

@@ -6,15 +6,17 @@ class FeedBackEnd {
   feedRef = null;
 
   constructor() {
-    auth.onAuthStateChanged(async user => {
+    const user = auth.currentUser
+    console.log(user,'feedbackend user')
       if (user) {
-        console.log('feed testing', user);
-        this.setUid(user.uid);
-        await database.ref(`/users/${user.uid}`).on('value', snapshot => {
+        this.setUid(user.uid)
+        .then(() => {
+          database.ref(`/users/${user.uid}`).on('value', snapshot => {
+          console.log(snapshot.val().name, "WHAT ARE YOU???")
           this.setName(snapshot.val().name);
         });
-      }
-    });
+      }).catch(error => console.error(error))
+    };
   }
 
   setUid(value) {
@@ -41,7 +43,6 @@ class FeedBackEnd {
     this.feedRef.off();
     const onReceive = data => {
       const feed = data.val();
-      console.log('feed', feed);
       callback({
         _id: data.key,
         context: feed.context,
@@ -58,30 +59,27 @@ class FeedBackEnd {
   postFeed(feed) {
     console.log('post!')
     console.log("i am posting... ")
-    // for (let i = 0; i < feed.length; i++) {
-    // }
-          this.feedRef.push({
-        context: feed.context,
-        userId: feed.userId,
-        userName: feed.userName,
-        comments: feed.comments,
-        likes: feed.likes,
-        createdAt: firebase.database.ServerValue.TIMESTAMP,
-      });
+    this.feedRef.push({
+      context: feed.context,
+      userId: feed.userId,
+      userName: feed.userName,
+      comments: feed.comments,
+      likes: feed.likes,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+    });
   }
 
   postComment(key, comment, userId) {
-    // for (let i = 0; i < comment.length; i++) {
-      this.feedRef.child(key).push({
-        comments: comment,
-        userId: userId
-      });
-    }
-  // }
+    console.log('PRESSED COMMENT')
+    this.feedRef.child(key).push({
+      comments: comment,
+      userId: userId,
+    })
+  }
+
 
   likePost(key) {
-    // for (let i = 0; i < like.length; i++) {
-    console.log('pressing LIKE')
+    console.log('PRESSED LIKE')
     console.log(key)
     this.feedRef.child(key).child('likes')
       .transaction((likes) => (likes || 0) + 1)
