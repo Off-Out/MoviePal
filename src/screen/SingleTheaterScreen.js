@@ -85,10 +85,11 @@ export default class SingleTheaterScreen extends Component {
       movie =>
         movie.title
           .toLowerCase()
-          .indexOf(this.state.movieSearch.toLowerCase()) !== -1 &&
+          .indexOf(this.state.movieSearch.toLowerCase()) !==
+        -1 /* &&
         movie.genres[0]
           .toLowerCase()
-          .indexOf(this.state.genreSearch.toLowerCase()) !== -1
+          .indexOf(this.state.genreSearch.toLowerCase()) !== -1 */
     );
 
     return (
