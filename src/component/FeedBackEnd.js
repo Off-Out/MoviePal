@@ -69,11 +69,12 @@ class FeedBackEnd {
     });
   }
 
-  postComment(key, comment, userId) {
+  postComment(key, comment, userId, userName) {
     console.log('PRESSED COMMENT')
     this.feedRef.child(key).push({
       comments: comment,
       userId: userId,
+      userName: userName
     })
   }
 
