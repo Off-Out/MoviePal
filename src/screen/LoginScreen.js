@@ -1,11 +1,64 @@
 import React, { Component } from 'react';
-import { View, Image, StyleSheet, Alert } from 'react-native';
-import { LoginForm } from '../component';
+import {
+  View,
+  Image,
+  Alert,
+  Keyboard,
+  Text,
+  KeyboardAvoidingView,
+} from 'react-native';
+import { Item, Input, Button } from 'native-base';
+import { RkStyleSheet } from 'react-native-ui-kitten';
+import { Ionicons } from '@expo/vector-icons';
+import { scaleVertical } from '../utility/duc';
 import firebase, { auth, database } from '../firebase';
-import axios from 'axios';
-import Stor from '../store/Stor';
+
+const styles = RkStyleSheet.create(theme => ({
+  screen: {
+    padding: scaleVertical(25),
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  image: {
+    height: scaleVertical(77),
+    resizeMode: 'contain',
+  },
+  header: {
+    paddingBottom: scaleVertical(10),
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  content: {
+    justifyContent: 'space-between',
+  },
+  input: {
+    marginVertical: 5,
+  },
+  save: {
+    marginVertical: 20,
+  },
+  buttons: {
+    flexDirection: 'row',
+    marginBottom: scaleVertical(24),
+    marginHorizontal: 24,
+    justifyContent: 'space-around',
+  },
+  textRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 15,
+  },
+  button: {
+    borderColor: theme.colors.border.solid,
+  },
+  footer: {},
+}));
 
 class LoginScreen extends Component {
+  static navigationOptions = {
+    header: null,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +77,9 @@ class LoginScreen extends Component {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(result => {
-        this.props.navigation.navigate('App', { userId: result.user.uid });
+        this.props.navigation.navigate('AuthLoading', {
+          userId: result.user.uid,
+        });
       })
       .catch(error => Alert.alert(error.message));
   };
@@ -48,13 +103,12 @@ class LoginScreen extends Component {
           return { cancelled: true };
         }
       })
-      .then(() => {
+      .then(async () => {
         const user = auth.currentUser || {};
         if (user.uid) {
           database.ref(`users/${user.uid}`).once('value', snapshot => {
             if (snapshot.exists()) {
               console.log('exists!');
-              this.props.navigation.navigate('App', { userId: user.uid });
             }
             if (!snapshot.exists()) {
               console.log('doesnt exist!');
@@ -64,10 +118,13 @@ class LoginScreen extends Component {
                 email: user.providerData[0].email,
                 photo: user.providerData[0].photoURL,
               });
-              this.props.navigation.navigate('App', { userId: user.uid });
             }
           });
         }
+      })
+      .finally(() => {
+        const user = auth.currentUser || {};
+        this.props.navigation.navigate('App', { userId: user.uid });
       })
       .catch(error => console.error(error));
   };
@@ -114,41 +171,83 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 10,
-          }}
-        >
-          <Image source={require('../image/manny.png')} />
+      <KeyboardAvoidingView
+        behavior="padding"
+        enabled
+        style={styles.screen}
+        onStartShouldSetResponder={() => true}
+        onResponderRelease={() => Keyboard.dismiss()}
+      >
+        <View style={styles.header}>
+          <Image style={styles.image} source={require('../image/logo.png')} />
+          <Text>Movie Pal</Text>
         </View>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            margin: 10,
-          }}
-        >
-          <LoginForm
-            handleUserInput={this.handleUserInput}
-            login={this.login}
-            credential={this.state}
-            signInWithGoogle={this.signInWithGoogle}
-            signInWithFacebook={this.signInWithFacebook}
-            navigation={this.props.navigation}
-          />
+        <View style={styles.content}>
+          <View>
+            <Item rounded style={styles.input}>
+              <Input
+                placeholder="EMAIL"
+                autoCapitalize="none"
+                autoCorrect={false}
+                onChangeText={text => {
+                  this.handleUserInput('email', text);
+                }}
+              />
+            </Item>
+            <Item rounded style={styles.input}>
+              <Input
+                placeholder="PASSWORD"
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry={true}
+                onChangeText={text => {
+                  this.handleUserInput('password', text);
+                }}
+              />
+            </Item>
+            <Button
+              rounded
+              block
+              light
+              style={styles.input}
+              onPress={() => {
+                this.login(this.state.email, this.state.password);
+              }}
+            >
+              <Text>LOGIN</Text>
+            </Button>
+          </View>
+          <View style={styles.buttons}>
+            {
+              <Ionicons
+                name="logo-google"
+                size={50}
+                onPress={() => this.signInWithGoogle()}
+              />
+            }
+            {
+              <Ionicons
+                name="logo-facebook"
+                size={50}
+                onPress={() => this.signInWithFacebook()}
+              />
+            }
+          </View>
+
+          <View style={styles.textRow}>
+            <Text>Don’t have an account? </Text>
+
+            <Text
+              onPress={() => this.props.navigation.navigate('SignUpScreen')}
+              style={{ color: 'red' }}
+            >
+              Sign up now
+            </Text>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default LoginScreen;

@@ -4,7 +4,6 @@
 // import { Search } from '../component';
 // import { Ionicons } from '@expo/vector-icons';
 // import axios from 'axios';
-// import Geocoder from 'react-native-geocoding';
 // import { Location, Permissions } from 'expo';
 
 // //THIS WILL ONLY WORK WITH A REAL PHONE!!!!!!!!
