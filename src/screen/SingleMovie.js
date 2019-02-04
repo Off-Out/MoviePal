@@ -1,4 +1,5 @@
 import React from 'react';
+import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import {
   View,
   FlatList,
@@ -6,9 +7,10 @@ import {
   Alert,
   Linking,
   ImageBackground,
-  Dimensions
+  Dimensions,
+  ScrollView,
 } from 'react-native';
-import { Text, Title, Button, Card } from 'react-native-paper';
+import { Text, Title, Button, Card, Paragraph } from 'react-native-paper';
 import { EventCard } from '../component';
 import axios from 'axios';
 import { database } from '../firebase';
@@ -23,12 +25,26 @@ class SingleEvent extends React.Component {
     super();
     this.state = {
       selectedTime: '',
-
-      ticketURI: ''
+      ticketURI: '',
     };
-
     this.handlePress = this.handlePress.bind(this);
   }
+
+  vw(percentageWidth) {
+    return Dimensions.get('window').width * (percentageWidth / 100);
+  }
+
+  vh(percentageHeight) {
+    return Dimensions.get('window').height * (percentageHeight / 100);
+  }
+  handlePress = selectedTime => {
+    const movieShowtime = this.props.navigation
+      .getParam('movie', null)
+      .showtimes.filter(movie => movie.dateTime.includes(selectedTime));
+
+    this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
+  };
+
   vw(percentageWidth) {
     return Dimensions.get('window').width * (percentageWidth / 100);
   }
@@ -40,15 +56,8 @@ class SingleEvent extends React.Component {
   async fetchImage() {
     const image = this.props.navigation.getParam('movie');
   }
-  handlePress(selectedTime) {
-    const movieShowtime = this.props.navigation
-      .getParam('movie', null)
-      .showtimes.filter((movie) => movie.dateTime.includes(selectedTime));
-    console.log('AFTER PRESSING TIME', movieShowtime);
-    this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
-  }
 
-  goToChatRoom = (userId) => {
+  goToChatRoom = userId => {
     console.log('go to chat room!');
     const { selectedTime } = this.state;
     const theater = this.props.navigation.getParam('theatre');
@@ -63,7 +72,7 @@ class SingleEvent extends React.Component {
     const userRef = database.ref('users/' + userId);
 
     chatRef
-      .once('value', (snapshot) => {
+      .once('value', snapshot => {
         if (snapshot.exists()) {
           chatRef.child('users' + userId);
         } else {
@@ -71,7 +80,7 @@ class SingleEvent extends React.Component {
             movie: title,
             selectedTime,
             theater,
-            users: userId
+            users: userId,
           });
         }
       })
@@ -82,10 +91,10 @@ class SingleEvent extends React.Component {
             [`${today}`]: {
               movie: title,
               selectedTime: this.state.selectedTime,
-              theater: theater
-            }
+              theater: theater,
+            },
           },
-          chatId
+          chatId,
         });
       })
       .then(() => {
@@ -93,11 +102,11 @@ class SingleEvent extends React.Component {
           movieInfo: {
             movie: title,
             selectedTime: this.state.selectedTime,
-            theater: theater
-          }
+            theater: theater,
+          },
         });
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   };
 
   render() {
@@ -106,171 +115,184 @@ class SingleEvent extends React.Component {
 
     const movie = navigation.getParam('movie', null);
 
-    const showtimes = movie.showtimes.map(
-      (show) => show.dateTime.split('T')[1]
-    );
+    const Showtimes = movie.showtimes.map(show => show.dateTime.split('T')[1]);
 
     if (!movie.shortDescription) {
-      return <Text>...Loading</Text>;
+      return <Image source={require('../image/logo.png')} />;
     } else {
       return (
-        <ImageBackground
-          resizeMode="cover"
-          source={{
-            uri:
-              'http://developer.tmsimg.com/' +
-              movie.preferredImage.uri +
-              '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
-          }}
-          style={{ width: '100%', height: '100%' }}
-        >
-          <View
-            style={{
-              flexDirection: 'column',
-              flex: 1,
-              justifyContent: 'flex-bottom',
-              alignContent: 'center',
-              alignItems: 'center'
+        <SafeAreaView>
+          <ImageBackground
+            resizeMode="cover"
+            source={{
+              uri:
+                'http://developer.tmsimg.com/' +
+                movie.preferredImage.uri +
+                '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
             }}
+            style={{ width: '100%', height: '100%' }}
           >
-            <View style={{ flex: 2 }}>
-              <EventCard
-                title={movie.title}
-                genres={movie.genres}
-                rating={movie.ratings[0].code}
-                shortDescription={movie.shortDescription}
-                uri={movie.preferredImage.uri}
-                theatre={theatre}
-              />
-            </View>
-            <View style={{ flex: 1.75, alignContent: 'center', marginTop: 20 }}>
-              <Card
-                style={{
-                  backgroundColor: 'white',
-                  width: this.vw(75),
-                  height: this.vh(30)
-                }}
-                elevation={2}
-              >
-                <Card.Content>
-                  <View
-                    style={{
-                      alignContent: 'center',
-                      alignItems: 'center'
-                    }}
-                  >
-                    {!this.state.selectedTime ? (
-                      <View>
-                        <Title style={{ alignSelf: 'center', marginTop: 10 }}>
-                          Show Times
-                        </Title>
-                        <FlatList
-                          numColumns={2}
-                          data={showtimes}
-                          renderItem={({ item }) => (
-                            <Button
-                              mode="outlined"
-                              style={{
-                                flexDirection: 'center',
-                                height: 40,
-                                width: 110,
-                                margin: 10,
-                                marginEnd: 10
-                              }}
-                              key={item}
-                              accessibilityLabel={item}
-                              onPress={() => this.handlePress(item)}
-                            >
-                              {item}
-                            </Button>
-                          )}
-                        />
-                      </View>
-                    ) : (
-                      <View style={{}}>
-                        <Button
-                          onPress={() => this.setState({ selectedTime: '' })}
-                        >
-                          All Showtimes
-                        </Button>
-                        <Card
-                          style={{
-                            alignSelf: 'center',
-                            backgroundColor: 'white',
-                            width: this.vw(40),
-                            height: this.vh(15),
-                            /*  alignItems: 'center', */
-                            margin: 10
-                          }}
-                          elevation={8}
-                        >
-                          <Card.Content
-                            style={{ alignContent: 'space-around' }}
-                          >
-                            <Button
-                              mode="outlined"
-                              icon="info"
-                              onPress={() =>
-                                this.goToChatRoom(this.props.screenProps)
-                              }
-                            >
-                              Chat!
-                            </Button>
-                            <Button
-                              mode="outlined"
-                              icon="info"
-                              // onPress={() =>
-                              //   this.props.navigation.navigate('Trivia')
-                              // }
-                              onPress={() =>
-                                this.props.navigation.navigate('Trivia')
-                              }
-                            >
-                              Play Trivia!
-                            </Button>
-                          </Card.Content>
-                        </Card>
-                        <Button
-                          onPress={() =>
-                            Alert.alert(
-                              'Choose from one of our partners',
-                              'options below',
-                              [
-                                {
-                                  text: 'Fandango',
-                                  icon: 'movie',
+            <View
+              style={{
+                flexDirection: 'column',
+                flex: 1,
+                justifyContent: 'flex-bottom',
+                alignContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <View style={{ flex: 2 }}>
+                <Card
+                  style={{
+                    backgroundColor: 'white',
+                    width: this.vw(75),
+                    height: this.vh(80),
+                    /*  alignItems: 'center', */
+                    margin: 10,
+                  }}
+                  elevation={4}
+                >
+                  <ScrollView>
+                    <Card.Content>
+                      <Card.Cover
+                        source={{
+                          uri:
+                            'http://developer.tmsimg.com/' +
+                            movie.preferredImage.uri +
+                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                        }}
+                      />
 
-                                  onPress: () =>
-                                    Linking.openURL(this.state.ticketURI)
-                                },
-                                {
-                                  text: 'Atom',
-                                  icon: 'react',
-                                  onPress: () => Linking.openURL('google.com')
-                                },
-                                {
-                                  text: 'Friendship',
-                                  icon: 'paw',
-                                  onPress: () =>
-                                    navigation.navigate('Home', {
-                                      movie: movie
-                                    })
-                                }
-                              ],
-                              { cancelable: true }
-                            )
-                          }
-                        >
-                          Purchase Tickets!
-                        </Button>
-                      </View>
-                    )}
-                  </View>
-                </Card.Content>
-              </Card>
+                      <Title numberOfLines={2} style={{ alignSelf: 'center' }}>
+                        {movie.title}
+                      </Title>
+                      <Paragraph
+                        style={{ alignSelf: 'center' }}
+                        numberOfLines={3}
+                      >
+                        {movie.genres ? movie.genres.join(', ') : null}
+                        {'   '}
+                        {movie.rating}
+                      </Paragraph>
+
+                      <Paragraph style={{ alignSelf: 'center' }}>
+                        {theatre}
+                      </Paragraph>
+                      <Paragraph
+                        numberOfLines={5}
+                        ellipsizeMode="tail"
+                        style={{}}
+                      >
+                        {movie.shortDescription}
+                      </Paragraph>
+                      {!this.state.selectedTime ? (
+                        <View>
+                          <Title style={{ alignSelf: 'center', marginTop: 10 }}>
+                            Show Times
+                          </Title>
+                          <FlatList
+                            numColumns={2}
+                            data={Showtimes}
+                            renderItem={({ item }) => (
+                              <Button
+                                mode="outlined"
+                                style={{
+                                  flexDirection: 'center',
+                                  height: 40,
+                                  width: 100,
+                                  margin: 10,
+                                }}
+                                key={item}
+                                accessibilityLabel={item}
+                                onPress={() => this.handlePress(item)}
+                              >
+                                {item}
+                              </Button>
+                            )}
+                          />
+                        </View>
+                      ) : (
+                        <View style={{}}>
+                          <Button
+                            onPress={() => this.setState({ selectedTime: '' })}
+                          >
+                            All Showtimes
+                          </Button>
+
+                          <Button
+                            mode="outlined"
+                            icon="info"
+                            onPress={() =>
+                              this.goToChatRoom(this.props.screenProps)
+                            }
+                          >
+                            Chat!
+                          </Button>
+                          <Button
+                            mode="outlined"
+                            icon="info"
+                            // onPress={() =>
+                            //   this.props.navigation.navigate('Trivia')
+                            // }
+                            onPress={() =>
+                              this.props.navigation.navigate('Trivia')
+                            }
+                          >
+                            Play Trivia!
+                          </Button>
+
+                          <Button
+                            onPress={() =>
+                              Alert.alert(
+                                'Choose from one of our partners',
+                                'options below',
+                                [
+                                  {
+                                    text: 'Fandango',
+                                    icon: 'movie',
+
+                                    onPress: () =>
+                                      Linking.openURL(this.state.ticketURI),
+                                  },
+                                  {
+                                    text: 'Add to Calendar',
+                                    icon: 'calendar',
+                                    onPress: () =>
+                                      AddCalendarEvent.presentEventCreatingDialog(
+                                        movie.title,
+                                        this.state.selectedTime
+                                      ),
+                                  },
+                                  {
+                                    text: 'Cancel',
+
+                                    onPress: () =>
+                                      console.log('Cancel Pressed'),
+                                    style: 'cancel',
+                                  },
+                                ],
+                                { cancelable: true }
+                              )
+                            }
+                          >
+                            Purchase Tickets!
+                          </Button>
+                        </View>
+                      )}
+                    </Card.Content>
+                  </ScrollView>
+                </Card>
+              </View>
+              <View
+                style={{ flex: 1.75, alignContent: 'center', marginTop: 20 }}
+              >
+                {/*   </View>
+                  </Card.Content>
+                </Card> */}
+              </View>
             </View>
-          </View>
-        </ImageBackground>
+          </ImageBackground>
+        </SafeAreaView>
       );
     }
   }
