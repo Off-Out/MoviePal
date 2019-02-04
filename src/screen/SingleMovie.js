@@ -1,4 +1,5 @@
 import React from 'react';
+import * as AddCalendarEvent from 'react-native-add-calendar-event';
 import {
   View,
   FlatList,
@@ -254,18 +255,13 @@ class SingleEvent extends React.Component {
                                       Linking.openURL(this.state.ticketURI),
                                   },
                                   {
-                                    text: 'Atom',
-                                    icon: 'react',
+                                    text: 'Add to Calendar',
+                                    icon: 'calendar',
                                     onPress: () =>
-                                      Linking.openURL('google.com'),
-                                  },
-                                  {
-                                    text: 'Friendship',
-                                    icon: 'paw',
-                                    onPress: () =>
-                                      navigation.navigate('Home', {
-                                        movie: movie,
-                                      }),
+                                      AddCalendarEvent.presentEventCreatingDialog(
+                                        movie.title,
+                                        this.state.selectedTime
+                                      ),
                                   },
                                   {
                                     text: 'Cancel',
