@@ -6,7 +6,7 @@ import {
   Alert,
   Linking,
   ImageBackground,
-  Dimensions,
+  Dimensions
 } from 'react-native';
 import { Text, Title, Button, Card } from 'react-native-paper';
 import { EventCard } from '../component';
@@ -24,7 +24,7 @@ class SingleEvent extends React.Component {
     this.state = {
       selectedTime: '',
 
-      ticketURI: '',
+      ticketURI: ''
     };
 
     this.handlePress = this.handlePress.bind(this);
@@ -43,25 +43,27 @@ class SingleEvent extends React.Component {
   handlePress(selectedTime) {
     const movieShowtime = this.props.navigation
       .getParam('movie', null)
-      .showtimes.filter(movie => movie.dateTime.includes(selectedTime));
+      .showtimes.filter((movie) => movie.dateTime.includes(selectedTime));
     console.log('AFTER PRESSING TIME', movieShowtime);
     this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
   }
 
-  goToChatRoom = userId => {
+  goToChatRoom = (userId) => {
     console.log('go to chat room!');
     const { selectedTime } = this.state;
     const theater = this.props.navigation.getParam('theatre');
     const { title } = this.props.navigation.getParam('movie', null);
-    const { preferredImage } = this.props.navigation.getParam('movie');
 
-    const chatId = `${theater}${selectedTime}${title}`;
+    const chatId = `${theater}${selectedTime}${title.substr(
+      title.length - 5,
+      title.length - 1
+    )}`;
     const today = new Date().toDateString();
     const chatRef = database.ref(`chatroom/${today}/` + chatId);
     const userRef = database.ref('users/' + userId);
 
     chatRef
-      .once('value', snapshot => {
+      .once('value', (snapshot) => {
         if (snapshot.exists()) {
           chatRef.child('users' + userId);
         } else {
@@ -69,7 +71,7 @@ class SingleEvent extends React.Component {
             movie: title,
             selectedTime,
             theater,
-            users: userId,
+            users: userId
           });
         }
       })
@@ -80,10 +82,10 @@ class SingleEvent extends React.Component {
             [`${today}`]: {
               movie: title,
               selectedTime: this.state.selectedTime,
-              theater: theater,
-            },
+              theater: theater
+            }
           },
-          chatId,
+          chatId
         });
       })
       .then(() => {
@@ -91,21 +93,11 @@ class SingleEvent extends React.Component {
           movieInfo: {
             movie: title,
             selectedTime: this.state.selectedTime,
-            theater,
-            image: preferredImage.uri,
-          },
+            theater: theater
+          }
         });
       })
-      .then(() => {
-        this.props.navigation.navigate('Chat', {
-          movieInfo: {
-            movie: title,
-            selectedTime: this.state.selectedTime,
-            theater: theater,
-          },
-        });
-      })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   };
 
   render() {
@@ -114,7 +106,9 @@ class SingleEvent extends React.Component {
 
     const movie = navigation.getParam('movie', null);
 
-    const showtimes = movie.showtimes.map(show => show.dateTime.split('T')[1]);
+    const showtimes = movie.showtimes.map(
+      (show) => show.dateTime.split('T')[1]
+    );
 
     if (!movie.shortDescription) {
       return <Text>...Loading</Text>;
@@ -126,7 +120,7 @@ class SingleEvent extends React.Component {
             uri:
               'http://developer.tmsimg.com/' +
               movie.preferredImage.uri +
-              '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+              '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
           }}
           style={{ width: '100%', height: '100%' }}
         >
@@ -136,7 +130,7 @@ class SingleEvent extends React.Component {
               flex: 1,
               justifyContent: 'flex-bottom',
               alignContent: 'center',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <View style={{ flex: 2 }}>
@@ -154,7 +148,7 @@ class SingleEvent extends React.Component {
                 style={{
                   backgroundColor: 'white',
                   width: this.vw(75),
-                  height: this.vh(30),
+                  height: this.vh(30)
                 }}
                 elevation={2}
               >
@@ -162,7 +156,7 @@ class SingleEvent extends React.Component {
                   <View
                     style={{
                       alignContent: 'center',
-                      alignItems: 'center',
+                      alignItems: 'center'
                     }}
                   >
                     {!this.state.selectedTime ? (
@@ -181,7 +175,7 @@ class SingleEvent extends React.Component {
                                 height: 40,
                                 width: 110,
                                 margin: 10,
-                                marginEnd: 10,
+                                marginEnd: 10
                               }}
                               key={item}
                               accessibilityLabel={item}
@@ -206,7 +200,7 @@ class SingleEvent extends React.Component {
                             width: this.vw(40),
                             height: this.vh(15),
                             /*  alignItems: 'center', */
-                            margin: 10,
+                            margin: 10
                           }}
                           elevation={8}
                         >
@@ -225,7 +219,12 @@ class SingleEvent extends React.Component {
                             <Button
                               mode="outlined"
                               icon="info"
-                              onPress={() => console.log('Play Trivia!')}
+                              // onPress={() =>
+                              //   this.props.navigation.navigate('Trivia')
+                              // }
+                              onPress={() =>
+                                this.props.navigation.navigate('Trivia')
+                              }
                             >
                               Play Trivia!
                             </Button>
@@ -242,21 +241,21 @@ class SingleEvent extends React.Component {
                                   icon: 'movie',
 
                                   onPress: () =>
-                                    Linking.openURL(this.state.ticketURI),
+                                    Linking.openURL(this.state.ticketURI)
                                 },
                                 {
                                   text: 'Atom',
                                   icon: 'react',
-                                  onPress: () => Linking.openURL('google.com'),
+                                  onPress: () => Linking.openURL('google.com')
                                 },
                                 {
                                   text: 'Friendship',
                                   icon: 'paw',
                                   onPress: () =>
                                     navigation.navigate('Home', {
-                                      movie: movie,
-                                    }),
-                                },
+                                      movie: movie
+                                    })
+                                }
                               ],
                               { cancelable: true }
                             )

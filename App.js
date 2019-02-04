@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
   createStackNavigator,
   createSwitchNavigator,
-  createAppContainer,
+  createAppContainer
 } from 'react-navigation';
 import {
   AuthLoadingScreen,
@@ -19,7 +19,8 @@ import {
   FilterScreen,
   ListScreen,
   SingleMovie,
-  FeedScreen
+  FeedScreen,
+  TriviaQuestions,
 } from './src/screen/index';
 import { auth, database } from './src/firebase';
 import { Text } from 'native-base';
@@ -31,12 +32,13 @@ const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
-  ListScreen: ListScreen,
+  ListScreen: ListScreen
+  // Trivia: TriviaQuestions
 });
 
 const ProfileStackNavigator = createStackNavigator({
   Profile: ProfileScreen,
-  History: HistoryScreen,
+  History: HistoryScreen
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -46,8 +48,8 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'MAP',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-map" color={tintColor} size={24} />
-      ),
-    },
+      )
+    }
   },
 
   // Home: {
@@ -72,33 +74,34 @@ const TabNavigator = createBottomTabNavigator({
         // BadgeElement={<Text style={{ color: 'white' }}>{screenProps.unreadMessagesCount}</Text>}
         // Hidden={screenProps.unreadMessagesCount === 0}
         // />
-      ),
-    },
+      )
+    }
   },
+  Trivia: {
+    screen: TriviaQuestions,
+    navigationOptions: {
+      tabBarLabel: 'TRIVIA',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-trophy" color={tintColor} size={24} />
+      )
+    }
+  },
+
   Profile: {
     screen: ProfileStackNavigator,
     navigationOptions: {
       tabBarLabel: 'PROFILE',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-contact" color={tintColor} size={24} />
-      ),
-    },
-  },
-  Feed: {
-    screen: FeedScreen,
-    navigationOptions: {
-      tabBarLabel: 'FEED',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-paper" color={tintColor} size={24} />
-      ),
-    },
-  },
+      )
+    }
+  }
 });
 
 const AuthStack = createStackNavigator(
   {
     LoginScreen: { screen: LoginScreen },
-    SignUpScreen: { screen: SignUpScreen },
+    SignUpScreen: { screen: SignUpScreen }
   },
   { initialRouteName: 'LoginScreen' }
 );
@@ -120,10 +123,10 @@ const AppContainer = createAppContainer(
     {
       AuthLoading: AuthLoadingScreen,
       App: TabComponents,
-      Auth: AuthStack,
+      Auth: AuthStack
     },
     {
-      initialRouteName: 'AuthLoading',
+      initialRouteName: 'AuthLoading'
     }
   )
 );

@@ -4,7 +4,7 @@ import { Card, CardItem, Body, Text, H2 } from 'native-base';
 
 class ListScreen extends Component {
   static navigationOptions = {
-    headerTitle: 'Theater List',
+    headerTitle: 'Theater List'
   };
   render() {
     const { navigation } = this.props;
@@ -14,14 +14,14 @@ class ListScreen extends Component {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
           <ScrollView>
-            {theaters.map(item => {
+            {theaters.map((item) => {
               const distance = item.location.distance.toString().slice(0, 4);
               return (
                 <TouchableOpacity
                   key={item.name}
                   onPress={() =>
                     this.props.navigation.navigate('SingleTheater', {
-                      theatre: item,
+                      theatre: item
                     })
                   }
                 >
