@@ -10,14 +10,14 @@ import axios from 'axios';
 
 export class MovieScreen extends Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
 
   constructor(props) {
     super(props);
     this.state = {
       zipCode: '',
-      movieSearch: '',
+      movieSearch: ''
     };
   }
 
@@ -25,19 +25,19 @@ export class MovieScreen extends Component {
 
   handleSearchChange = (stateField, text) => {
     this.setState({
-      [stateField]: text,
+      [stateField]: text
     });
   };
 
   zipCodeSubmit = () => {};
 
-  fetchAndNavigate = showtimes => {
+  fetchAndNavigate = (showtimes) => {
     const theaterArray = [];
-    showtimes.forEach(theater => theaterArray.push(theater.theatre.id));
+    showtimes.forEach((theater) => theaterArray.push(theater.theatre.id));
     const uniqueTheaters = [...new Set(theaterArray)];
 
     this.props.fetchTheaters(uniqueTheaters);
-    console.log('look for this', this.props.theaters);
+    // console.log('look for this', this.props.theaters);
   };
 
   render() {
@@ -53,7 +53,7 @@ export class MovieScreen extends Component {
             <Item rounded style={styles.item}>
               <Input
                 placeholder="Movie Search"
-                onChangeText={text => {
+                onChangeText={(text) => {
                   this.handleSearchChange('movieSearch', text);
                 }}
               />
@@ -61,7 +61,7 @@ export class MovieScreen extends Component {
             <Item rounded style={styles.item}>
               <Input
                 placeholder="ZipCode"
-                onChangeText={text => {
+                onChangeText={(text) => {
                   this.handleSearchChange('movieSearch', text);
                 }}
               />
@@ -79,7 +79,7 @@ export class MovieScreen extends Component {
             <Text>Search</Text>
           </Button>
           <ScrollView>
-            {movies.map(movie => (
+            {movies.map((movie) => (
               <TouchableOpacity
                 key={movie.tmsId}
                 onPress={() => this.fetchAndNavigate(movie.showtimes)}
@@ -110,35 +110,35 @@ export class MovieScreen extends Component {
 const styles = RkStyleSheet.create({
   container: {
     padding: scaleVertical(10),
-    flex: 1,
+    flex: 1
   },
   filter: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   item: {
-    flex: 1,
+    flex: 1
   },
   card: {
-    marginVertical: 8,
+    marginVertical: 8
   },
   post: {
-    marginTop: 13,
-  },
+    marginTop: 13
+  }
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     favoriteAnimal: state.favoriteAnimal,
     latitude: state.latitude,
     longitude: state.longitude,
     movies: state.movies,
-    theater: state.theater,
+    theater: state.theater
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return { fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)) };
+const mapDispatchToProps = (dispatch) => {
+  return { fetchTheaters: (theaterID) => dispatch(fetchTheaters(theaterID)) };
 };
 
 export default connect(

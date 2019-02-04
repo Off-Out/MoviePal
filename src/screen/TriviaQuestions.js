@@ -49,7 +49,7 @@ export default class Trivia extends Component {
       `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
     );
     let quiz = response.data.results;
-    console.log('quiz>>>>>', quiz);
+    // console.log('quiz>>>>>', quiz);
 
     // the reason putting data.results is all about the trivia questions data structure which is coming from axios request
     this.setState({
