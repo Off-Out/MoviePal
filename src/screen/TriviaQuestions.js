@@ -4,11 +4,11 @@ import {
   Text,
   View,
   Button,
-  StatusBar,
   ScrollView,
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
+  Alert,
   ImageBackground
 } from 'react-native';
 import { Card, Title, Paragraph, Chip } from 'react-native-paper';
@@ -21,7 +21,6 @@ export default class Trivia extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: '¿ Trivia ?'
-      // header: <Button onPress={() => navigation.goBack()} title="BACK" />
     };
   };
 
@@ -62,6 +61,14 @@ export default class Trivia extends Component {
 
     if (item === this.state.questions[this.state.qno].correct_answer) {
       increment += 5;
+
+      Alert.alert('¿ Trivia ?', 'You are correct!');
+    } else {
+      Alert.alert(
+        '¿ Trivia ?',
+        `Nope!, correct answer is:
+        ${this.state.questions[this.state.qno].correct_answer}`
+      );
     }
     if (this.state.qno === this.state.questions.length - 1) {
       this.setState({
@@ -116,10 +123,10 @@ export default class Trivia extends Component {
       );
     }
   };
-  // onPressBack = () => {
-  //   const { goBack } = this.props.navigation;
-  //   goBack();
-  // };
+  onPressBack = () => {
+    const { goBack } = this.props.navigation;
+    goBack();
+  };
   render() {
     // because of the structure of the data , if I am not shuffle the order of array, the correct answer always be the last option
     function shuffle(array) {
@@ -175,11 +182,27 @@ export default class Trivia extends Component {
           <View style={styles.circle}>
             {this.scoreMessage(this.state.score)}
           </View>
+          <Button
+            title="Play again"
+            onPress={() => {
+              this.setState({
+                score: 0,
+                qno: 0,
+                questions: [],
+                isFinished: false
+              });
+              this.componentDidMount();
+            }}
+          />
+          <Button
+            title="Search More Movies"
+            onPress={() => this.onPressBack()}
+          />
         </View>
       );
     } else {
       return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
           <ImageBackground
             resizeMode="cover"
             source={require('../image/questionPic.jpg')}

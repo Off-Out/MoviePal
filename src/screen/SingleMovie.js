@@ -219,6 +219,9 @@ class SingleEvent extends React.Component {
                             <Button
                               mode="outlined"
                               icon="info"
+                              // onPress={() =>
+                              //   this.props.navigation.navigate('Trivia')
+                              // }
                               onPress={() =>
                                 this.props.navigation.navigate('Trivia')
                               }

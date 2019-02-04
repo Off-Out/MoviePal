@@ -31,8 +31,8 @@ const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
-  ListScreen: ListScreen,
-  Trivia: TriviaQuestions
+  ListScreen: ListScreen
+  // Trivia: TriviaQuestions
 });
 
 const ProfileStackNavigator = createStackNavigator({
@@ -73,6 +73,15 @@ const TabNavigator = createBottomTabNavigator({
         // BadgeElement={<Text style={{ color: 'white' }}>{screenProps.unreadMessagesCount}</Text>}
         // Hidden={screenProps.unreadMessagesCount === 0}
         // />
+      )
+    }
+  },
+  Trivia: {
+    screen: TriviaQuestions,
+    navigationOptions: {
+      tabBarLabel: 'TRIVIA',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-trophy" color={tintColor} size={24} />
       )
     }
   },
