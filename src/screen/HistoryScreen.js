@@ -49,7 +49,7 @@ export default class HistoryScreen extends Component {
         {
           movie: 'Glass',
           image: 'assets/p14087450_v_v6_aa.jpg',
-          review: 'absolutely terrifying. no thank you.',
+          review: 'terrifying',
           rating: '☆',
           theatre: 'Logan Square Theatre',
           time: '9:00 on Tue Jan 29 2019',
@@ -63,9 +63,10 @@ export default class HistoryScreen extends Component {
           time: '15:00 on Wed Jan 30 2019',
         },
       ],
-      selectedMovie: {},
+      selectedMovie: '',
     };
     this.selectMovie = this.selectMovie.bind(this);
+    this.deselectMovie = this.deselectMovie.bind(this);
   }
 
   vw(percentageWidth) {
@@ -83,6 +84,9 @@ export default class HistoryScreen extends Component {
 
     console.log('SET MOVIE ON STATE', this.state.selectedMovie);
   }
+  async deselectMovie() {
+    await this.setState({ selectedMovie: '' });
+  }
 
   render() {
     return (
@@ -94,6 +98,70 @@ export default class HistoryScreen extends Component {
           </Title>
           {/* </Header> */}
           <Content style={{ flex: 1, margin: 10 }} padder>
+            {this.state.selectedMovie ? (
+              <Card
+                style={{
+                  alignSelf: 'center',
+                  width: this.vw(50),
+                  height: this.vh(50),
+                  borderRadius: 4,
+                  borderWidth: 2,
+                  borderColor: 'red',
+                  elevation: 4,
+                  margin: 10,
+                }}
+                onPress={() => this.selectMovie()}
+              >
+                <Card.Content>
+                  <Title
+                    numberOfLines={1}
+                    style={{
+                      alignSelf: 'center',
+                      color: 'darkred',
+                    }}
+                    ellipsizeMode="tail"
+                    onPress={e => {
+                      this.props.navigation.navigate('SingleMovie', {
+                        history: true,
+                        movie: dummyMovieData.movie,
+                        image: dummyMovieData.movieImage,
+                      });
+                    }}
+                  >
+                    {this.state.selectedMovie.movie}
+                  </Title>
+                  <Card.Cover
+                    source={{
+                      uri:
+                        'http://developer.tmsimg.com/' +
+                        this.state.selectedMovie.image +
+                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                    }}
+                  />
+
+                  <View style={{ flexDirection: 'row' }}>
+                    <Label style={{ fontSize: 12 }}>Review: {}</Label>
+                    <Text> {this.state.selectedMovie.review}</Text>
+                  </View>
+
+                  <View style={{ flexDirection: 'row' }}>
+                    <Label style={{ fontSize: 12 }}>Rating: {}</Label>
+                    <Text>{this.state.selectedMovie.rating}</Text>
+                  </View>
+
+                  <Paragraph
+                    style={{
+                      fontSize: 10,
+                      color: 'darkred',
+                    }}
+                  >
+                    {this.state.selectedMovie.theatre}
+                    {'\n'}
+                    {this.state.selectedMovie.time}
+                  </Paragraph>
+                </Card.Content>
+              </Card>
+            ) : null}
             <FlatList
               numColumns={2}
               data={this.state.movies}
@@ -170,71 +238,6 @@ export default class HistoryScreen extends Component {
               )}
             />
 
-            {this.state.selectedMovie ? (
-              <Card
-                style={{
-                  alignSelf: 'center',
-                  width: this.vw(75),
-                  height: this.vh(50),
-                  borderRadius: 4,
-                  borderWidth: 2,
-                  borderColor: 'red',
-                  elevation: 4,
-                }}
-              >
-                <Card.Content>
-                  <Title
-                    numberOfLines={1}
-                    style={{
-                      alignSelf: 'center',
-                      color: 'darkred',
-                      width: this.vw(70),
-                    }}
-                    ellipsizeMode="tail"
-                    onPress={e => {
-                      this.props.navigation.navigate('SingleMovie', {
-                        history: true,
-                        movie: dummyMovieData.movie,
-                        image: dummyMovieData.movieImage,
-                      });
-                    }}
-                  >
-                    {this.state.selectedMovie.movie}
-                  </Title>
-                  <Card.Cover
-                    source={{
-                      uri:
-                        'http://developer.tmsimg.com/' +
-                        this.state.selectedMovie.image +
-                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                    }}
-                  />
-
-                  <View style={{ display: 'flex' }}>
-                    <Label style={{ fontSize: 12 }}>
-                      {this.state.selectedMovie.review}
-                    </Label>
-                    {/* <Input /> */}
-                    <View style={{ flexDirection: 'row' }}>
-                      <Label style={{ fontSize: 12 }}>
-                        {this.state.selectedMovie.rating}
-                      </Label>
-                      <Text>☆☆☆☆☆</Text>
-                    </View>
-                    <Paragraph
-                      style={{
-                        fontSize: 10,
-                        color: 'darkred',
-                      }}
-                    >
-                      {this.state.selectedMovie.theatre}
-                      {'\n'}
-                      {this.state.selectedMovie.time}
-                    </Paragraph>
-                  </View>
-                </Card.Content>
-              </Card>
-            ) : null}
             {/* <View flexDirection="row" numColumns={2}>
               {this.state.movies.map(movie => (
 
