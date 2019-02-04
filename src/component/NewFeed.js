@@ -35,10 +35,13 @@ export default class NewFeed extends Component {
 
   render() {
     return (
-      <View style={styles.newPost}>
-        <Input
+      <View
+      // style={styles.newPost}
+      >
+        <Item regular>
+        <Input 
           style={styles.postInput}
-          placeholder='Write something...'
+          placeholder='Share something...'
           onChangeText={text => this.handleInput(text)}
         />
         <Button
@@ -50,28 +53,27 @@ export default class NewFeed extends Component {
             FeedBackEnd.postFeed(this.state)
             this.setState({context: ''})
           }}
-        >
-          <Text>POST</Text>
-        </Button>
+          >
+          <Text style={{color: "indianred"}}>POST</Text> 
+        </Button> 
+      </Item>
     </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  postInput: {
-    marginLeft: 7,
-    fontSize: 17,
-    marginRight: 20,
-    paddingTop: 1,
-    marginBottom: 10,
-    borderColor: 'indianred',
-    borderBottomWidth: 0.5,
-  },
   newPost: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignSelf: 'stretch',
+  },
+  postInput: {
+    fontSize: 10,
+    borderWidth: 0.75,
+    borderColor: 'indianred',
+    marginTop: 5,
+    marginBottom: 5,
+    height: 30
   },
   postBtn: {
     alignSelf: 'flex-end',

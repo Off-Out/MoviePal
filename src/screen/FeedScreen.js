@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Alert, Flatlist, SafeAreaView } from 'react-native';
 import { Container, Header, Title, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 import { Asset, AppLoading } from 'expo';
 import { GiftedChat } from 'react-native-gifted-chat';
 import FeedBackEnd from '../component/FeedBackEnd';
-import ChatNavBar from '../component/ChatNavBar';
 import {auth, database} from '../firebase';
 import NewFeed from '../component/NewFeed';
 import Feed from '../component/Feed';
@@ -19,13 +19,26 @@ export default class FeedScreen extends Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: '🎞 Movie Reel',
+      headerRight: (
+        <Ionicons
+          name="ios-chatbubbles"
+          style={{ marginRight: 10 }}
+          size={24}
+          onPress={() =>
+            navigation.navigate('Chat')
+          }
+        />
+      ),
+    };
+  };
+
   render () {
     console.log(this.state.feeds, "<<<<<feeds")
     return (
       <Container>
-        <Header>
-          <Title>Movie Reel 🎥</Title>
-        </Header>
         <Content>
           {
             this.state.feeds.map(feed => (<Feed key={feed._id} feed={feed} /> )

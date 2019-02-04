@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native'
 import { Chip } from 'react-native-paper'
 import { Container, Header, Title, Content, Card, CardItem, Thumbnail, Text, Input, Button, Icon, Left, Body, Right } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 import FeedBackEnd from './FeedBackEnd';
 import Comment from '../component/Comment'
 import {database} from '../firebase'
@@ -17,7 +18,7 @@ export default class Feed extends Component {
         likes: feed.likes || '',
         comments: [],
       },
-      showComment: 'none',
+      displayComment: false,
       newComment: ''
     }
   }
@@ -38,7 +39,7 @@ export default class Feed extends Component {
         day = timeStamp.getDate();
         month = timeStamp.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ","");
         year = timeStamp.getFullYear() == now.getFullYear() ? "" :  " "+timeStamp.getFullYear();
-        return day + " " + month + year;
+        return month + " " + day + year;
     }
   }
 
@@ -55,10 +56,13 @@ export default class Feed extends Component {
     this.setState({ newComment: text });
   };
 
+  showComment = () => {
+    this.state.displayComment === false ? this.setState({ displayComment: true }): this.setState({ displayComment: false })
+  }
+
   render() {
     const {feed} = this.props;
     const postTime = this.timeSince(feed.createdAt);
-    let display = this.state.showComment
 
     return (
       <Card>
@@ -76,34 +80,31 @@ export default class Feed extends Component {
             onPress={() => FeedBackEnd.likePost(feed._id)}
             >
               <Icon active name="thumbs-up" />
-              <Text style={{paddingLeft: 8}}>{this.state.feed.likes} Likes</Text>
+              <Text style={{paddingLeft: 8, fontSize: 12}}>{this.state.feed.likes} Likes</Text>
             </Button>
             <Button
             style={{paddingTop: 3}}
             transparent
               onPress={() => {
-                if (this.state.showCommment === 'none') {
-                  console.log("pressing COMMENT, none")
-                  console.log(this.state.showComment)
-                  this.setState({showComment: 'flex'})
-                } else {
-                  console.log("pressing COMMENT, flex", this.state.showComment)
-                  this.setState({showComment : 'none'})
-                }
+                this.showComment()
               }}
             >
               <Icon active name="chatbubbles" />
-              <Text style={{paddingLeft: 6, paddingTop: 1}}> 3 Comments</Text>
+              <Text style={{paddingLeft: 6, fontSize:12}}> 3 Comments</Text>
             </Button>
-            <CardItem style={{display}}>
-
-            {/* {this.state.feeds.comments.map(comment => ( */}
+            </Left>
+            <Right>
+            <Text style={{fontSize: 12}}>{postTime}</Text>
+          </Right>
+        </CardItem>
+         { this.state.displayComment ? 
+            <CardItem >
+          {/* {this.state.feeds.comments.map(comment => ( */}
             <Comment 
-            key={this.props.feed._id} feedComments={this.state.feed.comments} feedId={this.props.feed._id}
+            // key={this.props.feed._id} feedComments={this.state.feed.comments} feedId={this.props.feed._id}
             /> 
-            {/* )
-          )} */}
-          {/* <Input
+          {/* ))} */}
+          <Input
           style={styles.postInput}
           placeholder='Share comments...'
           onChangeText={text => this.handleInput(text)}
@@ -114,18 +115,14 @@ export default class Feed extends Component {
           small
           style={styles.postBtn}
           onPress={() => {
-            FeedBackEnd.postComment(this.props.feed._id, this.state.newComment)
+            FeedBackEnd.postComment(this.props.feed._id, this.state.newComment, this)
             this.setState({newComment: ''})
           }}
         >
           <Text>COMMENT</Text>
-        </Button> */}
-            </CardItem>
-            </Left>
-          <Right>
-            <Text style={{fontSize: 12}}>{postTime}</Text>
-          </Right>
-        </CardItem>
+        </Button> 
+            </CardItem> : <View />
+        }
       </Card>
     );
   }

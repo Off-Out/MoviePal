@@ -70,10 +70,11 @@ class FeedBackEnd {
       });
   }
 
-  postComment(key, comment) {
+  postComment(key, comment, userId) {
     // for (let i = 0; i < comment.length; i++) {
       this.feedRef.child(key).push({
-        comments: comment
+        comments: comment,
+        userId: userId
       });
     }
   // }

@@ -4,7 +4,6 @@ import { View, Text, StyleSheet } from 'react-native'
 export default Comment = () => {
   return (
     <View style={{flex: 1, justifyContent: "center"}}>
-    <Text>Comment Page</Text>
     </View>
   )
 }

@@ -24,6 +24,7 @@ class ChatBackEnd {
   setUid(value) {
     this.uid = value;
   }
+  
   getUid() {
     return this.uid;
   }
