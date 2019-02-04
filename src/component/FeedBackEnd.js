@@ -6,17 +6,17 @@ class FeedBackEnd {
   feedRef = null;
 
   constructor() {
-    const user = auth.currentUser
-    console.log(user,'feedbackend user')
+    // const user = auth.currentUser
+    auth.onAuthStateChanged(user => {
       if (user) {
+        console.log(user,'feedbackend user')
         this.setUid(user.uid)
-        .then(() => {
           database.ref(`/users/${user.uid}`).on('value', snapshot => {
           console.log(snapshot.val().name, "WHAT ARE YOU???")
           this.setName(snapshot.val().name);
         });
-      }).catch(error => console.error(error))
-    };
+      };
+    })
   }
 
   setUid(value) {

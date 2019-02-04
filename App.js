@@ -73,15 +73,6 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
-/*   History: {
-    screen: HistoryScreen,
-    navigationOptions: {
-      tabBarLabel: 'HISTORY',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-map" color={tintColor} size={24} />
-      ),
-    },
-  }, */
 
   Trivia: {
     screen: TriviaQuestions,
