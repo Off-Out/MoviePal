@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Dimensions,
   Animated,
+  FlatList,
 } from 'react-native';
 import {
   Container,
@@ -31,10 +32,6 @@ const dummyMovieData = {
   movie: 'Spider-Man: Into the Spider-Verse',
 };
 
-const arr = [];
-for (var i = 0; i < 500; i++) {
-  arr.push(i);
-}
 export default class HistoryScreen extends Component {
   constructor(screenProps) {
     super(screenProps);
@@ -43,54 +40,34 @@ export default class HistoryScreen extends Component {
       movies: [
         {
           movie: 'Spider-Man: Into the Spider-Verse',
-          movieImage: 'assets/p14939602_v_v5_aa.jpg',
+          image: 'assets/p14939602_v_v5_aa.jpg',
           review: 'family fun!',
           rating: '☆☆☆☆☆',
+          theatre: 'AMC 600 North Michigan 9',
+          time: '15:00 on Wed Jan 30 2019',
         },
         {
           movie: 'Glass',
-          movieImage: 'assets/p14087450_v_v6_aa.jpg',
+          image: 'assets/p14087450_v_v6_aa.jpg',
           review: 'absolutely terrifying. no thank you.',
           rating: '☆',
+          theatre: 'Logan Square Theatre',
+          time: '9:00 on Tue Jan 29 2019',
+        },
+        {
+          movie: 'Spider-Man: Into the Spider-Verse',
+          image: 'assets/p14939602_v_v5_aa.jpg',
+          review: 'family fun!',
+          rating: '☆☆☆☆☆',
+          theatre: 'AMC 600 North Michigan 9',
+          time: '15:00 on Wed Jan 30 2019',
         },
       ],
-      selectedMovie: '',
+      selectedMovie: {},
     };
-    this.animatedValue = [];
-    this.state.movies.forEach(value => {
-      this.animatedValue[value.movie] = new Animated.Value(0);
-    });
+    this.selectMovie = this.selectMovie.bind(this);
   }
 
-  // async componentDidMount () {
-  //   const userId = this.props.screenProps
-  //   await database.ref(`users/${userId}`).on('value', snapshot => {
-  //     console.log(snapshot.val())
-  //       this.setState({
-  //         movies: this.state.movies.push(Object.values(snapshot.val().pastMovies))
-  //       })
-  //   })
-  // }
-
-  componentDidMount() {
-    this.animate();
-  }
-
-  animate() {
-    i = 0.01;
-    const animations = arr.map(item => {
-      return Animated.timing(this.animatedValue[item.movieImage], {
-        toValue: {
-          x: Math.random(),
-          y: Math.random(),
-          z: i,
-        },
-        duration: 4000,
-      });
-    });
-    Animated.stagger(5, animations).start();
-    i--;
-  }
   vw(percentageWidth) {
     return Dimensions.get('window').width * (percentageWidth / 100);
   }
@@ -99,8 +76,15 @@ export default class HistoryScreen extends Component {
     return Dimensions.get('window').height * (percentageHeight / 100);
   }
 
+  async selectMovie(movie) {
+    console.log('SELECTED MOVIE ARGS', movie);
+
+    await this.setState({ selectedMovie: movie });
+
+    console.log('SET MOVIE ON STATE', this.state.selectedMovie);
+  }
+
   render() {
-    console.log('what are my movies', this.state.movies);
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1, margin: 10 }}>
@@ -109,10 +93,85 @@ export default class HistoryScreen extends Component {
             🍿MY MOVIES
           </Title>
           {/* </Header> */}
-          <Content padder>
-            {this.state.movies.map(movie => (
+          <Content style={{ flex: 1, margin: 10 }} padder>
+            <FlatList
+              numColumns={2}
+              data={this.state.movies}
+              renderItem={({ item }) => (
+                <Card
+                  key={item.movie}
+                  style={{
+                    alignSelf: 'center',
+                    width: this.vw(40),
+                    height: this.vh(40),
+                    borderRadius: 4,
+                    borderWidth: 2,
+                    borderColor: 'red',
+                    elevation: 4,
+                  }}
+                  onPress={() => this.selectMovie(item)}
+                >
+                  <Card.Content>
+                    {/*      <Title
+                      numberOfLines={1}
+                      style={{
+                        alignSelf: 'center',
+                        color: 'darkred',
+                        width: this.vw(40),
+                      }}
+                      ellipsizeMode="tail"
+                    >
+                      {movie.movie}
+                    </Title> */}
+                    <Card.Cover
+                      source={{
+                        uri:
+                          'http://developer.tmsimg.com/' +
+                          item.image +
+                          '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                      }}
+                    />
+
+                    {/*  <Image
+                      source={{
+                        uri:
+                        'http://developer.tmsimg.com/' +
+                        'assets/p14939602_v_v5_aa.jpg' +
+                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                      }}
+                      style={{ width: '45%', height: '65%' }}
+                    /> */}
+
+                    {/*  <Label style={{ fontSize: 12 }}>Your Review:</Label>
+
+                    <Text numberOfLines={1} ellipsizeMode="tail">
+                      {movie.review}
+                    </Text> */}
+                    <View flexDirection="row">
+                      <Label style={{ fontSize: '10%' }}>Your Rating: {}</Label>
+                      <Text style={{ fontSize: '10%' }}>{item.rating}</Text>
+                    </View>
+
+                    {/*  <Paragraph
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                      style={{
+                        fontSize: 10,
+                        color: 'darkred',
+                      }}
+                    >
+                      {movie.theatre}
+                      {'\n'}
+                      {movie.time}
+                    </Paragraph> */}
+                    <Text style={{ fontSize: '10%' }}>{item.time}</Text>
+                  </Card.Content>
+                </Card>
+              )}
+            />
+
+            {this.state.selectedMovie ? (
               <Card
-                key={movie.movie}
                 style={{
                   alignSelf: 'center',
                   width: this.vw(75),
@@ -140,31 +199,26 @@ export default class HistoryScreen extends Component {
                       });
                     }}
                   >
-                    Spider-Man: Into the Spider-Verse
+                    {this.state.selectedMovie.movie}
                   </Title>
                   <Card.Cover
                     source={{
                       uri:
                         'http://developer.tmsimg.com/' +
-                        'assets/p14939602_v_v5_aa.jpg' +
+                        this.state.selectedMovie.image +
                         '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
                     }}
                   />
 
-                  {/*  <Image
-                      source={{
-                        uri:
-                        'http://developer.tmsimg.com/' +
-                        'assets/p14939602_v_v5_aa.jpg' +
-                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                      }}
-                      style={{ width: '45%', height: '65%' }}
-                    /> */}
                   <View style={{ display: 'flex' }}>
-                    <Label style={{ fontSize: 12 }}>Your Review:</Label>
+                    <Label style={{ fontSize: 12 }}>
+                      {this.state.selectedMovie.review}
+                    </Label>
                     {/* <Input /> */}
                     <View style={{ flexDirection: 'row' }}>
-                      <Label style={{ fontSize: 12 }}>Your Rating: {}</Label>
+                      <Label style={{ fontSize: 12 }}>
+                        {this.state.selectedMovie.rating}
+                      </Label>
                       <Text>☆☆☆☆☆</Text>
                     </View>
                     <Paragraph
@@ -173,13 +227,19 @@ export default class HistoryScreen extends Component {
                         color: 'darkred',
                       }}
                     >
-                      AMC 600 North Michigan 9{'\n'}
-                      15:00 on Wed Jan 30 2019
+                      {this.state.selectedMovie.theatre}
+                      {'\n'}
+                      {this.state.selectedMovie.time}
                     </Paragraph>
                   </View>
                 </Card.Content>
               </Card>
-            ))}
+            ) : null}
+            {/* <View flexDirection="row" numColumns={2}>
+              {this.state.movies.map(movie => (
+
+              ))}
+            </View> */}
           </Content>
         </View>
       </SafeAreaView>
