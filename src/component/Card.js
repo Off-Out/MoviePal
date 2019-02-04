@@ -20,16 +20,14 @@ class EventCard extends React.Component {
 
       ticketURI: '',
     };
+    this.handlePress = this.handlePress.bind(this);
   }
 
   handlePress = selectedTime => {
     const movieShowtime = this.props.navigation
       .getParam('movie', null)
       .showtimes.filter(movie => movie.dateTime.includes(selectedTime));
-    console.log('AFTER PRESSING TIME', movieShowtime);
-    selectedTime = movieShowtime.dateTime.map(
-      show => show.dateTime.split('T')[1]
-    );
+
     this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
   };
 

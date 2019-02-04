@@ -35,9 +35,9 @@ export class MovieScreen extends Component {
     const theaterArray = [];
     showtimes.forEach(theater => theaterArray.push(theater.theatre.id));
     const uniqueTheaters = [...new Set(theaterArray)];
-    //console.log(uniqueTheaters);
 
     this.props.fetchTheaters(uniqueTheaters);
+    console.log('look for this', this.props.theaters);
   };
 
   render() {
@@ -45,8 +45,6 @@ export class MovieScreen extends Component {
     const sortedMovie = movies.sort(function(a, b) {
       return a.releaseDate < b.releaseDate;
     });
-
-    console.log('look for this', this.props.theaters);
 
     return (
       <SafeAreaView style={styles.container}>

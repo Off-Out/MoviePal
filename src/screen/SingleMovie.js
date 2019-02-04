@@ -38,17 +38,6 @@ class SingleEvent extends React.Component {
   async fetchImage() {
     const image = this.props.navigation.getParam('movie');
   }
-  /*  handlePress(selectedTime) {
-    const movieShowtime = this.props.navigation
-      .getParam('movie', null)
-      .showtimes.filter(movie => movie.dateTime.includes(selectedTime));
-    console.log('AFTER PRESSING TIME', movieShowtime);
-    selectedTime = movieShowtime.dateTime.map(
-      show => show.dateTime.split('T')[1]
-    );
-
-    this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
-  } */
 
   goToChatRoom = userId => {
     console.log('go to chat room!');

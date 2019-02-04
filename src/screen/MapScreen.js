@@ -144,6 +144,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { Search } from '../component';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 class MapScreen extends Component {
   constructor(props) {
@@ -177,7 +178,7 @@ class MapScreen extends Component {
   componentDidMount = async () => {
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres?zip=${
-      this.state.zipCode
+        this.state.zipCode
       }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
     this.props.navigation.setParams({
@@ -197,7 +198,7 @@ class MapScreen extends Component {
   handleZipCodeSubmit = async () => {
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres?zip=${
-      this.state.zipCode
+        this.state.zipCode
       }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
     this.setState({
@@ -206,6 +207,7 @@ class MapScreen extends Component {
   };
 
   render() {
+    console.log('look for this', this.props.theaters);
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <MapView
@@ -246,4 +248,17 @@ class MapScreen extends Component {
   }
 }
 
-export default MapScreen;
+const mapStateToProps = state => {
+  return {
+    theater: state.theater,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MapScreen);
