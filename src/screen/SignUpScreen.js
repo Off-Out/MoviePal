@@ -1,18 +1,52 @@
 import React, { Component } from 'react';
-import { View, Image, StyleSheet, Alert } from 'react-native';
-import * as Expo from 'expo';
-import { Form, Item, Label, Input, Button, Text } from 'native-base';
+import {
+  View,
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Image,
+} from 'react-native';
+import { Item, Input, Button, Text } from 'native-base';
+import { RkStyleSheet } from 'react-native-ui-kitten';
+import { scaleVertical } from '../utility/duc';
 import { auth, database } from '../firebase';
 
+const styles = RkStyleSheet.create(() => ({
+  screen: {
+    padding: 16,
+    flex: 1,
+    justifyContent: 'space-around',
+  },
+  image: {
+    marginBottom: 10,
+    height: scaleVertical(77),
+    resizeMode: 'contain',
+  },
+  content: {
+    justifyContent: 'space-between',
+  },
+  item: {
+    marginVertical: 15,
+  },
+  footer: {
+    justifyContent: 'flex-end',
+  },
+  textRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+}));
+
 class SignUpScreen extends Component {
-  constructor() {
-    super();
+  static navigationOptions = {
+    header: null,
+  };
+  constructor(props) {
+    super(props);
     this.state = {
       name: '',
-      location: '',
       email: '',
       password: '',
-      photoUrl: '',
     };
   }
 
@@ -28,7 +62,6 @@ class SignUpScreen extends Component {
       .then(user => {
         database.ref(`users/${user.user.uid}`).set({
           name: this.state.name,
-          location: this.state.location,
           email: this.state.email,
         });
         this.props.navigation.navigate('App', { userId: user.uid });
@@ -37,49 +70,45 @@ class SignUpScreen extends Component {
   };
 
   render() {
-    const { name, email, location, password } = this.state;
     return (
-      <View style={styles.container}>
-        <Text style={styles.header}> WELCOME PAL! </Text>
-        <Form style={styles.form}>
-          <Item floatingLabel style={styles.item}>
-            <Label style={styles.label}>NAME</Label>
+      <KeyboardAvoidingView
+        behavior="padding"
+        enabled
+        style={styles.screen}
+        onStartShouldSetResponder={() => true}
+        onResponderRelease={() => Keyboard.dismiss()}
+      >
+        <View style={{ alignItems: 'center' }}>
+          <Image style={styles.image} source={require('../image/logo.png')} />
+          <Text>Registration</Text>
+        </View>
+
+        <View style={styles.content}>
+          <Item rounded style={styles.item}>
             <Input
-              style={styles.input}
-              autoCapitalize={'none'}
+              placeholder="NAME"
+              autoCapitalize="none"
               autoCorrect={false}
               onChangeText={text => {
                 this.handleNewUserInput('name', text);
               }}
             />
           </Item>
-          <Item floatingLabel style={styles.item}>
-            <Label style={styles.label}>ZIPCODE</Label>
+          <Item rounded style={styles.item}>
             <Input
-              style={styles.input}
-              autoCapitalize={'none'}
-              autoCorrect={false}
-              onChangeText={text => {
-                this.handleNewUserInput('location', text);
-              }}
-            />
-          </Item>
-          <Item floatingLabel style={styles.item}>
-            <Label style={styles.label}>E-MAIL ADDRESS</Label>
-            <Input
-              style={styles.input}
-              autoCapitalize={'none'}
+              placeholder="EMAIL"
+              autoCapitalize="none"
               autoCorrect={false}
               onChangeText={text => {
                 this.handleNewUserInput('email', text);
               }}
             />
           </Item>
-          <Item floatingLabel style={styles.item}>
-            <Label style={styles.label}>CREATE PASSWORD</Label>
+
+          <Item rounded style={styles.item}>
             <Input
-              style={styles.input}
-              autoCapitalize={'none'}
+              placeholder="PASSWORD"
+              autoCapitalize="none"
               autoCorrect={false}
               secureTextEntry={true}
               onChangeText={text => {
@@ -88,57 +117,30 @@ class SignUpScreen extends Component {
             />
           </Item>
           <Button
-            outline
-            danger
-            style={styles.createBtn}
+            style={styles.item}
+            rounded
+            block
+            light
             onPress={() =>
               this.createUserAccount(this.state.email, this.state.password)
             }
           >
             <Text>Join MoviePal</Text>
           </Button>
-        </Form>
-      </View>
+        </View>
+        <View style={styles.textRow}>
+          <Text>Already have an account? </Text>
+
+          <Text
+            onPress={() => this.props.navigation.navigate('LoginScreen')}
+            style={{ color: 'red' }}
+          >
+            Sign in now
+          </Text>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  item: {
-    borderColor: 'transparent',
-  },
-  form: {
-    alignSelf: 'stretch',
-    margin: 25,
-  },
-  input: {
-    fontSize: 17,
-    marginRight: 25,
-    marginBottom: 10,
-    borderColor: 'indianred',
-    borderBottomWidth: 0.5,
-  },
-  label: {
-    fontSize: 12,
-    marginRight: 10,
-  },
-  createBtn: {
-    fontSize: 15,
-    marginTop: 40,
-    alignSelf: 'center',
-  },
-  header: {
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    fontSize: 20,
-    marginTop: 30,
-  },
-});
 
 export default SignUpScreen;

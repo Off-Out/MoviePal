@@ -1,21 +1,57 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { auth } from '../firebase';
+import { Location, Permissions } from 'expo';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { setGeoLocation, setMovies } from '../redux/app-redux';
+
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.verifyAccount();
+    this.state = {
+      loading: true,
+    };
+    //this.verifyAccount();
   }
 
-  // Fetch the token from storage then navigate to our appropriate place
-  verifyAccount = () => {
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
-    //console.log('I am at the AuthLoading Page');
+  getLocationAndMovieAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      console.log('Access denied');
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    const geoLocation = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    };
+    this.props.setGeoLocation(geoLocation);
 
+    const response = await axios.get(
+      `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
+        this.props.date
+      }&lat=${location.coords.latitude}&lng=-${
+        location.coords.longitude
+      }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    );
+
+    this.props.setMovies(response.data);
+    // const { navigation } = this.props;
+    // const userID = navigation.getParam('userId');
+
+    this.setState(
+      {
+        loading: false,
+      },
+      () => {
+        this.props.navigation.navigate('App');
+      }
+    );
+  };
+
+  verifyAccount = () => {
     auth.onAuthStateChanged(async user => {
       if (user) {
-        //console.log('authloading', user)
         this.props.navigation.navigate('App', { userId: user.uid });
       } else {
         this.props.navigation.navigate('Auth');
@@ -23,23 +59,33 @@ class AuthLoadingScreen extends React.Component {
     });
   };
 
-  // Render any loading content that you like here
+  componentDidMount = async () => {
+    await this.getLocationAndMovieAsync();
+  };
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
-        <StatusBar barStyle="default" />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const mapStateToProps = state => {
+  return {
+    date: state.date,
+  };
+};
 
-export default AuthLoadingScreen;
+const mapDispatchToProps = dispatch => {
+  return {
+    setGeoLocation: location => dispatch(setGeoLocation(location)),
+    setMovies: movies => dispatch(setMovies(movies)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthLoadingScreen);

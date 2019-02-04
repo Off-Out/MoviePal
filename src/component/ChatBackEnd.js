@@ -11,10 +11,12 @@ class ChatBackEnd {
       if (user) {
         //console.log('backend testing', user);
         this.setUid(user.uid);
-        await database.ref(`/users/${user.uid}`).on('value', snapshot => {
-          this.setName(snapshot.val().name);
-          this.setChatId(snapshot.val().chatId);
-        });
+        setTimeout(async () => {
+          await database.ref(`/users/${user.uid}`).on('value', snapshot => {
+            this.setName(snapshot.val().name);
+            this.setChatId(snapshot.val().chatId);
+          });
+        }, 2000);
       }
     });
   }

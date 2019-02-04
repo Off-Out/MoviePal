@@ -8,7 +8,7 @@ export { default as LoginScreen } from './LoginScreen';
 export { default as SignUpScreen } from './SignUpScreen';
 export { default as ProfileScreen } from './ProfileScreen';
 export { default as HistoryScreen } from './HistoryScreen';
-export { default as HomeScreen } from './HomeScreen';
+export { default as MovieScreen } from './MovieScreen';
 export { default as ChatScreen } from './ChatScreen';
 export { default as AuthLoadingScreen } from './AuthLoadingScreen';
 export { default as SingleMovie } from './SingleMovie';
