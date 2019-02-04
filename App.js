@@ -32,8 +32,8 @@ const MapStackNavigator = createStackNavigator({
 });
 
 const ProfileStackNavigator = createStackNavigator({
-  Profile: ProfileScreen,
   History: HistoryScreen,
+  Profile: ProfileScreen,
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -51,6 +51,15 @@ const TabNavigator = createBottomTabNavigator({
     screen: MapStackNavigator,
     navigationOptions: {
       tabBarLabel: 'MAP',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-map" color={tintColor} size={24} />
+      ),
+    },
+  },
+  History: {
+    screen: HistoryScreen,
+    navigationOptions: {
+      tabBarLabel: 'HISTORY',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-map" color={tintColor} size={24} />
       ),
