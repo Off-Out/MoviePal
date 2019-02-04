@@ -7,6 +7,7 @@ import {
   Linking,
   ImageBackground,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import { Text, Title, Button, Card, Paragraph } from 'react-native-paper';
 import { EventCard } from '../component';
@@ -150,145 +151,147 @@ class SingleEvent extends React.Component {
                   }}
                   elevation={4}
                 >
-                  <Card.Content>
-                    <Card.Cover
-                      source={{
-                        uri:
-                          'http://developer.tmsimg.com/' +
-                          movie.preferredImage.uri +
-                          '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                      }}
-                    />
+                  <ScrollView>
+                    <Card.Content>
+                      <Card.Cover
+                        source={{
+                          uri:
+                            'http://developer.tmsimg.com/' +
+                            movie.preferredImage.uri +
+                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                        }}
+                      />
 
-                    <Title numberOfLines={2} style={{ alignSelf: 'center' }}>
-                      {movie.title}
-                    </Title>
-                    <Paragraph
-                      style={{ alignSelf: 'center' }}
-                      numberOfLines={3}
-                    >
-                      {movie.genres.join(', ')}
-                      {'   '}
-                      {movie.rating}
-                    </Paragraph>
+                      <Title numberOfLines={2} style={{ alignSelf: 'center' }}>
+                        {movie.title}
+                      </Title>
+                      <Paragraph
+                        style={{ alignSelf: 'center' }}
+                        numberOfLines={3}
+                      >
+                        {movie.genres ? movie.genres.join(', ') : null}
+                        {'   '}
+                        {movie.rating}
+                      </Paragraph>
 
-                    <Paragraph style={{ alignSelf: 'center' }}>
-                      {theatre}
-                    </Paragraph>
-                    <Paragraph
-                      numberOfLines={5}
-                      ellipsizeMode="tail"
-                      style={{}}
-                    >
-                      {movie.shortDescription}
-                    </Paragraph>
-                    {!this.state.selectedTime ? (
-                      <View>
-                        <Title style={{ alignSelf: 'center', marginTop: 10 }}>
-                          Show Times
-                        </Title>
-                        <FlatList
-                          numColumns={2}
-                          data={Showtimes}
-                          renderItem={({ item }) => (
-                            <Button
-                              mode="outlined"
-                              style={{
-                                flexDirection: 'center',
-                                height: 40,
-                                width: 110,
-                                margin: 10,
-                                marginEnd: 10,
-                              }}
-                              key={item}
-                              accessibilityLabel={item}
-                              onPress={() => this.handlePress(item)}
-                            >
-                              {item}
-                            </Button>
-                          )}
-                        />
-                      </View>
-                    ) : (
-                      <View style={{}}>
-                        <Button
-                          onPress={() => this.setState({ selectedTime: '' })}
-                        >
-                          All Showtimes
-                        </Button>
-                        <Card
-                          style={{
-                            alignSelf: 'center',
-                            backgroundColor: 'white',
-                            width: this.vw(40),
-                            height: this.vh(80),
-                            /*  alignItems: 'center', */
-                            margin: 10,
-                          }}
-                          elevation={8}
-                        >
-                          <Card.Content
-                            style={{ alignContent: 'space-around' }}
+                      <Paragraph style={{ alignSelf: 'center' }}>
+                        {theatre}
+                      </Paragraph>
+                      <Paragraph
+                        numberOfLines={5}
+                        ellipsizeMode="tail"
+                        style={{}}
+                      >
+                        {movie.shortDescription}
+                      </Paragraph>
+                      {!this.state.selectedTime ? (
+                        <View>
+                          <Title style={{ alignSelf: 'center', marginTop: 10 }}>
+                            Show Times
+                          </Title>
+                          <FlatList
+                            numColumns={2}
+                            data={Showtimes}
+                            renderItem={({ item }) => (
+                              <Button
+                                mode="outlined"
+                                style={{
+                                  flexDirection: 'center',
+                                  height: 40,
+                                  width: 100,
+                                  margin: 10,
+                                }}
+                                key={item}
+                                accessibilityLabel={item}
+                                onPress={() => this.handlePress(item)}
+                              >
+                                {item}
+                              </Button>
+                            )}
+                          />
+                        </View>
+                      ) : (
+                        <View style={{}}>
+                          <Button
+                            onPress={() => this.setState({ selectedTime: '' })}
                           >
-                            <Button
-                              mode="outlined"
-                              icon="info"
-                              onPress={() =>
-                                this.goToChatRoom(this.props.screenProps)
-                              }
+                            All Showtimes
+                          </Button>
+                          <Card
+                            style={{
+                              alignSelf: 'center',
+                              backgroundColor: 'white',
+                              width: this.vw(40),
+                              height: this.vh(80),
+                              /*  alignItems: 'center', */
+                              margin: 10,
+                            }}
+                            elevation={8}
+                          >
+                            <Card.Content
+                              style={{ alignContent: 'space-around' }}
                             >
-                              Chat!
-                            </Button>
-                            <Button
-                              mode="outlined"
-                              icon="info"
-                              // onPress={() =>
-                              //   this.props.navigation.navigate('Trivia')
-                              // }
-                              onPress={() =>
-                                this.props.navigation.navigate('Trivia')
-                              }
-                            >
-                              Play Trivia!
-                            </Button>
-                          </Card.Content>
-                        </Card>
-                        <Button
-                          onPress={() =>
-                            Alert.alert(
-                              'Choose from one of our partners',
-                              'options below',
-                              [
-                                {
-                                  text: 'Fandango',
-                                  icon: 'movie',
+                              <Button
+                                mode="outlined"
+                                icon="info"
+                                onPress={() =>
+                                  this.goToChatRoom(this.props.screenProps)
+                                }
+                              >
+                                Chat!
+                              </Button>
+                              <Button
+                                mode="outlined"
+                                icon="info"
+                                // onPress={() =>
+                                //   this.props.navigation.navigate('Trivia')
+                                // }
+                                onPress={() =>
+                                  this.props.navigation.navigate('Trivia')
+                                }
+                              >
+                                Play Trivia!
+                              </Button>
+                            </Card.Content>
+                          </Card>
+                          <Button
+                            onPress={() =>
+                              Alert.alert(
+                                'Choose from one of our partners',
+                                'options below',
+                                [
+                                  {
+                                    text: 'Fandango',
+                                    icon: 'movie',
 
-                                  onPress: () =>
-                                    Linking.openURL(this.state.ticketURI),
-                                },
-                                {
-                                  text: 'Atom',
-                                  icon: 'react',
-                                  onPress: () => Linking.openURL('google.com'),
-                                },
-                                {
-                                  text: 'Friendship',
-                                  icon: 'paw',
-                                  onPress: () =>
-                                    navigation.navigate('Home', {
-                                      movie: movie,
-                                    }),
-                                },
-                              ],
-                              { cancelable: true }
-                            )
-                          }
-                        >
-                          Purchase Tickets!
-                        </Button>
-                      </View>
-                    )}
-                  </Card.Content>
+                                    onPress: () =>
+                                      Linking.openURL(this.state.ticketURI),
+                                  },
+                                  {
+                                    text: 'Atom',
+                                    icon: 'react',
+                                    onPress: () =>
+                                      Linking.openURL('google.com'),
+                                  },
+                                  {
+                                    text: 'Friendship',
+                                    icon: 'paw',
+                                    onPress: () =>
+                                      navigation.navigate('Home', {
+                                        movie: movie,
+                                      }),
+                                  },
+                                ],
+                                { cancelable: true }
+                              )
+                            }
+                          >
+                            Purchase Tickets!
+                          </Button>
+                        </View>
+                      )}
+                    </Card.Content>
+                  </ScrollView>
                 </Card>
               </View>
               <View
