@@ -16,12 +16,11 @@ export default class NewFeed extends Component {
       likes: 0
     }
   }
-
-  async componentDidMount() {
-   await this.setState({
+  componentDidMount() {
+    this.setState({
       userId: FeedBackEnd.getUid(),
     });
-    await this.setState({userName: FeedBackEnd.getName()})
+    this.setState({userName: FeedBackEnd.getName()})
   }
 
   handleInput = (text) => {
