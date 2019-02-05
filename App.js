@@ -62,6 +62,16 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
 
+  Feed: {
+    screen: FeedStackNavigator,
+    navigationOptions: {
+      tabBarLabel: 'FEED',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-paper" color={tintColor} size={24} />
+      ),
+    },
+  },
+
   Trivia: {
     screen: TriviaQuestions,
     navigationOptions: {
@@ -80,16 +90,7 @@ const TabNavigator = createBottomTabNavigator({
         <Ionicons name="ios-contact" color={tintColor} size={24} />
       ),
     },
-  },
-  Feed: {
-    screen: FeedStackNavigator,
-    navigationOptions: {
-      tabBarLabel: 'FEED',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-paper" color={tintColor} size={24} />
-      ),
-    },
-  },
+  }
 });
 
 const AuthStack = createStackNavigator(
