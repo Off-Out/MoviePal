@@ -96,7 +96,7 @@ export class MovieScreen extends Component {
               <Input
                 placeholder="ZipCode"
                 onChangeText={text => {
-                  this.handleSearchChange('movieSearch', text);
+                  preZipCode = text;
                 }}
               />
             </Item>
@@ -106,9 +106,10 @@ export class MovieScreen extends Component {
             block
             light
             style={{ marginTop: 5 }}
-            onPress={async () => {
-              await this.setState({ zipCode: preZipCode });
-              await this.zipCodeSubmit();
+            onPress={() => {
+              this.setState({ zipCode: preZipCode }, async () => {
+                await this.zipCodeSubmit();
+              });
             }}
           >
             <Text>Search</Text>
