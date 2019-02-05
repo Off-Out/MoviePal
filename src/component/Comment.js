@@ -14,19 +14,39 @@ export default class Commment extends Component {
       }
     }
 
+    timeSince = (timeStamp) => {
+      let now = new Date(),
+        secondsPast = (now.getTime() - timeStamp.getTime()) / 1000;
+      if(secondsPast < 60){
+        return parseInt(secondsPast) + 's';
+      }
+      if(secondsPast < 3600){
+        return parseInt(secondsPast/60) + 'm';
+      }
+      if(secondsPast <= 86400){
+        return parseInt(secondsPast/3600) + 'h';
+      }
+      if(secondsPast > 86400){
+          day = timeStamp.getDate();
+          month = timeStamp.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ","");
+          year = timeStamp.getFullYear() == now.getFullYear() ? "" :  " "+timeStamp.getFullYear();
+          return month + " " + day + year;
+      }
+    }
 
   async componentDidMount () {
     await database.ref(`/feeds/${this.props.feedId}`).on('value', snapshot => {
-      let comments = Object.values(snapshot.val().feedComments)
+      if (snapshot.val().feedComments) {
+      let comments = Object.values(snapshot.val().feedComments) || [];
       this.setState({
         feedComments: comments,
       })
+    }
     });
     console.log("this.state.feedComments", this.state.feedComments)
   }
 
   render() {
-
     return (
       <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}
           >
@@ -37,6 +57,9 @@ export default class Commment extends Component {
                 <View style={{display: "flex", flexDirection: "row"}}>
                   <Text note>{item.userName + ' '}</Text>
                   <Text>{item.comments}</Text>
+                  <Right>
+                    <Text note>{this.timeSince(item.createdAt)}</Text>
+                  </Right>
                 </View>
               )}
   
