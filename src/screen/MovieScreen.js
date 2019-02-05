@@ -1,49 +1,73 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
-import { Item, Input, Button, Text, Card, CardItem, Body } from 'native-base';
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions
+} from 'react-native';
+import { Item, Input, Button, Text, Body } from 'native-base';
+
+import { material, iOSColors } from 'react-native-typography';
+import { Card, Divider } from 'react-native-paper';
 import { RkStyleSheet } from 'react-native-ui-kitten';
-import { scaleVertical } from '../utility/duc';
+
 import { format } from 'date-fns';
 import { connect } from 'react-redux';
 import { fetchTheaters, fetchMovies } from '../redux/app-redux';
 import { Location } from 'expo';
 
 const styles = RkStyleSheet.create({
-  container: {
-    padding: scaleVertical(10),
-    flex: 1,
-  },
   filter: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   item: {
-    flex: 1,
+    flex: 0.5
+  }
+});
+
+const textStyles = StyleSheet.create({
+  screenHeader: {
+    fontSize: 34,
+    letterSpacing: 5,
+    color: '#aa1919',
+    alignSelf: 'center',
+    marginBottom: 10
   },
-  card: {
-    marginVertical: 8,
+  movieTitle: {
+    color: iOSColors.purple,
+    ...material.robotoWeights,
+    ...material.body2,
+    maxWidth: Dimensions.get('window').width * (45 / 100),
+    letterSpacing: 0.5
   },
-  post: {
-    marginTop: 13,
-  },
+  text: {
+    color: iOSColors.purple,
+    ...material.robotoWeights,
+    ...material.body1,
+    maxWidth: Dimensions.get('window').width * (45 / 100),
+    letterSpacing: 0.5
+  }
 });
 
 export class MovieScreen extends Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
 
   constructor(props) {
     super(props);
     this.state = {
       zipCode: '',
-      movieSearch: '',
+      movieSearch: ''
     };
   }
 
   handleSearchChange = (stateField, text) => {
     this.setState({
-      [stateField]: text,
+      [stateField]: text
     });
   };
 
@@ -53,16 +77,25 @@ export class MovieScreen extends Component {
     this.setState({ zipCode: '' });
   };
 
-  fetchAndNavigate = showtimes => {
+  fetchAndNavigate = (showtimes) => {
     const theaterArray = [];
-    showtimes.forEach(theater => theaterArray.push(theater.theatre.id));
+    showtimes.forEach((theater) => theaterArray.push(theater.theatre.id));
     const uniqueTheaters = [...new Set(theaterArray)];
     this.props.fetchTheaters(uniqueTheaters);
     this.props.navigation.navigate('Map');
   };
 
+  vw(percentageWidth) {
+    return Dimensions.get('window').width * (percentageWidth / 100);
+  }
+
+  vh(percentageHeight) {
+    return Dimensions.get('window').height * (percentageHeight / 100);
+  }
+
   render() {
     let movies = this.props.movies;
+
     if (!this.state.movieSearch && !this.state.zipCode) {
       movies = movies.sort(function(a, b) {
         return a.releaseDate < b.releaseDate;
@@ -71,7 +104,7 @@ export class MovieScreen extends Component {
 
     if (this.state.movieSearch) {
       movies = movies.filter(
-        movie =>
+        (movie) =>
           movie.title
             .toLowerCase()
             .indexOf(this.state.movieSearch.toLowerCase()) !== -1
@@ -81,21 +114,33 @@ export class MovieScreen extends Component {
     let preZipCode = '';
 
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 1, margin: 10 }}>
+          <Text style={textStyles.screenHeader}> ALL MOVIES </Text>
+
           <View style={styles.filter}>
-            <Item rounded style={styles.item}>
+            <Item
+              rounded
+              style={
+                (styles.item, { width: this.vw(47.5), height: this.vh(4) })
+              }
+            >
               <Input
                 placeholder="Movie Search"
-                onChangeText={text => {
+                onChangeText={(text) => {
                   this.handleSearchChange('movieSearch', text);
                 }}
               />
             </Item>
-            <Item rounded style={styles.item}>
+            <Item
+              rounded
+              style={
+                (styles.item, { width: this.vw(47.5), height: this.vh(4) })
+              }
+            >
               <Input
                 placeholder="ZipCode"
-                onChangeText={text => {
+                onChangeText={(text) => {
                   this.handleSearchChange('movieSearch', text);
                 }}
               />
@@ -105,7 +150,11 @@ export class MovieScreen extends Component {
             rounded
             block
             light
-            style={{ marginTop: 5 }}
+            style={{
+              marginTop: 5,
+              width: this.vw(95),
+              height: this.vh(4)
+            }}
             onPress={async () => {
               await this.setState({ zipCode: preZipCode });
               await this.zipCodeSubmit();
@@ -114,24 +163,65 @@ export class MovieScreen extends Component {
             <Text>Search</Text>
           </Button>
           <ScrollView>
-            {movies.map(movie => (
+            {movies.map((movie) => (
               <TouchableOpacity
                 key={movie.tmsId}
                 onPress={() => this.fetchAndNavigate(movie.showtimes)}
               >
-                <Card>
-                  <CardItem header>
-                    <Text>{movie.title}</Text>
-                  </CardItem>
-                  <CardItem>
-                    <Body>
-                      <Text>{movie.shortDescription}</Text>
-                    </Body>
-                  </CardItem>
-                  <CardItem footer style={{ justifyContent: 'space-between' }}>
-                    <Text>{format(movie.releaseDate, 'MM-DD-YYYY')}</Text>
-                    <Text>{movie.audience}</Text>
-                  </CardItem>
+                <Card
+                  style={{
+                    alignContent: 'center',
+                    alignSelf: 'center',
+                    width: this.vw(90),
+                    height: this.vh(30),
+                    borderWidth: 2,
+                    borderColor: '#aa1919',
+                    borderTop: true,
+                    borderBottom: true,
+                    elevation: 4,
+                    margin: 10
+                  }}
+                >
+                  <Card.Content flexDirection="row">
+                    <View
+                      style={{ marginRight: 5, justifyContent: 'space-evenly' }}
+                    >
+                      <Text style={textStyles.movieTitle}>{movie.title}</Text>
+                      <Divider />
+                      <Body>
+                        <Text style={textStyles.text}>
+                          {movie.shortDescription}
+                        </Text>
+                      </Body>
+                      <Divider />
+                      {movie.genres ? (
+                        movie.genres.map((item, i) => (
+                          <Text key={i} style={textStyles.text}>
+                            {item}
+                          </Text>
+                        ))
+                      ) : (
+                        <Text>No genre information</Text>
+                      )}
+
+                      <Text style={textStyles.text}>
+                        {format(movie.releaseDate, 'MM-DD-YYYY')}
+                      </Text>
+                    </View>
+                    <View style={{ width: this.vw(45) }}>
+                      <Card.Cover
+                        style={{
+                          maxWidth: Dimensions.get('window').width * (35 / 100)
+                        }}
+                        source={{
+                          uri:
+                            'http://developer.tmsimg.com/' +
+                            movie.preferredImage.uri +
+                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+                        }}
+                      />
+                    </View>
+                  </Card.Content>
                 </Card>
               </TouchableOpacity>
             ))}
@@ -142,20 +232,19 @@ export class MovieScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    favoriteAnimal: state.favoriteAnimal,
     latitude: state.latitude,
     longitude: state.longitude,
     movies: state.movies,
-    theater: state.theater,
+    theater: state.theater
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)),
-    fetchMovies: (lat, long) => dispatch(fetchMovies(lat, long)),
+    fetchTheaters: (theaterID) => dispatch(fetchTheaters(theaterID)),
+    fetchMovies: (lat, long) => dispatch(fetchMovies(lat, long))
   };
 };
 
