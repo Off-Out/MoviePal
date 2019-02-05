@@ -14,7 +14,6 @@ export { default as AuthLoadingScreen } from './AuthLoadingScreen';
 export { default as SingleMovie } from './SingleMovie';
 export { default as MapScreen } from './MapScreen';
 export { default as SingleTheaterScreen } from './SingleTheaterScreen';
-export { default as FilterScreen } from './FilterScreen';
 export { default as ListScreen } from './ListScreen';
 export { default as FeedScreen } from './FeedScreen';
 export { default as TriviaQuestions } from './TriviaQuestions.js';

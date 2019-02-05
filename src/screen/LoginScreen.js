@@ -6,6 +6,7 @@ import {
   Keyboard,
   Text,
   KeyboardAvoidingView,
+  Dimensions,
 } from 'react-native';
 import { Item, Input, Button } from 'native-base';
 import { RkStyleSheet } from 'react-native-ui-kitten';
@@ -20,7 +21,7 @@ const styles = RkStyleSheet.create(theme => ({
     justifyContent: 'space-between',
   },
   image: {
-    height: scaleVertical(77),
+    height: Dimensions.get('window').height * (25 / 100),
     resizeMode: 'contain',
   },
   header: {
@@ -179,7 +180,6 @@ class LoginScreen extends Component {
       >
         <View style={styles.header}>
           <Image style={styles.image} source={require('../image/logo.png')} />
-          <Text>Movie Pal</Text>
         </View>
         <View style={styles.content}>
           <View>

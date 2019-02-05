@@ -58,7 +58,6 @@ class SingleEvent extends React.Component {
   }
 
   goToChatRoom = userId => {
-    console.log('go to chat room!');
     const { selectedTime } = this.state;
     const theater = this.props.navigation.getParam('theatre');
     const { title } = this.props.navigation.getParam('movie', null);
@@ -104,7 +103,7 @@ class SingleEvent extends React.Component {
             movie: title,
             selectedTime: this.state.selectedTime,
             theater: theater,
-            chatId: chatId
+            chatId: chatId,
           },
         });
       })
