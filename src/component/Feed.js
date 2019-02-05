@@ -63,7 +63,12 @@ export default class Feed extends Component {
 
   render() {
     const {feed} = this.props;
+    console.log(feed, "feedprops")
     const postTime = this.timeSince(feed.createdAt);
+    let comments = '';
+    if (feed.feedComments) {
+      comments = Object.values(feed.feedComments)
+    }
 
     return (
       <Card>
@@ -91,7 +96,7 @@ export default class Feed extends Component {
               }}
             >
               <Icon active name="chatbubbles" />
-              <Text style={{paddingLeft: 6, fontSize:12}}> 3 Comments</Text>
+              <Text style={{paddingLeft: 6, fontSize:12}}>{comments.length} Comments</Text>
             </Button>
             </Left>
             <Right>
@@ -113,8 +118,7 @@ export default class Feed extends Component {
               small
               style={styles.postBtn}
               onPress={() => {
-                FeedBackEnd.postComment(this.props.feed._id, this.state.newComment, this.state.userId, this.state.userName)
-                this.setState({newComment: ''})
+                FeedBackEnd.postComment(this.props.feed._id, this.state.newComment, this.state.userId, this.state.userName);
               }}
               >
               <Text>COMMENT</Text>

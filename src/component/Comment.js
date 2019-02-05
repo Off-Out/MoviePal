@@ -57,15 +57,16 @@ export default class Commment extends Component {
                 <View style={{display: "flex", flexDirection: "row"}}>
                   <Text note>{item.userName + ' '}</Text>
                   <Text>{item.comments}</Text>
-                  <Right>
+                  <Text>{item.createdAt}</Text>
+                  {/* <Right>
                     <Text note>{this.timeSince(item.createdAt)}</Text>
-                  </Right>
+                  </Right> */}
                 </View>
-              )}
-  
+                )
+              }
             />
-          </List>
-    )
+          </List>    
+      )
   }
 }
 

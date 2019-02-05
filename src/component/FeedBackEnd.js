@@ -11,7 +11,7 @@ class FeedBackEnd {
         console.log(user,'feedbackend user')
         this.setUid(user.uid)
           database.ref(`/users/${user.uid}`).on('value', snapshot => {
-          console.log(snapshot.val().name, "WHAT ARE YOU???")
+          console.log(snapshot.val().name, "WHO ARE YOU???")
           this.setName(snapshot.val().name);
         });
       };
@@ -62,7 +62,6 @@ class FeedBackEnd {
       context: feed.context,
       userId: feed.userId,
       userName: feed.userName,
-      comments: feed.comments,
       likes: feed.likes,
       createdAt: firebase.database.ServerValue.TIMESTAMP,
     });
