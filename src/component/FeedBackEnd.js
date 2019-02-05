@@ -6,7 +6,6 @@ class FeedBackEnd {
   feedRef = null;
 
   constructor() {
-    // const user = auth.currentUser
     auth.onAuthStateChanged(user => {
       if (user) {
         console.log(user,'feedbackend user')
@@ -46,7 +45,7 @@ class FeedBackEnd {
       callback({
         _id: data.key,
         context: feed.context,
-        // comments: feed.comments,
+        comments: feed.comments,
         likes: feed.likes,
         createdAt: new Date(feed.createdAt),
         userId: feed.userId,
@@ -71,7 +70,7 @@ class FeedBackEnd {
 
   postComment(key, comment, userId, userName) {
     console.log('PRESSED COMMENT')
-    this.feedRef.child(key).push({
+    this.feedRef.child(`${key}/feedComments`).set({
       comments: comment,
       userId: userId,
       userName: userName
@@ -86,12 +85,6 @@ class FeedBackEnd {
       .transaction((likes) => (likes || 0) + 1)
   }
 
-  // close the connection to the Backend
-  closeChat() {
-    if (this.feedRef) {
-      this.feedRef.off();
-    }
-  }
 }
 
 export default new FeedBackEnd();
