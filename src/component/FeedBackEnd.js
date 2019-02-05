@@ -70,10 +70,11 @@ class FeedBackEnd {
 
   postComment(key, comment, userId, userName) {
     console.log('PRESSED COMMENT')
-    this.feedRef.child(`${key}/feedComments`).set({
+    this.feedRef.child(`${key}/feedComments`).push({
       comments: comment,
       userId: userId,
-      userName: userName
+      userName: userName,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
     })
   }
 

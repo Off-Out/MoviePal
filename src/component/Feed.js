@@ -16,7 +16,6 @@ export default class Feed extends Component {
     this.state = {
       feed: {
         likes: feed.likes || '',
-        feedComments: {},
       },
       displayComment: false,
       newComment: '',
@@ -47,7 +46,6 @@ export default class Feed extends Component {
 
   async componentDidMount () {
     await database.ref(`/feeds/${this.props.feed._id}`).on('value', snapshot => {
-      console.log("comments???", snapshot.val())
       this.setState({feed: {
         likes: snapshot.val().likes,
         feedComments: snapshot.val().feedComments,
@@ -102,19 +100,14 @@ export default class Feed extends Component {
         </CardItem>
          { this.state.displayComment ? (
           <CardItem>
-              <View style={{display: "flex"}}>
-            {/* {
-              this.state.feed.comments.length ? this.state.feed.comments.map(comment => (
-                <Comment comment={comment} feedId={this.props.feed._id} />
-              )) : "No Comments Yet!"
-            } */}
+            <View style={{display: "flex"}}>
+              <Comment feedId={this.props.feed._id}/>
               <Input
               style={styles.postInput}
               placeholder='Share comments...'
               onChangeText={text => this.handleInput(text)}
               />
-            </View>
-            <Button
+              <Button
               primary
               transparent
               small
@@ -123,9 +116,10 @@ export default class Feed extends Component {
                 FeedBackEnd.postComment(this.props.feed._id, this.state.newComment, this.state.userId, this.state.userName)
                 this.setState({newComment: ''})
               }}
-            >
+              >
               <Text>COMMENT</Text>
-            </Button> 
+              </Button> 
+            </View>
           </CardItem> ) : <View />
         }
       </Card>
