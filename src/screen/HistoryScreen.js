@@ -77,6 +77,20 @@ export default class HistoryScreen extends Component {
     this.deselectMovie = this.deselectMovie.bind(this);
   }
 
+  async componentDidMount() {
+    const userId = this.props.screenProps;
+    this.userRef = database.ref(`/users/${userId}`);
+
+    this.callback = snapshot => {
+      let user = snapshot.val();
+    };
+    await this.userRef.on('value', this.callback);
+  }
+
+  componentWillUnmount() {
+    this.userRef.off('value', this.callback);
+  }
+
   vw(percentageWidth) {
     return Dimensions.get('window').width * (percentageWidth / 100);
   }

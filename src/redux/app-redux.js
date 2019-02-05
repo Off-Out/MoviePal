@@ -83,7 +83,7 @@ export const fetchTheaters = theaterID => {
 };
 
 export const fetchNearbyTheaters = (lat, long) => {
-  console.log(' I was here');
+
   return async dispatch => {
     try {
     // const { data: theaters } = await axios.get(

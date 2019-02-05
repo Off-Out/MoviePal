@@ -23,7 +23,7 @@ class UploadPicBackEnd extends React.Component {
     image: null,
     uploading: false,
   };
-  
+
   // render() {
   //   let { image } = this.state;
 
@@ -134,7 +134,6 @@ class UploadPicBackEnd extends React.Component {
   };
 
   _pickImage = async () => {
-    console.log('Click _pickImage!!')
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -155,7 +154,6 @@ class UploadPicBackEnd extends React.Component {
       console.log(e);
       alert('Upload failed, sorry :(');
     }
-
   };
 }
 
