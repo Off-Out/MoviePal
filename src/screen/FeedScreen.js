@@ -67,9 +67,15 @@ export default class FeedScreen extends Component {
     return (
       <Container>
         <Content>
-          {this.state.feeds.map(feed => (
-            <Feed key={feed._id} feed={feed} userId={this.props.screenProps} />
-          ))}
+          {this.state.feeds
+            .map(feed => (
+              <Feed
+                key={feed._id}
+                feed={feed}
+                userId={this.props.screenProps}
+              />
+            ))
+            .reverse()}
         </Content>
         <NewFeed />
       </Container>
