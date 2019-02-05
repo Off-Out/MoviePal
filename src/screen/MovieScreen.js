@@ -149,7 +149,7 @@ const mapStateToProps = state => {
     latitude: state.latitude,
     longitude: state.longitude,
     movies: state.movies,
-    theater: state.theater,
+    theaters: state.theaters,
   };
 };
 
