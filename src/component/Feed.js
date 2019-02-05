@@ -143,7 +143,6 @@ export default class Feed extends Component {
       comments = Object.values(feed.feedComments);
     }
 
-    console.log('FEED', feed.feedComments);
     return (
       <Card>
         <CardItem>
