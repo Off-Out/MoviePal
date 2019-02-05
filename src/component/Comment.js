@@ -21,13 +21,13 @@ export default class Commment extends Component {
 
     this.state = {
       feedComments: [],
-      user: {},
     };
   }
 
   timeSince = timeStamp => {
+    console.log("timeStamp", timeStamp)
     let now = new Date(),
-      secondsPast = (now.getTime() - timeStamp.getTime()) / 1000;
+      secondsPast = (now.getTime() - timeStamp) / 1000;
     if (secondsPast < 60) {
       return parseInt(secondsPast) + 's';
     }
@@ -60,11 +60,10 @@ export default class Commment extends Component {
         });
       }
     });
-    await this.setState({user: this.props.user})
-    console.log(this.state.user, "comment user")
   }
 
   render() {
+    // console.log(this.state.feedComments, "FEEDCOMMENTS")
     return (
       <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
         <FlatList
@@ -73,13 +72,13 @@ export default class Commment extends Component {
           renderItem={({ item }) => (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
           <Left>
-            <Thumbnail small source={ this.state.user.userPhoto ? {uri: this.state.user.userPhoto} :
+            <Thumbnail small source={ item.userPhoto ? {uri: item.userPhoto} :
             require('../image/user-account-icon-13.jpg')
           } />
           </Left>
               <Text note>{item.userName + ' '}</Text>
               <Text>{item.comments}</Text>
-              <Text>{item.createdAt}</Text>
+              <Text>{this.timeSince(item.createdAt)}</Text>
               {/* <Right>
                     <Text note>{this.timeSince(item.createdAt)}</Text>
                   </Right> */}

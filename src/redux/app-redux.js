@@ -67,10 +67,14 @@ export const setZipCode = zipcode => {
 export const fetchTheaters = theaterID => {
   return async dispatch => {
     const theaterInfo = theaterID.map(async id => {
-      const { data: theater } = await axios.get(
-        `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-      );
-      return theater;
+      try{
+        // const { data: theater } = await axios.get(
+        //   `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+        // );
+        // return theater;
+        } catch(error) {
+          console.error(error)
+        }
     });
 
     const theaterDetails = await Promise.all(theaterInfo);
@@ -81,21 +85,28 @@ export const fetchTheaters = theaterID => {
 export const fetchNearbyTheaters = (lat, long) => {
   console.log(' I was here');
   return async dispatch => {
-    const { data: theaters } = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres?lat=${lat}&lng=${long}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-    dispatch(setTheaters(theaters));
+    try {
+    // const { data: theaters } = await axios.get(
+    //   `http://data.tmsapi.com/v1.1/theatres?lat=${lat}&lng=${long}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    // );
+    // dispatch(setTheaters(theaters));
+    } catch(error) {
+      console.error(error)
+    }
   };
 };
 
 export const fetchMovies = (lat, long) => {
   return async dispatch => {
-    const { data: movies } = await axios.get(
-      `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
-        initialState.date
-      }&lat=${lat}&lng=${long}&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-
+    try {
+    //   const { data: movies } = await axios.get(
+    //   `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
+    //     initialState.date
+    //   }&lat=${lat}&lng=${long}&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    // );
+    } catch(error) {
+      console.error(error)
+    }
     dispatch(setMovies(movies));
   };
 };

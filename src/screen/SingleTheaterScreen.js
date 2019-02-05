@@ -39,14 +39,17 @@ export default class SingleTheaterScreen extends Component {
   componentDidMount = async () => {
     const { navigation } = this.props;
     const theatre = navigation.getParam('theatre', null);
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres/${
-        theatre.theatreId
-      }/showings?startDate=${
-        this.state.selectedDate
-      }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-
+    try {
+    //   const response = await axios.get(
+    //   `http://data.tmsapi.com/v1.1/theatres/${
+    //     theatre.theatreId
+    //   }/showings?startDate=${
+    //     this.state.selectedDate
+    //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    // );
+    } catch(error) {
+      console.error(error)
+    }
     this.setState({
       movies: response.data,
     });
@@ -63,14 +66,17 @@ export default class SingleTheaterScreen extends Component {
     });
     const { navigation } = this.props;
     const theatre = navigation.getParam('theatre', null);
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres/${
-        theatre.theatreId
-      }/showings?startDate=${
-        this.state.selectedDate
-      }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-
+    try {
+    //   const response = await axios.get(
+    //   `http://data.tmsapi.com/v1.1/theatres/${
+    //     theatre.theatreId
+    //   }/showings?startDate=${
+    //     this.state.selectedDate
+    //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    // );
+    } catch(error) {
+      console.error(error)
+    }
     this.setState({
       movies: response.data,
     });
