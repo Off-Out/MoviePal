@@ -113,7 +113,7 @@ export default class Commment extends Component {
   render() {
     return (
       <FlatList
-        data={this.state.feedComments}
+        data={this.state.feedComments.reverse()}
         keyExtractor={item => item.createdAt.toString()}
         renderItem={({ item }) => (
           <View>

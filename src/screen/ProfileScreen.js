@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     marginLeft: 7,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   button: {
     ...material.button,
@@ -297,14 +297,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 200,
     alignSelf: 'center',
-    marginTop: 15,
+    marginTop: 10,
   },
   input: {
     marginLeft: 7,
     fontSize: 17,
     marginRight: 20,
-    paddingTop: 1,
-    marginBottom: 10,
     borderColor: 'indianred',
     borderBottomWidth: 0.5,
   },
