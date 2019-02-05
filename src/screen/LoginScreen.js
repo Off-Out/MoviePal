@@ -22,7 +22,6 @@ const styles = RkStyleSheet.create(theme => ({
   },
   image: {
     height: Dimensions.get('window').height * (25 / 100),
-
     resizeMode: 'contain',
   },
   header: {
