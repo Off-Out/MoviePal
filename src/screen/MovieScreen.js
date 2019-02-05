@@ -81,18 +81,16 @@ export class MovieScreen extends Component {
             <Item rounded style={styles.item}>
               <Input
                 placeholder="Movie Search"
-                autoCorrect={false}
                 onChangeText={text => {
-                  this.setState({ movieSearch: text });
+                  this.handleSearchChange('movieSearch', text);
                 }}
               />
             </Item>
             <Item rounded style={styles.item}>
               <Input
                 placeholder="ZipCode"
-                autoCorrect={false}
                 onChangeText={text => {
-                  preZipCode = text;
+                  this.handleSearchChange('movieSearch', text);
                 }}
               />
             </Item>
@@ -149,10 +147,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)),
-    fetchMovies: (lat, long) => dispatch(fetchMovies(lat, long)),
-  };
+  return { fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)) };
 };
 
 export default connect(

@@ -66,12 +66,18 @@ export class ChatScreen extends Component {
     ChatBackEnd.closeChat();
   }
 
-  // componentDidUpdate (prevProps, prevState) {
-  //   if (prevPRops.roomId !== this.props.rommId) {
-  //     // cleanup currentfirebase stuff
-  //     // set up new firebase stuff
-  //   }
-  // }
+  async componentDidUpdate (prevProps, prevState) {
+    if (prevProps.chatId !== this.props.chatId) {
+      await this.setState({messages: []})
+      await ChatBackEnd.loadMessages(message => {
+        this.setState(previousState => {
+          return {
+            messages: GiftedChat.append(previousState.messages, message),
+          };
+        });
+      });
+    }
+  }
 }
 
 const styles = StyleSheet.create({
