@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
-import { Form, Item, Label, Input, Button, Text, Icon } from 'native-base';
+import { StyleSheet, View, TextInput, Image, Alert, TouchableOpacity } from 'react-native';
+import { Form, Item, Label, Input, Button, Text, Icon, Thumbnail } from 'native-base';
 import { Avatar } from 'react-native-elements';
 import { Constants, ImagePicker, Permissions } from 'expo';
 import firebase, { auth, database } from '../firebase';
 import { storage } from 'firebase';
-// import UploadPicBackEnd from '../component/UploadPicBackEnd';
+import uploadImageAsync from '../utility/christina'
+
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -25,17 +26,24 @@ export default class ProfileScreen extends Component {
 
   async componentDidMount() {
     const userId = this.props.screenProps;
+    this.userRef = database.ref(`/users/${userId}`)
     console.log("profilescreen props", this.props)
-    await database.ref(`/users/${userId}`).on('value', snapshot => {
+    this.callback = snapshot => {
       let user = snapshot.val();
       this.setState({
         name: user.name,
         email: user.email,
         location: user.location,
+        photo: user.photo,
       });
-    });
+    }
+    await this.userRef.on('value', this.callback);
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    await Permissions.askAsync(Permissions.CAMERA);
+    // await Permissions.askAsync(Permissions.CAMERA);
+  }
+
+  componentWillUnmount() {
+    this.userRef.off('value', this.callback)
   }
 
   handleInput = (stateField, text) => {
@@ -53,8 +61,7 @@ export default class ProfileScreen extends Component {
   };
 
   save = async userId => {
-    let userRef = await database.ref('users').child(`${userId}`);
-    userRef
+    this.userRef
       .update({
         name: this.state.name,
         email: this.state.email,
@@ -97,42 +104,13 @@ export default class ProfileScreen extends Component {
       this.setState({ uploading: true });
       if (!pickerResult.cancelled) {
         uploadUrl = await uploadImageAsync(pickerResult.uri);
-        this.setState({ photo: uploadUrl });
+        this.userRef.update({ photo: uploadUrl})
       }
     } catch (e) {
       console.log(e);
       alert('Upload failed, sorry :(');
     }
   };
-
-async uploadImageAsync(uri) {
-  // Why are we using XMLHttpRequest? See:
-  // https://github.com/expo/expo/issues/2402#issuecomment-443726662
-  const blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      resolve(xhr.response);
-    };
-    xhr.onerror = function(e) {
-      console.log(e);
-      reject(new TypeError('Network request failed'));
-    };
-    xhr.responseType = 'blob';
-    xhr.open('GET', uri, true);
-    xhr.send(null);
-  });
-
-  const ref = firebase
-    .storage()
-    .ref()
-    .child(uuid.v4());
-  const snapshot = await ref.put(blob);
-
-  // We're done with the blob, close and release it
-  blob.close();
-
-  return await snapshot.ref.getDownloadURL();
-}
 
   render() {
     const userId = this.props.screenProps;
@@ -146,17 +124,24 @@ async uploadImageAsync(uri) {
 
     return (
       <Form style={styles.form}>
-        {/* <Image
-          source={require('../image/user-account-icon-13.jpg')}
-          style={styles.image}
-        /> */}
-        <Avatar
-          size="xlarge"
-          rounded
-          source={{ uri: '../image/user-account-icon-13.jpg'}}
-          showEditButton
-          onEditPress={() => this._pickImage()}
-        />
+        <View style={{display: "flex", justifyContent:"center"}}>
+        <TouchableOpacity onPress={() => this._pickImage()}>
+        <Thumbnail style={styles.image} source={ this.state.photo ? {uri: this.state.photo} :
+            require('../image/user-account-icon-13.jpg')
+          } 
+          />
+          {/* <Button
+          style={{alignSelf: "center"}}
+            small
+            transparent
+            danger
+            onPress={() => this._pickImage()}
+          >
+            <Text>EDIT</Text>
+          </Button> */}
+          </TouchableOpacity>
+          </View>
+        {/* <Image style={styles.image} source={image}/> */}
         <Item stackedLabel style={styles.item}>
           <Label style={styles.label}>NAME</Label>
           <Input
@@ -261,10 +246,11 @@ const styles = StyleSheet.create({
     marginBottom: -5,
   },
   image: {
-    width: 150,
-    height: 150,
+    height: 200,
+    borderRadius: 100,
+    width: 200,
     alignSelf: 'center',
-    marginBottom: 55,
+    marginTop: 15,
   },
   input: {
     marginLeft: 7,
