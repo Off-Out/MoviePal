@@ -28,16 +28,19 @@ class AuthLoadingScreen extends React.Component {
     // console.log('long', geoLocation.longitude);
 
     this.props.setGeoLocation(geoLocation);
+    try {
+      const response = await axios.get(
+        `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
+          this.props.date
+        }&lat=${location.coords.latitude}&lng=${
+          location.coords.longitude
+        }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+      );
 
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
-        this.props.date
-      }&lat=${location.coords.latitude}&lng=${
-        location.coords.longitude
-      }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-
-    this.props.setMovies(response.data);
+      this.props.setMovies(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   verifyAccount = () => {

@@ -24,12 +24,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'react-redux';
 import store from './src/redux/app-redux';
 
-const MapStackNavigator = createStackNavigator({
+/* const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
-});
+}); */
 
 const ProfileStackNavigator = createStackNavigator({
   Profile: ProfileScreen,
@@ -52,7 +52,7 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
 
-  Map: {
+  /* Map: {
     screen: MapStackNavigator,
     navigationOptions: {
       tabBarLabel: 'MAP',
@@ -60,7 +60,7 @@ const TabNavigator = createBottomTabNavigator({
         <Ionicons name="ios-map" color={tintColor} size={24} />
       ),
     },
-  },
+  }, */
 
   Feed: {
     screen: FeedStackNavigator,
@@ -90,7 +90,7 @@ const TabNavigator = createBottomTabNavigator({
         <Ionicons name="ios-contact" color={tintColor} size={24} />
       ),
     },
-  }
+  },
 });
 
 const AuthStack = createStackNavigator(

@@ -43,17 +43,21 @@ export default class Trivia extends Component {
   }
 
   componentDidMount = async () => {
-    const response = await axios.get(
-      // `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
-      //only five questions for demo purposes
-      `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
-    );
-    let quiz = response.data.results;
+    try {
+      const response = await axios.get(
+        // `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
+        //only five questions for demo purposes
+        `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
+      );
+      let quiz = response.data.results;
 
-    // the reason putting data.results is all about the trivia questions data structure which is coming from axios request
-    this.setState({
-      questions: quiz,
-    });
+      // the reason putting data.results is all about the trivia questions data structure which is coming from axios request
+      this.setState({
+        questions: quiz,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   answerQuestion = item => {

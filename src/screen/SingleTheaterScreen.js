@@ -63,6 +63,7 @@ export default class SingleTheaterScreen extends Component {
     });
     const { navigation } = this.props;
     const theatre = navigation.getParam('theatre', null);
+
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres/${
         theatre.theatreId

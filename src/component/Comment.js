@@ -60,8 +60,7 @@ export default class Commment extends Component {
         });
       }
     });
-    await this.setState({user: this.props.user})
-    console.log(this.state.user, "comment user")
+    await this.setState({ user: this.props.user });
   }
 
   render() {
@@ -72,11 +71,16 @@ export default class Commment extends Component {
           keyExtractor={item => item.createdAt.toString()}
           renderItem={({ item }) => (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <Left>
-            <Thumbnail small source={ this.state.user.userPhoto ? {uri: this.state.user.userPhoto} :
-            require('../image/user-account-icon-13.jpg')
-          } />
-          </Left>
+              <Left>
+                <Thumbnail
+                  small
+                  source={
+                    this.state.user.userPhoto
+                      ? { uri: this.state.user.userPhoto }
+                      : require('../image/user-account-icon-13.jpg')
+                  }
+                />
+              </Left>
               <Text note>{item.userName + ' '}</Text>
               <Text>{item.comments}</Text>
               <Text>{item.createdAt}</Text>

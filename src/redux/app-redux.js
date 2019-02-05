@@ -79,7 +79,7 @@ export const fetchTheaters = theaterID => {
 };
 
 export const fetchNearbyTheaters = (lat, long) => {
-  console.log(' I was here');
+
   return async dispatch => {
     const { data: theaters } = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres?lat=${lat}&lng=${long}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`

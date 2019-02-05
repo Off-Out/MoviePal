@@ -52,7 +52,7 @@ export default class ProfileScreen extends Component {
   async componentDidMount() {
     const userId = this.props.screenProps;
     this.userRef = database.ref(`/users/${userId}`);
-    console.log('profilescreen props', this.props);
+
     this.callback = snapshot => {
       let user = snapshot.val();
       this.setState({
