@@ -5,11 +5,23 @@ import {
   TextInput,
   Image,
   Alert,
+  TouchableOpacity,
   SafeAreaView,
+  ScrollView
 } from 'react-native';
-import { Form, Item, Label, Input, Button, Text, Icon } from 'native-base';
+import {
+  Form,
+  Item,
+  Label,
+  Input,
+  Button,
+  Text,
+  Icon,
+  Thumbnail,
+} from 'native-base';
 import { Avatar } from 'react-native-elements';
-import { auth, database } from '../firebase';
+import { Constants, ImagePicker, Permissions } from 'expo';
+import firebase, { auth, database } from '../firebase';
 import { storage } from 'firebase';
 import {
   material,
@@ -19,6 +31,7 @@ import {
   human,
   iOSUIKit,
 } from 'react-native-typography';
+import uploadImageAsync from '../utility/christina';
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -29,16 +42,18 @@ export default class ProfileScreen extends Component {
       email: '',
       location: '',
       password: '',
-      photoUrl: '',
+      photo: '',
+      uploading: '',
       hidePassword: true,
       show: 'SHOW',
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const userId = this.props.screenProps;
+    this.userRef = database.ref(`/users/${userId}`);
     console.log('profilescreen props', this.props);
-    database.ref(`/users/${userId}`).on('value', snapshot => {
+    this.callback = snapshot => {
       let user = snapshot.val();
       this.setState({
         name: user.name,
@@ -46,7 +61,14 @@ export default class ProfileScreen extends Component {
         location: user.location,
         photo: user.photo,
       });
-    });
+    };
+    await this.userRef.on('value', this.callback);
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    // await Permissions.askAsync(Permissions.CAMERA);
+  }
+
+  componentWillUnmount() {
+    this.userRef.off('value', this.callback);
   }
 
   handleInput = (stateField, text) => {
@@ -64,8 +86,7 @@ export default class ProfileScreen extends Component {
   };
 
   save = async userId => {
-    let userRef = await database.ref('users').child(`${userId}`);
-    userRef
+    this.userRef
       .update({
         name: this.state.name,
         email: this.state.email,
@@ -93,8 +114,30 @@ export default class ProfileScreen extends Component {
     }
   };
 
+  _pickImage = async () => {
+    console.log('Click _pickImage!!');
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    this._handleImagePicked(pickerResult);
+  };
+
+  _handleImagePicked = async pickerResult => {
+    try {
+      this.setState({ uploading: true });
+      if (!pickerResult.cancelled) {
+        uploadUrl = await uploadImageAsync(pickerResult.uri);
+        this.userRef.update({ photo: uploadUrl });
+      }
+    } catch (e) {
+      console.log(e);
+      alert('Upload failed, sorry :(');
+    }
+  };
+
   render() {
-    console.log('PHOTO', this.state.photo);
     const userId = this.props.screenProps;
     const { navigation } = this.props;
     let isProvider = false;
@@ -103,100 +146,134 @@ export default class ProfileScreen extends Component {
       isProvider = currentUser.providerData[0].providerId !== 'password';
     }
     let display = isProvider ? 'none' : 'flex';
-    let photo = '../image/' + this.state.photo;
-    console.log(typeof photo, 'photo');
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <Form style={styles.form}>
-          <Image
-            source={require(`../image/user-account-icon-13.jpg`)}
-            style={styles.image}
-          />
-          <Item stackedLabel style={styles.item}>
-            <Label style={styles.label}>NAME</Label>
-            <Input
-              style={styles.input}
-              name="name"
-              value={this.state.name}
-              onChangeText={text => this.handleInput('name', text)}
+      <SafeAreaView style={{ flex: 1 }} scrollable={true}>
+        <ScrollView>
+          <Form style={styles.form}>
+            <Image
+              source={require(`../image/user-account-icon-13.jpg`)}
+              style={styles.image}
             />
-          </Item>
-          <Item stackedLabel style={styles.item}>
-            <Label style={styles.label}>EMAIL</Label>
-            <Input
-              style={styles.input}
-              keyboardType="email-address"
-              name="email"
-              value={this.state.email}
-              onChangeText={text => this.handleInput('email', text)}
-            />
-          </Item>
-          <Item stackedLabel style={[styles.item, { display }]}>
-            <Label style={styles.label}>LOCATION</Label>
-            <Input
-              style={styles.input}
-              keyboardType={'numeric'}
-              name="location"
-              value={this.state.location}
-              onChangeText={text => this.handleInput('location', text)}
-            />
-          </Item>
-          <Item stackedLabel style={[styles.item, { display }]}>
-            <View style={styles.changepw}>
-              <Label style={styles.label}>CHANGE PASSWORD</Label>
+            <View style={{ display: 'flex', justifyContent: 'center' }}>
+              <TouchableOpacity onPress={() => this._pickImage()}>
+                <Thumbnail
+                  style={styles.image}
+                  source={
+                    this.state.photo
+                      ? { uri: this.state.photo }
+                      : require('../image/user-account-icon-13.jpg')
+                  }
+                />
+                {/* <Button
+          style={{alignSelf: "center"}}
+            small
+            transparent
+            danger
+            onPress={() => this._pickImage()}
+          >
+            <Text>EDIT</Text>
+          </Button> */}
+              </TouchableOpacity>
+            </View>
+            {/* <Image style={styles.image} source={image}/> */}
+            <Item stackedLabel style={styles.item}>
+              <Label style={styles.label}>NAME</Label>
+              <Input
+                style={styles.input}
+                name="name"
+                value={this.state.name}
+                onChangeText={text => this.handleInput('name', text)}
+              />
+              <Item stackedLabel style={styles.item}>
+                <Label style={styles.label}>NAME</Label>
+                <Input
+                  style={styles.input}
+                  name="name"
+                  value={this.state.name}
+                  onChangeText={text => this.handleInput('name', text)}
+                />
+              </Item>
+              <Item stackedLabel style={styles.item}>
+                <Label style={styles.label}>EMAIL</Label>
+                <Input
+                  style={styles.input}
+                  keyboardType="email-address"
+                  name="email"
+                  value={this.state.email}
+                  onChangeText={text => this.handleInput('email', text)}
+                />
+              </Item>
+              <Item stackedLabel style={[styles.item, { display }]}>
+                <Label style={styles.label}>LOCATION</Label>
+                <Input
+                  style={styles.input}
+                  keyboardType={'numeric'}
+                  name="location"
+                  value={this.state.location}
+                  onChangeText={text => this.handleInput('location', text)}
+                />
+              </Item>
+              <Item stackedLabel style={[styles.item, { display }]}>
+                <View style={styles.changepw}>
+                  <Label style={styles.label}>CHANGE PASSWORD</Label>
 
+                  <Button
+                    danger
+                    transparent
+                    small
+                    style={styles.showBtn}
+                    onPress={this.showPassword}
+                  >
+                    <Text>{this.state.show}</Text>
+                  </Button>
+                </View>
+                <Input
+                  style={styles.input}
+                  secureTextEntry={this.state.hidePassword}
+                  name="password"
+                  value={this.state.password}
+                  onChangeText={text => this.handleInput('password', text)}
+                />
+              </Item>
               <Button
                 danger
-                transparent
-                small
-                style={styles.showBtn}
-                onPress={this.showPassword}
+                style={[{ margin: 10 }, { marginLeft: 25 }, { display }]}
+                onPress={() => {
+                  this.save(userId);
+                }}
               >
-                <Text>{this.state.show}</Text>
+                <Text>SAVE</Text>
               </Button>
-            </View>
-            <Input
-              style={styles.input}
-              secureTextEntry={this.state.hidePassword}
-              name="password"
-              value={this.state.password}
-              onChangeText={text => this.handleInput('password', text)}
-            />
-          </Item>
-          <Button
-            danger
-            style={[{ margin: 10 }, { marginLeft: 25 }, { display }]}
-            onPress={() => {
-              this.save(userId);
-            }}
-          >
-            <Text>SAVE</Text>
-          </Button>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          >
-            <Button
-              transparent
-              danger
-              style={{ marginLeft: 10 }}
-              onPress={() => this.logout()}
-            >
-              <Text style={styles.button}>LOG OUT</Text>
-            </Button>
-            <Button
-              style={{ marginRight: 15 }}
-              dark
-              transparent
-              onPress={() => {
-                console.log('MY MOVIE HISTORY');
-                navigation.navigate('History');
-              }}
-            >
-              <Text style={styles.button}>🍿MY MOVIES</Text>
-            </Button>
-          </View>
-        </Form>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Button
+                  transparent
+                  danger
+                  style={{ marginLeft: 10 }}
+                  onPress={() => this.logout()}
+                >
+                  <Text style={styles.button}>LOG OUT</Text>
+                </Button>
+                <Button
+                  style={{ marginRight: 15 }}
+                  dark
+                  transparent
+                  onPress={() => {
+                    console.log('MY MOVIE HISTORY');
+                    navigation.navigate('History');
+                  }}
+                >
+                  <Text style={styles.button}>🍿MY MOVIES</Text>
+                </Button>
+              </View>
+            </Item>
+          </Form>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -227,10 +304,11 @@ const styles = StyleSheet.create({
     marginBottom: -5,
   },
   image: {
-    width: 150,
-    height: 150,
+    height: 200,
+    borderRadius: 100,
+    width: 200,
     alignSelf: 'center',
-    marginBottom: 25,
+    marginTop: 15,
   },
   input: {
     marginLeft: 7,

@@ -26,6 +26,7 @@ import {
   Body,
   Right,
 } from 'native-base';
+import { Avatar } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import FeedBackEnd from './FeedBackEnd';
 import Comment from '../component/Comment';
@@ -81,6 +82,7 @@ export default class Feed extends Component {
       newComment: '',
       userId: FeedBackEnd.getUid(),
       userName: FeedBackEnd.getName(),
+      userPhoto: FeedBackEnd.getUserPhoto(),
     };
   }
 
@@ -146,6 +148,11 @@ export default class Feed extends Component {
     return (
       <Card>
         <CardItem>
+          <Left>
+            <Thumbnail small source={ this.state.userPhoto ? {uri: this.state.userPhoto} :
+            require('../image/user-account-icon-13.jpg')
+          } />
+          </Left>
           <View flexDirection="row">
             <Text style={styles.userDetails && { marginRight: 100 }}>
               {feed.userName}{' '}
@@ -184,7 +191,7 @@ export default class Feed extends Component {
         {this.state.displayComment ? (
           <CardItem>
             <View style={{ display: 'flex' }}>
-              <Comment feedId={this.props.feed._id} />
+              <Comment feedId={this.props.feed._id} user={{userId: this.state.userId, userName: this.state.userName, userPhoto: this.state.userPhoto}}/>
               <Input
                 style={styles.postInput}
                 placeholder="Share comments..."
@@ -200,7 +207,8 @@ export default class Feed extends Component {
                     this.props.feed._id,
                     this.state.newComment,
                     this.state.userId,
-                    this.state.userName
+                    this.state.userName,
+                    this.state.userPhoto
                   );
                 }}
               >
