@@ -25,7 +25,6 @@ export default class Commment extends Component {
   }
 
   timeSince = timeStamp => {
-    console.log("timeStamp", timeStamp)
     let now = new Date(),
       secondsPast = (now.getTime() - timeStamp) / 1000;
     if (secondsPast < 60) {
@@ -63,7 +62,6 @@ export default class Commment extends Component {
   }
 
   render() {
-    // console.log(this.state.feedComments, "FEEDCOMMENTS")
     return (
       <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
         <FlatList

@@ -168,9 +168,15 @@ export default class Feed extends Component {
           <Left>
             <Button transparent onPress={() => FeedBackEnd.likePost(feed._id)}>
               <Icon active name="thumbs-up" style={{ color: '#a1320c' }} />
-              <Text style={styles.likesAndComments}>
+              { this.state.feed.likes > 1 ?
+                <Text style={styles.likesAndComments}>
                 {this.state.feed.likes} Likes
               </Text>
+              :
+              <Text style={styles.likesAndComments}>
+                {this.state.feed.likes} Like
+              </Text>
+              }
             </Button>
             <Button
               style={{ paddingTop: 3 }}
@@ -180,9 +186,16 @@ export default class Feed extends Component {
               }}
             >
               <Icon active name="chatbubbles" style={{ color: '#a1320c' }} />
+              {
+                comments.length > 1 ? 
               <Text style={styles.likesAndComments}>
                 {comments.length} Comments
               </Text>
+              : 
+              <Text style={styles.likesAndComments}>
+                {comments.length} Comment
+              </Text>
+              }
             </Button>
           </Left>
           {/*  <Right>
