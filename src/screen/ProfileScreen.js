@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text, Icon } from 'native-base';
-import { Avatar } from 'react-native-elements'
-import { auth, database } from '../firebase';
+import { Avatar } from 'react-native-elements';
+import { Constants, ImagePicker, Permissions } from 'expo';
+import firebase, { auth, database } from '../firebase';
 import { storage } from 'firebase';
+// import UploadPicBackEnd from '../component/UploadPicBackEnd';
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -14,24 +16,26 @@ export default class ProfileScreen extends Component {
       email: '',
       location: '',
       password: '',
-      photoUrl: '',
+      photo: '',
+      uploading: '',
       hidePassword: true,
       show: 'SHOW',
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const userId = this.props.screenProps;
     console.log("profilescreen props", this.props)
-    database.ref(`/users/${userId}`).on('value', snapshot => {
+    await database.ref(`/users/${userId}`).on('value', snapshot => {
       let user = snapshot.val();
       this.setState({
         name: user.name,
         email: user.email,
         location: user.location,
-        photo: user.photo
       });
     });
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    await Permissions.askAsync(Permissions.CAMERA);
   }
 
   handleInput = (stateField, text) => {
@@ -78,8 +82,59 @@ export default class ProfileScreen extends Component {
     }
   };
 
+  _pickImage = async () => {
+    console.log('Click _pickImage!!')
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    this._handleImagePicked(pickerResult);
+  };
+
+  _handleImagePicked = async pickerResult => {
+    try {
+      this.setState({ uploading: true });
+      if (!pickerResult.cancelled) {
+        uploadUrl = await uploadImageAsync(pickerResult.uri);
+        this.setState({ photo: uploadUrl });
+      }
+    } catch (e) {
+      console.log(e);
+      alert('Upload failed, sorry :(');
+    }
+  };
+
+async uploadImageAsync(uri) {
+  // Why are we using XMLHttpRequest? See:
+  // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function(e) {
+      console.log(e);
+      reject(new TypeError('Network request failed'));
+    };
+    xhr.responseType = 'blob';
+    xhr.open('GET', uri, true);
+    xhr.send(null);
+  });
+
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(uuid.v4());
+  const snapshot = await ref.put(blob);
+
+  // We're done with the blob, close and release it
+  blob.close();
+
+  return await snapshot.ref.getDownloadURL();
+}
+
   render() {
-    console.log("PHOTO", this.state.photo)
     const userId = this.props.screenProps;
     const {navigation} = this.props;
     let isProvider = false;
@@ -88,14 +143,19 @@ export default class ProfileScreen extends Component {
       isProvider = currentUser.providerData[0].providerId !== 'password';
     }
     let display = isProvider ? 'none' : 'flex';
-    let photo = '../image/'+this.state.photo;
-    console.log(typeof photo, "photo")
 
     return (
       <Form style={styles.form}>
-        <Image
-          source={require(`../image/user-account-icon-13.jpg`)}
+        {/* <Image
+          source={require('../image/user-account-icon-13.jpg')}
           style={styles.image}
+        /> */}
+        <Avatar
+          size="xlarge"
+          rounded
+          source={{ uri: '../image/user-account-icon-13.jpg'}}
+          showEditButton
+          onEditPress={() => this._pickImage()}
         />
         <Item stackedLabel style={styles.item}>
           <Label style={styles.label}>NAME</Label>
