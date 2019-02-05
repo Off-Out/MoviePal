@@ -141,9 +141,7 @@
 import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-//import { Search } from '../component';
 import { Ionicons } from '@expo/vector-icons';
-import axios from 'axios';
 import { connect } from 'react-redux';
 
 class MapScreen extends Component {
@@ -169,15 +167,7 @@ class MapScreen extends Component {
 
   componentDidMount = async () => {};
 
-  handleZipCodeChange = text => {
-    this.setState({
-      zipCode: text,
-    });
-  };
-
   render() {
-    console.log('where is this data', this.props.theaters);
-
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <MapView

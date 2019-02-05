@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { connect } from 'react-redux';
 import { fetchTheaters, fetchMovies } from '../redux/app-redux';
 import { Location } from 'expo';
+
 const styles = RkStyleSheet.create({
   container: {
     padding: scaleVertical(10),
@@ -40,12 +41,8 @@ export class MovieScreen extends Component {
     };
   }
 
-  componentDidMount = async () => {};
-
   zipCodeSubmit = async () => {
     const result = await Location.geocodeAsync(this.state.zipCode);
-    console.log('lat', result[0].latitude);
-    console.log('lat', result[0].longitude);
     this.props.fetchMovies(result[0].latitude, result[0].longitude);
     this.setState({ zipCode: '' });
   };
@@ -59,17 +56,23 @@ export class MovieScreen extends Component {
   };
 
   render() {
-    const movies = this.props.movies;
-    const sortedMovie = movies.sort(function(a, b) {
-      return a.releaseDate < b.releaseDate;
-    });
+    let movies = this.props.movies;
+    if (!this.state.movieSearch && !this.state.zipCode) {
+      movies = movies.sort(function(a, b) {
+        return a.releaseDate < b.releaseDate;
+      });
+    }
 
-    const searchedMovie = sortedMovie.filter(
-      movie =>
-        movie.title
-          .toLowerCase()
-          .indexOf(this.state.movieSearch.toLowerCase()) !== -1
-    );
+    if (this.state.movieSearch) {
+      movies = movies.filter(
+        movie =>
+          movie.title
+            .toLowerCase()
+            .indexOf(this.state.movieSearch.toLowerCase()) !== -1
+      );
+    }
+
+    let preZipCode = '';
 
     return (
       <SafeAreaView style={styles.container}>
@@ -89,7 +92,7 @@ export class MovieScreen extends Component {
                 placeholder="ZipCode"
                 autoCorrect={false}
                 onChangeText={text => {
-                  this.setState({ zipCode: text });
+                  preZipCode = text;
                 }}
               />
             </Item>
@@ -99,14 +102,15 @@ export class MovieScreen extends Component {
             block
             light
             style={{ marginTop: 5 }}
-            onPress={() => {
-              this.zipCodeSubmit();
+            onPress={async () => {
+              await this.setState({ zipCode: preZipCode });
+              await this.zipCodeSubmit();
             }}
           >
             <Text>Search</Text>
           </Button>
           <ScrollView>
-            {searchedMovie.map(movie => (
+            {movies.map(movie => (
               <TouchableOpacity
                 key={movie.tmsId}
                 onPress={() => this.fetchAndNavigate(movie.showtimes)}
