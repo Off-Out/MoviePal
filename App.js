@@ -72,7 +72,7 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
 
-  Trivia: {
+  /* Trivia: {
     screen: TriviaQuestions,
     navigationOptions: {
       tabBarLabel: 'TRIVIA',
@@ -81,7 +81,7 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
-
+ */
   Profile: {
     screen: ProfileStackNavigator,
     navigationOptions: {

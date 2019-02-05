@@ -1,4 +1,12 @@
 import React, { Component } from 'react';
+import {
+  material,
+  sanFranciscoSpacing,
+  robotoWeights,
+  iOSColors,
+  human,
+  iOSUIKit,
+} from 'react-native-typography';
 import { View, StyleSheet, FlatList } from 'react-native';
 import {
   Container,
@@ -15,6 +23,42 @@ import {
 import { Avatar } from 'react-native-elements';
 import { database } from '../firebase';
 
+const styles = StyleSheet.create({
+  screenHeader: {
+    fontSize: 34,
+
+    letterSpacing: 5,
+    color: '#aa1919',
+    alignSelf: 'center',
+  },
+  feedText: {
+    ...iOSUIKit.title3,
+  },
+  likesAndComments: {
+    color: '#a1320c',
+
+    fontSize: 12,
+  },
+  userDetails: {
+    ...iOSUIKit.caption2Emphasized,
+  },
+  date: {
+    ...material.caption,
+
+    marginLeft: 15,
+    marginBottom: 5,
+    fontStyle: 'italic',
+  },
+  submitButton: {},
+  container: { flex: 1 },
+  hashtags: {},
+  footer: {
+    margin: 0,
+    padding: 0,
+    height: 35,
+  },
+});
+
 export default class Commment extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +69,7 @@ export default class Commment extends Component {
   }
 
   timeSince = timeStamp => {
-    console.log("timeStamp", timeStamp)
+    console.log('timeStamp', timeStamp);
     let now = new Date(),
       secondsPast = (now.getTime() - timeStamp) / 1000;
     if (secondsPast < 60) {
@@ -60,10 +104,6 @@ export default class Commment extends Component {
         });
       }
     });
-<<<<<<< HEAD
-    await this.setState({ user: this.props.user });
-=======
->>>>>>> 972023c8b81211c6e55d4b5a847456c90747a330
   }
 
   render() {
@@ -75,26 +115,22 @@ export default class Commment extends Component {
           keyExtractor={item => item.createdAt.toString()}
           renderItem={({ item }) => (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-<<<<<<< HEAD
               <Left>
                 <Thumbnail
                   small
                   source={
-                    this.state.user.userPhoto
-                      ? { uri: this.state.user.userPhoto }
+                    item.userPhoto
+                      ? { uri: item.userPhoto }
                       : require('../image/user-account-icon-13.jpg')
                   }
                 />
               </Left>
-=======
-          <Left>
-            <Thumbnail small source={ item.userPhoto ? {uri: item.userPhoto} :
-            require('../image/user-account-icon-13.jpg')
-          } />
-          </Left>
->>>>>>> 972023c8b81211c6e55d4b5a847456c90747a330
-              <Text note>{item.userName + ' '}</Text>
-              <Text>{item.comments}</Text>
+              <View style={{ flexDirection: '' }}>
+                <Text style={styles.userDetails} note>
+                  {item.userName + ' '} {'\n'}
+                </Text>
+                <Text> {item.comments}</Text>
+              </View>
               <Text>{this.timeSince(item.createdAt)}</Text>
               {/* <Right>
                     <Text note>{this.timeSince(item.createdAt)}</Text>
@@ -106,9 +142,3 @@ export default class Commment extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  flatview: {
-    flex: 1,
-  },
-});

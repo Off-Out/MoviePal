@@ -40,15 +40,15 @@ export default class SingleTheaterScreen extends Component {
     const { navigation } = this.props;
     const theatre = navigation.getParam('theatre', null);
     try {
-    //   const response = await axios.get(
-    //   `http://data.tmsapi.com/v1.1/theatres/${
-    //     theatre.theatreId
-    //   }/showings?startDate=${
-    //     this.state.selectedDate
-    //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    // );
-    } catch(error) {
-      console.error(error)
+      //   const response = await axios.get(
+      //   `http://data.tmsapi.com/v1.1/theatres/${
+      //     theatre.theatreId
+      //   }/showings?startDate=${
+      //     this.state.selectedDate
+      //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+      // );
+    } catch (error) {
+      console.error(error);
     }
     this.setState({
       movies: response.data,
@@ -66,29 +66,17 @@ export default class SingleTheaterScreen extends Component {
     });
     const { navigation } = this.props;
     const theatre = navigation.getParam('theatre', null);
-<<<<<<< HEAD
-
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres/${
-        theatre.theatreId
-      }/showings?startDate=${
-        this.state.selectedDate
-      }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-
-=======
     try {
-    //   const response = await axios.get(
-    //   `http://data.tmsapi.com/v1.1/theatres/${
-    //     theatre.theatreId
-    //   }/showings?startDate=${
-    //     this.state.selectedDate
-    //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    // );
-    } catch(error) {
-      console.error(error)
+      //   const response = await axios.get(
+      //   `http://data.tmsapi.com/v1.1/theatres/${
+      //     theatre.theatreId
+      //   }/showings?startDate=${
+      //     this.state.selectedDate
+      //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+      // );
+    } catch (error) {
+      console.error(error);
     }
->>>>>>> 972023c8b81211c6e55d4b5a847456c90747a330
     this.setState({
       movies: response.data,
     });
