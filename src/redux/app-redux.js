@@ -62,6 +62,8 @@ export const setZipCode = zipcode => {
 // Thunk Creators
 //
 //
+
+//This fetch is only for a specific theater that is showing a chosen movie
 export const fetchTheaters = theaterID => {
   return async dispatch => {
     const theaterInfo = theaterID.map(async id => {
@@ -73,6 +75,16 @@ export const fetchTheaters = theaterID => {
 
     const theaterDetails = await Promise.all(theaterInfo);
     dispatch(setTheaters(theaterDetails));
+  };
+};
+
+export const fetchNearbyTheaters = (lat, long) => {
+  console.log(' I was here');
+  return async dispatch => {
+    const { data: theaters } = await axios.get(
+      `http://data.tmsapi.com/v1.1/theatres?lat=${lat}&lng=${long}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    );
+    dispatch(setTheaters(theaters));
   };
 };
 
@@ -106,6 +118,7 @@ const reducer = (state = initialState, action) => {
         movies: [...action.movies],
       };
     case SET_THEATERS:
+      //console.log('inside reducer', action.theaters);
       return {
         ...state,
         theaters: action.theaters,
