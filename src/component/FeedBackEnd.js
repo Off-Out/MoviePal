@@ -51,7 +51,7 @@ class FeedBackEnd {
       callback({
         _id: data.key,
         context: feed.context,
-        comments: feed.comments,
+        feedComments: feed.feedComments,
         likes: feed.likes,
         createdAt: new Date(feed.createdAt),
         userId: feed.userId,
