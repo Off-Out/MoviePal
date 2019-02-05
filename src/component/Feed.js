@@ -87,6 +87,7 @@ export default class Feed extends Component {
   }
 
   timeSince = timeStamp => {
+    // console.log("feed timeStamp", timeStamp)
     let now = new Date(),
       secondsPast = (now.getTime() - timeStamp.getTime()) / 1000;
     if (secondsPast < 60) {
@@ -145,12 +146,11 @@ export default class Feed extends Component {
       comments = Object.values(feed.feedComments);
     }
 
-    console.log('FEED', feed.feedComments);
     return (
       <Card>
         <CardItem>
           <Left>
-            <Thumbnail small source={ this.state.userPhoto ? {uri: this.state.userPhoto} :
+            <Thumbnail small source={feed.userPhoto ? {uri: feed.userPhoto} :
             require('../image/user-account-icon-13.jpg')
           } />
           </Left>
@@ -192,7 +192,7 @@ export default class Feed extends Component {
         {this.state.displayComment ? (
           <CardItem>
             <View style={{ display: 'flex' }}>
-              <Comment feedId={this.props.feed._id} user={{userId: this.state.userId, userName: this.state.userName, userPhoto: this.state.userPhoto}}/>
+              <Comment feedId={feed._id} user={{userId: feed.userId, userName: feed.userName, userPhoto: feed.userPhoto}}/>
               <Input
                 style={styles.postInput}
                 placeholder="Share comments..."
