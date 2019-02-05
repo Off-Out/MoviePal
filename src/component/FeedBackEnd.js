@@ -9,14 +9,13 @@ class FeedBackEnd {
     // const user = auth.currentUser
     auth.onAuthStateChanged(user => {
       if (user) {
-        console.log(user,'feedbackend user')
-        this.setUid(user.uid)
-          database.ref(`/users/${user.uid}`).on('value', snapshot => {
-          console.log(snapshot.val().name, "WHAT ARE YOU???")
+        console.log(user, 'feedbackend user');
+        this.setUid(user.uid);
+        database.ref(`/users/${user.uid}`).on('value', snapshot => {
           this.setName(snapshot.val().name);
         });
-      };
-    })
+      }
+    });
   }
 
   setUid(value) {
@@ -37,9 +36,7 @@ class FeedBackEnd {
   // retrieve the feeds from the Backend
   loadFeeds(callback) {
     const today = new Date().toDateString();
-    this.feedRef = database.ref(
-      `/feeds`
-    );
+    this.feedRef = database.ref(`/feeds`);
     this.feedRef.off();
     const onReceive = data => {
       const feed = data.val();
@@ -57,8 +54,8 @@ class FeedBackEnd {
   }
   // send the feed to the Backend
   postFeed(feed) {
-    console.log('post!')
-    console.log("i am posting... ")
+    console.log('post!');
+    console.log('i am posting... ');
     this.feedRef.push({
       context: feed.context,
       userId: feed.userId,
@@ -70,20 +67,21 @@ class FeedBackEnd {
   }
 
   postComment(key, comment, userId, userName) {
-    console.log('PRESSED COMMENT')
+    console.log('PRESSED COMMENT');
     this.feedRef.child(key).push({
       comments: comment,
       userId: userId,
-      userName: userName
-    })
+      userName: userName,
+    });
   }
 
-
   likePost(key) {
-    console.log('PRESSED LIKE')
-    console.log(key)
-    this.feedRef.child(key).child('likes')
-      .transaction((likes) => (likes || 0) + 1)
+    console.log('PRESSED LIKE');
+    console.log(key);
+    this.feedRef
+      .child(key)
+      .child('likes')
+      .transaction(likes => (likes || 0) + 1);
   }
 
   // close the connection to the Backend

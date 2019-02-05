@@ -147,14 +147,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 class MapScreen extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     zipCode: '60606',
-  //     theaters: [],
-  //   };
-  // }
-
   static navigationOptions = ({ navigation }) => {
     const theaters = navigation.getParam('theaters');
 
@@ -175,37 +167,11 @@ class MapScreen extends Component {
     };
   };
 
-  componentDidMount = async () => {
-    // const response = await axios.get(
-    //   `http://data.tmsapi.com/v1.1/theatres?zip=${
-    //     this.state.zipCode
-    //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    // );
-    // this.props.navigation.setParams({
-    //   theaters: response.data,
-    // });
-    // this.setState({
-    //   theaters: response.data,
-    // });
-    // this.setState({
-    //   theaters: this.props.theaters,
-    // });
-  };
+  componentDidMount = async () => {};
 
   handleZipCodeChange = text => {
     this.setState({
       zipCode: text,
-    });
-  };
-
-  handleZipCodeSubmit = async () => {
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres?zip=${
-        this.state.zipCode
-      }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-    this.setState({
-      theaters: response.data,
     });
   };
 

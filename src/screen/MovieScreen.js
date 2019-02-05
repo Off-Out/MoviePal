@@ -5,8 +5,27 @@ import { RkStyleSheet } from 'react-native-ui-kitten';
 import { scaleVertical } from '../utility/duc';
 import { format } from 'date-fns';
 import { connect } from 'react-redux';
-import { fetchTheaters } from '../redux/app-redux';
-import axios from 'axios';
+import { fetchTheaters, fetchMovies } from '../redux/app-redux';
+import { Location } from 'expo';
+const styles = RkStyleSheet.create({
+  container: {
+    padding: scaleVertical(10),
+    flex: 1,
+  },
+  filter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  item: {
+    flex: 1,
+  },
+  card: {
+    marginVertical: 8,
+  },
+  post: {
+    marginTop: 13,
+  },
+});
 
 export class MovieScreen extends Component {
   static navigationOptions = {
@@ -23,13 +42,13 @@ export class MovieScreen extends Component {
 
   componentDidMount = async () => {};
 
-  handleSearchChange = (stateField, text) => {
-    this.setState({
-      [stateField]: text,
-    });
+  zipCodeSubmit = async () => {
+    const result = await Location.geocodeAsync(this.state.zipCode);
+    console.log('lat', result[0].latitude);
+    console.log('lat', result[0].longitude);
+    this.props.fetchMovies(result[0].latitude, result[0].longitude);
+    this.setState({ zipCode: '' });
   };
-
-  zipCodeSubmit = () => {};
 
   fetchAndNavigate = showtimes => {
     const theaterArray = [];
@@ -45,6 +64,13 @@ export class MovieScreen extends Component {
       return a.releaseDate < b.releaseDate;
     });
 
+    const searchedMovie = sortedMovie.filter(
+      movie =>
+        movie.title
+          .toLowerCase()
+          .indexOf(this.state.movieSearch.toLowerCase()) !== -1
+    );
+
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
@@ -52,16 +78,18 @@ export class MovieScreen extends Component {
             <Item rounded style={styles.item}>
               <Input
                 placeholder="Movie Search"
+                autoCorrect={false}
                 onChangeText={text => {
-                  this.handleSearchChange('movieSearch', text);
+                  this.setState({ movieSearch: text });
                 }}
               />
             </Item>
             <Item rounded style={styles.item}>
               <Input
                 placeholder="ZipCode"
+                autoCorrect={false}
                 onChangeText={text => {
-                  this.handleSearchChange('movieSearch', text);
+                  this.setState({ zipCode: text });
                 }}
               />
             </Item>
@@ -78,7 +106,7 @@ export class MovieScreen extends Component {
             <Text>Search</Text>
           </Button>
           <ScrollView>
-            {movies.map(movie => (
+            {searchedMovie.map(movie => (
               <TouchableOpacity
                 key={movie.tmsId}
                 onPress={() => this.fetchAndNavigate(movie.showtimes)}
@@ -106,26 +134,6 @@ export class MovieScreen extends Component {
   }
 }
 
-const styles = RkStyleSheet.create({
-  container: {
-    padding: scaleVertical(10),
-    flex: 1,
-  },
-  filter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  item: {
-    flex: 1,
-  },
-  card: {
-    marginVertical: 8,
-  },
-  post: {
-    marginTop: 13,
-  },
-});
-
 const mapStateToProps = state => {
   return {
     favoriteAnimal: state.favoriteAnimal,
@@ -137,7 +145,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return { fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)) };
+  return {
+    fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)),
+    fetchMovies: (lat, long) => dispatch(fetchMovies(lat, long)),
+  };
 };
 
 export default connect(
