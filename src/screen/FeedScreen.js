@@ -55,7 +55,15 @@ export default class FeedScreen extends Component {
   };
 
   render() {
-    let film = '🎞';
+    /* let hashtags = this.state.feeds.filter(text => {
+      let hash = '';
+      if (text.context.includes('#')) {
+        hash += text.context.slice(text.context.indexOf('#'));
+        return hash;
+      }
+    });
+    console.log('HASHTAGS', hashtags);
+    let film = '🎞'; */
     return (
       <Container>
         <Content>

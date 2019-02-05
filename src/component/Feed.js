@@ -142,11 +142,8 @@ export default class Feed extends Component {
     if (feed.feedComments) {
       comments = Object.values(feed.feedComments);
     }
-    let hashtags = '';
-    if (feed.comments.include('#')) {
-      hashtags = feed.comments.slice(feed.comments.indexOf('#'));
-    }
-    console.log('FEED', hashtags);
+
+    console.log('FEED', feed.feedComments);
     return (
       <Card>
         <CardItem>
