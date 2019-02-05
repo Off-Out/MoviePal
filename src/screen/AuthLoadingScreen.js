@@ -4,7 +4,11 @@ import { auth } from '../firebase';
 import { Location, Permissions } from 'expo';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setGeoLocation, setMovies } from '../redux/app-redux';
+import {
+  setGeoLocation,
+  setMovies,
+  fetchNearbyTheaters,
+} from '../redux/app-redux';
 
 class AuthLoadingScreen extends React.Component {
   getLocationAndMovieAsync = async () => {
@@ -17,6 +21,11 @@ class AuthLoadingScreen extends React.Component {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
+
+    this.props.fetchNearbyTheaters(geoLocation.latitude, geoLocation.longitude);
+    //console.log('fetchNearby', this.props.fetchNearbyTheaters);
+    // console.log('lat', geoLocation.latitude);
+    // console.log('long', geoLocation.longitude);
 
     this.props.setGeoLocation(geoLocation);
 
@@ -65,6 +74,8 @@ const mapDispatchToProps = dispatch => {
   return {
     setGeoLocation: location => dispatch(setGeoLocation(location)),
     setMovies: movies => dispatch(setMovies(movies)),
+    fetchNearbyTheaters: (lat, long) =>
+      dispatch(fetchNearbyTheaters(lat, long)),
   };
 };
 

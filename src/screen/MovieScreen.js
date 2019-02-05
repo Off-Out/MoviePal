@@ -140,8 +140,13 @@ export class MovieScreen extends Component {
             >
               <Input
                 placeholder="ZipCode"
+<<<<<<< HEAD
                 onChangeText={(text) => {
                   this.handleSearchChange('movieSearch', text);
+=======
+                onChangeText={text => {
+                  preZipCode = text;
+>>>>>>> master
                 }}
               />
             </Item>
@@ -150,6 +155,7 @@ export class MovieScreen extends Component {
             rounded
             block
             light
+<<<<<<< HEAD
             style={{
               marginTop: 5,
               width: this.vw(95),
@@ -158,6 +164,13 @@ export class MovieScreen extends Component {
             onPress={async () => {
               await this.setState({ zipCode: preZipCode });
               await this.zipCodeSubmit();
+=======
+            style={{ marginTop: 5 }}
+            onPress={() => {
+              this.setState({ zipCode: preZipCode }, async () => {
+                await this.zipCodeSubmit();
+              });
+>>>>>>> master
             }}
           >
             <Text>Search</Text>
@@ -237,7 +250,11 @@ const mapStateToProps = (state) => {
     latitude: state.latitude,
     longitude: state.longitude,
     movies: state.movies,
+<<<<<<< HEAD
     theater: state.theater
+=======
+    theaters: state.theaters,
+>>>>>>> master
   };
 };
 
