@@ -35,7 +35,7 @@ import Stor from '../store/Stor';
 import { storage } from 'firebase';
 
 const styles = StyleSheet.create({
-  customSize: {
+  screenHeader: {
     fontSize: 34,
 
     letterSpacing: 5,
@@ -48,6 +48,13 @@ const styles = StyleSheet.create({
     ...material.body1,
     maxWidth: Dimensions.get('window').width * (45 / 100),
     letterSpacing: 0.5,
+  },
+  userRatingsAndReviews: {
+    ...material.caption,
+  },
+  theaterDetails: {
+    ...material.caption,
+    color: iOSColors.red,
   },
 });
 
@@ -116,7 +123,7 @@ export default class HistoryScreen extends Component {
         <View style={{ flex: 1, margin: 10 }}>
           <LinearGradient colors={[('ff0100', 'cc0d0c', 0, 0)]} style={{}} />
 
-          <Text style={styles.customSize}> MOVIE HISTORY</Text>
+          <Text style={styles.screenHeader}> MOVIE HISTORY</Text>
           <Divider />
 
           <Content style={{ flex: 1, margin: 10 }} padder>
@@ -170,18 +177,15 @@ export default class HistoryScreen extends Component {
                         flexDirection: 'row',
                       }}
                     >
-                      <Text style={material.caption}>Rating: {}</Text>
-                      <Text style={material.caption}>
+                      <Text style={styles.userRatingsAndReviews}>
+                        Rating: {}
+                      </Text>
+                      <Text style={styles.userRatingsAndReviews}>
                         {this.state.selectedMovie.rating}
                       </Text>
                     </View>
 
-                    <Text
-                      style={{
-                        fontSize: 10,
-                        color: 'red',
-                      }}
-                    >
+                    <Text style={styles.theaterDetails}>
                       {this.state.selectedMovie.theatre}
                       {'\n'}
                       {this.state.selectedMovie.time}
