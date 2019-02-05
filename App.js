@@ -16,8 +16,9 @@ import {
   SignUpScreen,
   SingleTheaterScreen,
   ListScreen,
-  TriviaQuestions,
   SingleMovie,
+  FeedScreen,
+  TriviaQuestions,
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'react-redux';
@@ -32,8 +33,14 @@ const MapStackNavigator = createStackNavigator({
 });
 
 const ProfileStackNavigator = createStackNavigator({
-  History: HistoryScreen,
   Profile: ProfileScreen,
+  History: HistoryScreen,
+});
+
+
+const FeedStackNavigator = createStackNavigator({
+  Feed: FeedScreen,
+  Chat: ChatScreen,
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -56,25 +63,7 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
-/*   History: {
-    screen: HistoryScreen,
-    navigationOptions: {
-      tabBarLabel: 'HISTORY',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-map" color={tintColor} size={24} />
-      ),
-    },
-  }, */
 
-  Chat: {
-    screen: ChatScreen,
-    navigationOptions: {
-      tabBarLabel: 'CHAT',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-chatbubbles" color={tintColor} size={24} />
-      ),
-    },
-  },
   Trivia: {
     screen: TriviaQuestions,
     navigationOptions: {
@@ -86,11 +75,20 @@ const TabNavigator = createBottomTabNavigator({
   },
 
   Profile: {
-    screen: ProfileScreen,
+    screen: ProfileStackNavigator,
     navigationOptions: {
       tabBarLabel: 'PROFILE',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-contact" color={tintColor} size={24} />
+      ),
+    },
+  },
+  Feed: {
+    screen: FeedStackNavigator,
+    navigationOptions: {
+      tabBarLabel: 'FEED',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-paper" color={tintColor} size={24} />
       ),
     },
   },

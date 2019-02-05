@@ -22,6 +22,7 @@ export default class ProfileScreen extends Component {
 
   componentDidMount() {
     const userId = this.props.screenProps;
+    console.log("profilescreen props", this.props)
     database.ref(`/users/${userId}`).on('value', snapshot => {
       let user = snapshot.val();
       this.setState({
@@ -78,6 +79,7 @@ export default class ProfileScreen extends Component {
 
   render() {
     const userId = this.props.screenProps;
+    const {navigation} = this.props;
     let isProvider = false;
     let currentUser = auth.currentUser || {};
     if (currentUser.providerData) {
@@ -163,7 +165,10 @@ export default class ProfileScreen extends Component {
             style={{ marginRight: 15 }}
             dark
             transparent
-            onPress={() => this.props.navigation.navigate('History')}
+            onPress={() => {
+              console.log("MY MOVIE HISTORY")
+              navigation.navigate('History')
+            }}
           >
             <Text style={{ fontWeight: 'bold' }}>🍿MY MOVIES</Text>
           </Button>
