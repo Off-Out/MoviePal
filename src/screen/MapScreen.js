@@ -28,6 +28,7 @@ class MapScreen extends Component {
   componentDidMount = async () => {};
 
   render() {
+    console.log('theaters', this.props.theaters);
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <MapView
