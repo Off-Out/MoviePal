@@ -7,7 +7,7 @@ import {
   Alert,
   TouchableOpacity,
   SafeAreaView,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import {
   Form,
@@ -148,24 +148,23 @@ export default class ProfileScreen extends Component {
     let display = isProvider ? 'none' : 'flex';
 
     return (
-      <SafeAreaView style={{ flex: 1 }} scrollable={true}>
-        <ScrollView>
-          <Form style={styles.form}>
-            <Image
-              source={require(`../image/user-account-icon-13.jpg`)}
-              style={styles.image}
-            />
-            <View style={{ display: 'flex', justifyContent: 'center' }}>
-              <TouchableOpacity onPress={() => this._pickImage()}>
-                <Thumbnail
-                  style={styles.image}
-                  source={
-                    this.state.photo
-                      ? { uri: this.state.photo }
-                      : require('../image/user-account-icon-13.jpg')
-                  }
-                />
-                {/* <Button
+      <ScrollView>
+        <Form style={styles.form}>
+          {/*  <Image
+            source={require(`../image/user-account-icon-13.jpg`)}
+            style={styles.image}
+          /> */}
+          <View style={{ display: 'flex', justifyContent: 'center' }}>
+            <TouchableOpacity onPress={() => this._pickImage()}>
+              <Thumbnail
+                style={styles.image}
+                source={
+                  this.state.photo
+                    ? { uri: this.state.photo }
+                    : require('../image/user-account-icon-13.jpg')
+                }
+              />
+              {/* <Button
           style={{alignSelf: "center"}}
             small
             transparent
@@ -174,107 +173,97 @@ export default class ProfileScreen extends Component {
           >
             <Text>EDIT</Text>
           </Button> */}
-              </TouchableOpacity>
-            </View>
-            {/* <Image style={styles.image} source={image}/> */}
-            <Item stackedLabel style={styles.item}>
-              <Label style={styles.label}>NAME</Label>
-              <Input
-                style={styles.input}
-                name="name"
-                value={this.state.name}
-                onChangeText={text => this.handleInput('name', text)}
-              />
-              <Item stackedLabel style={styles.item}>
-                <Label style={styles.label}>NAME</Label>
-                <Input
-                  style={styles.input}
-                  name="name"
-                  value={this.state.name}
-                  onChangeText={text => this.handleInput('name', text)}
-                />
-              </Item>
-              <Item stackedLabel style={styles.item}>
-                <Label style={styles.label}>EMAIL</Label>
-                <Input
-                  style={styles.input}
-                  keyboardType="email-address"
-                  name="email"
-                  value={this.state.email}
-                  onChangeText={text => this.handleInput('email', text)}
-                />
-              </Item>
-              <Item stackedLabel style={[styles.item, { display }]}>
-                <Label style={styles.label}>LOCATION</Label>
-                <Input
-                  style={styles.input}
-                  keyboardType={'numeric'}
-                  name="location"
-                  value={this.state.location}
-                  onChangeText={text => this.handleInput('location', text)}
-                />
-              </Item>
-              <Item stackedLabel style={[styles.item, { display }]}>
-                <View style={styles.changepw}>
-                  <Label style={styles.label}>CHANGE PASSWORD</Label>
+            </TouchableOpacity>
+          </View>
 
-                  <Button
-                    danger
-                    transparent
-                    small
-                    style={styles.showBtn}
-                    onPress={this.showPassword}
-                  >
-                    <Text>{this.state.show}</Text>
-                  </Button>
-                </View>
-                <Input
-                  style={styles.input}
-                  secureTextEntry={this.state.hidePassword}
-                  name="password"
-                  value={this.state.password}
-                  onChangeText={text => this.handleInput('password', text)}
-                />
-              </Item>
+          <Item stackedLabel style={styles.item}>
+            <Label style={styles.label}>NAME</Label>
+            <Input
+              style={styles.input}
+              name="name"
+              value={this.state.name}
+              onChangeText={text => this.handleInput('name', text)}
+            />
+          </Item>
+          <Item stackedLabel style={styles.item}>
+            <Label style={styles.label}>EMAIL</Label>
+            <Input
+              style={styles.input}
+              keyboardType="email-address"
+              name="email"
+              value={this.state.email}
+              onChangeText={text => this.handleInput('email', text)}
+            />
+          </Item>
+          <Item stackedLabel style={[styles.item, { display }]}>
+            <Label style={styles.label}>LOCATION</Label>
+            <Input
+              style={styles.input}
+              keyboardType={'numeric'}
+              name="location"
+              value={this.state.location}
+              onChangeText={text => this.handleInput('location', text)}
+            />
+          </Item>
+          <Item stackedLabel style={[styles.item, { display }]}>
+            <View style={styles.changepw}>
+              <Label style={styles.label}>CHANGE PASSWORD</Label>
+
               <Button
                 danger
-                style={[{ margin: 10 }, { marginLeft: 25 }, { display }]}
-                onPress={() => {
-                  this.save(userId);
-                }}
+                transparent
+                small
+                style={styles.showBtn}
+                onPress={this.showPassword}
               >
-                <Text>SAVE</Text>
+                <Text>{this.state.show}</Text>
               </Button>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Button
-                  transparent
-                  danger
-                  style={{ marginLeft: 10 }}
-                  onPress={() => this.logout()}
-                >
-                  <Text style={styles.button}>LOG OUT</Text>
-                </Button>
-                <Button
-                  style={{ marginRight: 15 }}
-                  dark
-                  transparent
-                  onPress={() => {
-                    console.log('MY MOVIE HISTORY');
-                    navigation.navigate('History');
-                  }}
-                >
-                  <Text style={styles.button}>🍿MY MOVIES</Text>
-                </Button>
-              </View>
-            </Item>
-          </Form>
-        </ScrollView>
-      </SafeAreaView>
+            </View>
+            <Input
+              style={styles.input}
+              secureTextEntry={this.state.hidePassword}
+              name="password"
+              value={this.state.password}
+              onChangeText={text => this.handleInput('password', text)}
+            />
+          </Item>
+          <Button
+            danger
+            style={[{ margin: 10 }, { marginLeft: 25 }, { display }]}
+            onPress={() => {
+              this.save(userId);
+            }}
+          >
+            <Text>SAVE</Text>
+          </Button>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Button
+              transparent
+              danger
+              style={{ marginLeft: 10 }}
+              onPress={() => this.logout()}
+            >
+              <Text style={styles.button}>LOG OUT</Text>
+            </Button>
+            <Button
+              style={{ marginRight: 15 }}
+              dark
+              transparent
+              onPress={() => {
+                console.log('MY MOVIE HISTORY');
+                navigation.navigate('History');
+              }}
+            >
+              <Text style={styles.button}>🍿MY MOVIES</Text>
+            </Button>
+          </View>
+        </Form>
+      </ScrollView>
     );
   }
 }
