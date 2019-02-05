@@ -19,8 +19,9 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
-export default class SingleTheaterScreen extends Component {
+class SingleTheaterScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: 'Theater Details',
@@ -36,61 +37,31 @@ export default class SingleTheaterScreen extends Component {
     };
   }
 
-  componentDidMount = async () => {
-    const { navigation } = this.props;
-    const theatre = navigation.getParam('theatre', null);
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres/${
-        theatre.theatreId
-      }/showings?startDate=${
-        this.state.selectedDate
-      }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-
-    this.setState({
-      movies: response.data,
-    });
-  };
+  componentDidMount = async () => {};
 
   onSearchTextChange = (stateField, text) => {
     this.setState({
       [stateField]: text,
     });
   };
-  onValueChange2 = async value => {
+  onValueChange2 = value => {
     this.setState({
       selectedDate: value,
-    });
-    const { navigation } = this.props;
-    const theatre = navigation.getParam('theatre', null);
-    const response = await axios.get(
-      `http://data.tmsapi.com/v1.1/theatres/${
-        theatre.theatreId
-      }/showings?startDate=${
-        this.state.selectedDate
-      }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-    );
-
-    this.setState({
-      movies: response.data,
     });
   };
 
   render() {
-    const { navigation } = this.props;
-    const theatre = navigation.getParam('theatre', null);
-    const movies = this.state.movies;
+    const movies = this.props.singleTheaterMovies;
 
     let searchMovie = movies.filter(
       movie =>
         movie.title
           .toLowerCase()
-          .indexOf(this.state.movieSearch.toLowerCase()) !==
-        -1 /* &&
-        movie.genres[0]
-          .toLowerCase()
-          .indexOf(this.state.genreSearch.toLowerCase()) !== -1 */
+          .indexOf(this.state.movieSearch.toLowerCase()) !== -1
     );
+
+    const { navigation } = this.props;
+    const theatre = navigation.getParam('theatre', null);
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -155,12 +126,6 @@ export default class SingleTheaterScreen extends Component {
                       this.onSearchTextChange('movieSearch', text);
                     }}
                   />
-                  <Input
-                    placeholder="Search"
-                    onChangeText={text => {
-                      this.onSearchTextChange('genreSearch', text);
-                    }}
-                  />
                 </View>
               </Body>
             </CardItem>
@@ -179,7 +144,7 @@ export default class SingleTheaterScreen extends Component {
               <TouchableOpacity
                 key={movie.tmsId}
                 onPress={() =>
-                  navigation.navigate('SingleMovie', {
+                  this.props.navigation.navigate('SingleMovie', {
                     movie,
                     theatre: theatre.name,
                   })
@@ -203,3 +168,18 @@ export default class SingleTheaterScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    singleTheaterMovies: state.singleTheaterMovies,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SingleTheaterScreen);

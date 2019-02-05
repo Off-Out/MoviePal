@@ -23,9 +23,6 @@ class AuthLoadingScreen extends React.Component {
     };
 
     this.props.fetchNearbyTheaters(geoLocation.latitude, geoLocation.longitude);
-    //console.log('fetchNearby', this.props.fetchNearbyTheaters);
-    // console.log('lat', geoLocation.latitude);
-    // console.log('long', geoLocation.longitude);
 
     this.props.setGeoLocation(geoLocation);
 

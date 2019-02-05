@@ -13,7 +13,7 @@ const initialState = {
   longitude: null,
   movies: [],
   theaters: [],
-  loading: true,
+  singleTheaterMovies: [],
   userID: null,
   zipCode: null,
   favoriteAnimal: 'dog',
@@ -26,6 +26,7 @@ const SET_GEOLOCATION = 'SET_GEOLOCATION';
 const SET_MOVIES = 'SET_MOVIES';
 const SET_THEATERS = 'SET_THEATERS';
 const SET_ZIPCODE = 'SET_ZIPCODE';
+const SET_SINGLETHEATERMOVIES = 'SET_SINGLETHEATERMOVIES';
 
 //
 // Action Creators
@@ -58,6 +59,13 @@ export const setZipCode = zipcode => {
   };
 };
 
+export const setSingleTheaterMovies = movies => {
+  return {
+    type: SET_SINGLETHEATERMOVIES,
+    movies,
+  };
+};
+
 //
 // Thunk Creators
 //
@@ -79,12 +87,20 @@ export const fetchTheaters = theaterID => {
 };
 
 export const fetchNearbyTheaters = (lat, long) => {
-  console.log(' I was here');
   return async dispatch => {
     const { data: theaters } = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres?lat=${lat}&lng=${long}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
     dispatch(setTheaters(theaters));
+  };
+};
+
+export const fetchSingleTheaterMovies = (theaterId, date) => {
+  return async dispatch => {
+    const { data: movies } = await axios.get(
+      `http://data.tmsapi.com/v1.1/theatres/${theaterId}/showings?startDate=${date}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    );
+    dispatch(setSingleTheaterMovies(movies));
   };
 };
 
@@ -118,10 +134,14 @@ const reducer = (state = initialState, action) => {
         movies: [...action.movies],
       };
     case SET_THEATERS:
-      //console.log('inside reducer', action.theaters);
       return {
         ...state,
         theaters: action.theaters,
+      };
+    case SET_SINGLETHEATERMOVIES:
+      return {
+        ...state,
+        singleTheaterMovies: action.movies,
       };
     default:
       return state;
