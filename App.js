@@ -29,7 +29,6 @@ const MapStackNavigator = createStackNavigator({
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
-  // Trivia: TriviaQuestions
 });
 
 const ProfileStackNavigator = createStackNavigator({

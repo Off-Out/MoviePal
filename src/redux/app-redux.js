@@ -76,6 +76,18 @@ export const fetchTheaters = theaterID => {
   };
 };
 
+export const fetchMovies = (lat, long) => {
+  return async dispatch => {
+    const { data: movies } = await axios.get(
+      `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
+        initialState.date
+      }&lat=${lat}&lng=${long}&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    );
+
+    dispatch(setMovies(movies));
+  };
+};
+
 //
 // Reducer...
 //
