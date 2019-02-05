@@ -102,6 +102,20 @@ export default class HistoryScreen extends Component {
     this.deselectMovie = this.deselectMovie.bind(this);
   }
 
+  async componentDidMount() {
+    const userId = this.props.screenProps;
+    this.userRef = database.ref(`/users/${userId}`);
+
+    this.callback = snapshot => {
+      let user = snapshot.val();
+    };
+    await this.userRef.on('value', this.callback);
+  }
+
+  componentWillUnmount() {
+    this.userRef.off('value', this.callback);
+  }
+
   vw(percentageWidth) {
     return Dimensions.get('window').width * (percentageWidth / 100);
   }
@@ -220,24 +234,10 @@ export default class HistoryScreen extends Component {
                     width: this.vw(40),
                     height: this.vh(40),
 
-                    /* borderRadius: 4, */
-                    /*   borderWidth: 2,
-                    borderColor: 'red', */
                     elevation: 4,
                   }}
                   onPress={() => this.selectMovie(item)}
                 >
-                  {/*      <Title
-                      numberOfLines={1}
-                      style={{
-                        alignSelf: 'center',
-                        color: 'darkred',
-                        width: this.vw(40),
-                      }}
-                      ellipsizeMode="tail"
-                    >
-                      {movie.movie}
-                    </Title> */}
                   <Card.Cover
                     style={{ width: this.vw(40), height: this.vh(40) }}
                     source={{
@@ -247,51 +247,9 @@ export default class HistoryScreen extends Component {
                         '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
                     }}
                   />
-
-                  {/*  <Image
-                      source={{
-                        uri:
-                        'http://developer.tmsimg.com/' +
-                        'assets/p14939602_v_v5_aa.jpg' +
-                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                      }}
-                      style={{ width: '45%', height: '65%' }}
-                    /> */}
-
-                  {/*  <Label style={{ fontSize: 12 }}>Your Review:</Label>
-
-                    <Text numberOfLines={1} ellipsizeMode="tail">
-                      {movie.review}
-                    </Text> */}
-
-                  {/*  <View flexDirection="row">
-                      <Label style={{ fontSize: '10%' }}>Your Rating: {}</Label>
-                      <Text style={{ fontSize: '10%' }}>{item.rating}</Text>
-                    </View> */}
-
-                  {/*  <Paragraph
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
-                      style={{
-                        fontSize: 10,
-                        color: 'darkred',
-                      }}
-                    >
-                      {movie.theatre}
-                      {'\n'}
-                      {movie.time}
-                    </Paragraph> */}
-
-                  {/*  <Text style={{ fontSize: '10%' }}>{item.time}</Text> */}
                 </Card>
               )}
             />
-
-            {/* <View flexDirection="row" numColumns={2}>
-              {this.state.movies.map(movie => (
-
-              ))}
-            </View> */}
           </Content>
         </View>
       </SafeAreaView>

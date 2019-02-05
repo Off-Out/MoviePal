@@ -19,6 +19,14 @@ import {
 import FeedBackEnd from './FeedBackEnd';
 import { database } from '../firebase';
 
+const styles = StyleSheet.create({
+  footer: {
+    margin: 0,
+    padding: 0,
+    height: 35,
+  },
+});
+
 export default class Feed extends Component {
   constructor(props) {
     super(props);
@@ -69,11 +77,8 @@ export default class Feed extends Component {
   }
 
   render() {
-
-
-    const {feed} = this.props;
-    const postTime = this.timeSince(feed.createdAt)
-    
+    const { feed } = this.props;
+    const postTime = this.timeSince(feed.createdAt);
 
     return (
       <Card>
@@ -120,11 +125,3 @@ export default class Feed extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  footer: {
-    margin: 0,
-    padding: 0,
-    height: 35,
-  },
-});
