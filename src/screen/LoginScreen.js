@@ -112,7 +112,6 @@ class LoginScreen extends Component {
             }
             if (!snapshot.exists()) {
               console.log('doesnt exist!');
-
               database.ref(`users/${user.uid}`).set({
                 name: user.providerData[0].displayName,
                 email: user.providerData[0].email,

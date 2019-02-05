@@ -68,6 +68,7 @@ class SingleEvent extends React.Component {
       title.length - 1
     )}`;
     const today = new Date().toDateString();
+    // midnight problem!
     const chatRef = database.ref(`chatroom/${today}/` + chatId);
     const userRef = database.ref('users/' + userId);
 
@@ -103,6 +104,7 @@ class SingleEvent extends React.Component {
             movie: title,
             selectedTime: this.state.selectedTime,
             theater: theater,
+            chatId: chatId
           },
         });
       })
