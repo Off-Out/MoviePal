@@ -42,7 +42,6 @@ class EventCard extends React.Component {
     return prevProps.movie !== this.props.movie;
   }
   render() {
-    console.log('current state', this.state);
     return (
       <SafeAreaView>
         <Card

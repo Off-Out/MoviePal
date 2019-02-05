@@ -41,6 +41,12 @@ export class MovieScreen extends Component {
     };
   }
 
+  handleSearchChange = (stateField, text) => {
+    this.setState({
+      [stateField]: text,
+    });
+  };
+
   zipCodeSubmit = async () => {
     const result = await Location.geocodeAsync(this.state.zipCode);
     this.props.fetchMovies(result[0].latitude, result[0].longitude);
@@ -147,7 +153,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return { fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)) };
+  return {
+    fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)),
+    fetchMovies: (lat, long) => dispatch(fetchMovies(lat, long)),
+  };
 };
 
 export default connect(

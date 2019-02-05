@@ -43,7 +43,6 @@ class LoginForm extends Component {
               style={{ alignSelf: 'center' }}
               onPress={() => {
                 if (!credential.email) {
-                  console.log('here');
                   Alert.alert('Please enter your email');
                 } else {
                   auth
@@ -97,7 +96,6 @@ class LoginForm extends Component {
           <TouchableOpacity
             onPress={() => {
               if (!credential.email) {
-                console.log('here');
                 Alert.alert('Please enter your email');
               } else {
                 auth

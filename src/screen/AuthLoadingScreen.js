@@ -23,7 +23,7 @@ class AuthLoadingScreen extends React.Component {
     const response = await axios.get(
       `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
         this.props.date
-      }&lat=${location.coords.latitude}&lng=-${
+      }&lat=${location.coords.latitude}&lng=${
         location.coords.longitude
       }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );

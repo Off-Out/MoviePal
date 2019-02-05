@@ -90,7 +90,7 @@ export default class Feed extends Component {
 
   render() {
     const { feed } = this.props;
-    console.log(feed, 'feedprops');
+
     const postTime = this.timeSince(feed.createdAt);
     let comments = '';
     if (feed.feedComments) {

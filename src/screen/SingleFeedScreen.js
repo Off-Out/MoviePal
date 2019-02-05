@@ -49,7 +49,7 @@ export default class Feed extends Component {
   render() {
     const {feed} = this.props;
     const postTime = this.timeSince(feed.createdAt)
-    console.log("feedProps", feed);
+    
     return (
       <Card>
         <CardItem>
