@@ -226,7 +226,7 @@ export default class Trivia extends Component {
         <SafeAreaView style={{ flex: 1 }}>
           <ImageBackground
             resizeMode="cover"
-            source={require('../image/questionPic.jpg')}
+            source={require('../image/popcorn.jpg')}
             style={{ width: '100%', height: '100%' }}
           >
             <View
