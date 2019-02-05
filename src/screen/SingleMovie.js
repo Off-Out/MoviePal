@@ -104,6 +104,7 @@ class SingleEvent extends React.Component {
             movie: title,
             selectedTime: this.state.selectedTime,
             theater: theater,
+            chatId: chatId
           },
         });
       })

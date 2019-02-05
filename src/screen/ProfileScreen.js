@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
 import { Form, Item, Label, Input, Button, Text, Icon } from 'native-base';
+import { Avatar } from 'react-native-elements'
 import { auth, database } from '../firebase';
-import Stor from '../store/Stor';
 import { storage } from 'firebase';
 
 export default class ProfileScreen extends Component {
@@ -29,6 +29,7 @@ export default class ProfileScreen extends Component {
         name: user.name,
         email: user.email,
         location: user.location,
+        photo: user.photo
       });
     });
   }
@@ -78,6 +79,7 @@ export default class ProfileScreen extends Component {
   };
 
   render() {
+    console.log("PHOTO", this.state.photo)
     const userId = this.props.screenProps;
     const {navigation} = this.props;
     let isProvider = false;
@@ -86,11 +88,13 @@ export default class ProfileScreen extends Component {
       isProvider = currentUser.providerData[0].providerId !== 'password';
     }
     let display = isProvider ? 'none' : 'flex';
+    let photo = '../image/'+this.state.photo;
+    console.log(typeof photo, "photo")
 
     return (
       <Form style={styles.form}>
         <Image
-          source={require('../image/user-account-icon-13.jpg')}
+          source={require(`../image/user-account-icon-13.jpg`)}
           style={styles.image}
         />
         <Item stackedLabel style={styles.item}>

@@ -16,7 +16,6 @@ export default class Feed extends Component {
     this.state = {
       feed: {
         likes: feed.likes || '',
-        comments: [],
       },
       displayComment: false,
       newComment: '',
@@ -45,11 +44,11 @@ export default class Feed extends Component {
     }
   }
 
-  componentDidMount () {
-    database.ref(`/feeds/${this.props.feed._id}`).on('value', snapshot => {
+  async componentDidMount () {
+    await database.ref(`/feeds/${this.props.feed._id}`).on('value', snapshot => {
       this.setState({feed: {
         likes: snapshot.val().likes,
-        comments: snapshot.val().comments,
+        feedComments: snapshot.val().feedComments,
       } })
     });
   }
@@ -64,7 +63,12 @@ export default class Feed extends Component {
 
   render() {
     const {feed} = this.props;
+    console.log(feed, "feedprops")
     const postTime = this.timeSince(feed.createdAt);
+    let comments = '';
+    if (feed.feedComments) {
+      comments = Object.values(feed.feedComments)
+    }
 
     return (
       <Card>
@@ -92,38 +96,35 @@ export default class Feed extends Component {
               }}
             >
               <Icon active name="chatbubbles" />
-              <Text style={{paddingLeft: 6, fontSize:12}}> 3 Comments</Text>
+              <Text style={{paddingLeft: 6, fontSize:12}}>{comments.length} Comments</Text>
             </Button>
             </Left>
             <Right>
             <Text style={{fontSize: 12}}>{postTime}</Text>
           </Right>
         </CardItem>
-         { this.state.displayComment ? 
-            <CardItem >
-          {/* {this.state.feeds.comments.map(comment => ( */}
-            <Comment 
-            // key={this.props.feed._id} feedComments={this.state.feed.comments} feedId={this.props.feed._id}
-            /> 
-          {/* ))} */}
-          <Input
-          style={styles.postInput}
-          placeholder='Share comments...'
-          onChangeText={text => this.handleInput(text)}
-        />
-        <Button
-          primary
-          transparent
-          small
-          style={styles.postBtn}
-          onPress={() => {
-            FeedBackEnd.postComment(this.props.feed._id, this.state.newComment, this.state.userId, this.state.userName)
-            this.setState({newComment: ''})
-          }}
-        >
-          <Text>COMMENT</Text>
-        </Button> 
-            </CardItem> : <View />
+         { this.state.displayComment ? (
+          <CardItem>
+            <View style={{display: "flex"}}>
+              <Comment feedId={this.props.feed._id}/>
+              <Input
+              style={styles.postInput}
+              placeholder='Share comments...'
+              onChangeText={text => this.handleInput(text)}
+              />
+              <Button
+              primary
+              transparent
+              small
+              style={styles.postBtn}
+              onPress={() => {
+                FeedBackEnd.postComment(this.props.feed._id, this.state.newComment, this.state.userId, this.state.userName);
+              }}
+              >
+              <Text>COMMENT</Text>
+              </Button> 
+            </View>
+          </CardItem> ) : <View />
         }
       </Card>
     );

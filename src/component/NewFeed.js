@@ -12,7 +12,6 @@ export default class NewFeed extends Component {
       userId:'',
       userName: '',
       context: '',
-      comments: [],
       likes: 0
     }
   }
@@ -47,7 +46,6 @@ export default class NewFeed extends Component {
           style={styles.postBtn}
           onPress={() => {
             FeedBackEnd.postFeed(this.state)
-            this.setState({context: ''})
           }}
           >
           <Text style={{color: "indianred"}}>POST</Text> 
