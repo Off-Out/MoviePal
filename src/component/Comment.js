@@ -77,9 +77,6 @@ export default class Commment extends Component {
               <Text note>{item.userName + ' '}</Text>
               <Text>{item.comments}</Text>
               <Text>{this.timeSince(item.createdAt)}</Text>
-              {/* <Right>
-                    <Text note>{this.timeSince(item.createdAt)}</Text>
-                  </Right> */}
             </View>
           )}
         />

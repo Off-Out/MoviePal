@@ -68,32 +68,7 @@ export default class HistoryScreen extends Component {
     super(screenProps);
 
     this.state = {
-      movies: [
-        {
-          movie: 'Spider-Man: Into the Spider-Verse',
-          image: 'assets/p14939602_v_v5_aa.jpg',
-          review: 'family fun!',
-          rating: '☆☆☆☆☆',
-          theatre: 'AMC 600 North Michigan 9',
-          time: '15:00 on Wed Jan 30 2019',
-        },
-        {
-          movie: 'Glass',
-          image: 'assets/p14087450_v_v6_aa.jpg',
-          review: 'terrifying',
-          rating: '☆',
-          theatre: 'Logan Square Theatre',
-          time: '9:00 on Tue Jan 29 2019',
-        },
-        {
-          movie: 'Spider-Man: Into the Spider-Verse',
-          image: 'assets/p14939602_v_v5_aa.jpg',
-          review: 'family fun!',
-          rating: '☆☆☆☆☆',
-          theatre: 'AMC 600 North Michigan 9',
-          time: '15:00 on Wed Jan 30 2019',
-        },
-      ],
+      pastMovies: {},
       selectedMovie: '',
     };
     this.vw = this.vw.bind(this);
@@ -110,14 +85,33 @@ export default class HistoryScreen extends Component {
     return Dimensions.get('window').height * (percentageHeight / 100);
   }
 
-  async selectMovie(movie) {
-    await this.setState({ selectedMovie: movie });
+  async componentDidMount() {
+    const userId = this.props.screenProps;
+    this.userHistRef = await database.ref(`/users/${userId}/pastMovies`)
+    this.callback = snapshot => {
+      let pastMovies = snapshot.val();
+      this.setState({
+        pastMovies
+      });
+    }
+    await this.userHistRef.on('value', this.callback);
   }
-  async deselectMovie() {
-    await this.setState({ selectedMovie: '' });
+
+  componentWillUnmount() {
+    this.userHistRef.off('value', this.callback)
+  }
+
+  selectMovie(movie) {
+   this.setState({ selectedMovie: movie });
+  }
+
+  deselectMovie() {
+    this.setState({ selectedMovie: '' });
   }
 
   render() {
+    console.log(this.state.pastMovies, 
+      "History pastMovies state")
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1, margin: 10 }}>
@@ -209,7 +203,7 @@ export default class HistoryScreen extends Component {
             ) : null}
             <FlatList
               numColumns={2}
-              data={this.state.movies}
+              data={this.state.pastMovies}
               renderItem={({ item }) => (
                 <Card
                   key={item.movie}
@@ -219,79 +213,22 @@ export default class HistoryScreen extends Component {
                     marginBottom: 10,
                     width: this.vw(40),
                     height: this.vh(40),
-
-                    /* borderRadius: 4, */
-                    /*   borderWidth: 2,
-                    borderColor: 'red', */
                     elevation: 4,
                   }}
                   onPress={() => this.selectMovie(item)}
                 >
-                  {/*      <Title
-                      numberOfLines={1}
-                      style={{
-                        alignSelf: 'center',
-                        color: 'darkred',
-                        width: this.vw(40),
-                      }}
-                      ellipsizeMode="tail"
-                    >
-                      {movie.movie}
-                    </Title> */}
                   <Card.Cover
                     style={{ width: this.vw(40), height: this.vh(40) }}
-                    source={{
-                      uri:
-                        'http://developer.tmsimg.com/' +
-                        item.image +
-                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                    }}
+                    // source={{
+                    //   uri:
+                    //     'http://developer.tmsimg.com/' +
+                    //     item.image +
+                    //     '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                    // }}
                   />
-
-                  {/*  <Image
-                      source={{
-                        uri:
-                        'http://developer.tmsimg.com/' +
-                        'assets/p14939602_v_v5_aa.jpg' +
-                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                      }}
-                      style={{ width: '45%', height: '65%' }}
-                    /> */}
-
-                  {/*  <Label style={{ fontSize: 12 }}>Your Review:</Label>
-
-                    <Text numberOfLines={1} ellipsizeMode="tail">
-                      {movie.review}
-                    </Text> */}
-
-                  {/*  <View flexDirection="row">
-                      <Label style={{ fontSize: '10%' }}>Your Rating: {}</Label>
-                      <Text style={{ fontSize: '10%' }}>{item.rating}</Text>
-                    </View> */}
-
-                  {/*  <Paragraph
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
-                      style={{
-                        fontSize: 10,
-                        color: 'darkred',
-                      }}
-                    >
-                      {movie.theatre}
-                      {'\n'}
-                      {movie.time}
-                    </Paragraph> */}
-
-                  {/*  <Text style={{ fontSize: '10%' }}>{item.time}</Text> */}
                 </Card>
               )}
             />
-
-            {/* <View flexDirection="row" numColumns={2}>
-              {this.state.movies.map(movie => (
-
-              ))}
-            </View> */}
           </Content>
         </View>
       </SafeAreaView>
