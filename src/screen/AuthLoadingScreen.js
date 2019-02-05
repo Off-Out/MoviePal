@@ -11,22 +11,23 @@ import {
 } from '../redux/app-redux';
 
 class AuthLoadingScreen extends React.Component {
-  getLocationAndMovieAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      console.log('Access denied');
-    }
-    let location = await Location.getCurrentPositionAsync({});
-    const geoLocation = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
+  // getLocationAndMovieAsync = async () => {
+  //   let { status } = await Permissions.askAsync(Permissions.LOCATION);
+  //   if (status !== 'granted') {
+  //     console.log('Access denied');
+  //   }
+  //   let location = await Location.getCurrentPositionAsync({});
+  //   const geoLocation = {
+  //     latitude: location.coords.latitude,
+  //     longitude: location.coords.longitude,
+  //   };
 
-    this.props.fetchNearbyTheaters(geoLocation.latitude, geoLocation.longitude);
+    // this.props.fetchNearbyTheaters(geoLocation.latitude, geoLocation.longitude);
     //console.log('fetchNearby', this.props.fetchNearbyTheaters);
     // console.log('lat', geoLocation.latitude);
     // console.log('long', geoLocation.longitude);
 
+<<<<<<< HEAD
     this.props.setGeoLocation(geoLocation);
     try {
       const response = await axios.get(
@@ -42,6 +43,24 @@ class AuthLoadingScreen extends React.Component {
       console.error(error);
     }
   };
+=======
+    // this.props.setGeoLocation(geoLocation);
+
+    // try {
+    //   const response = await axios.get(
+    //   `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
+    //     this.props.date
+    //   }&lat=${location.coords.latitude}&lng=${
+    //     location.coords.longitude
+    //   }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+    // );
+    // } catch(error) {
+    //   console.error(error)
+    // }
+
+  //   this.props.setMovies(response.data);
+  // };
+>>>>>>> 972023c8b81211c6e55d4b5a847456c90747a330
 
   verifyAccount = () => {
     auth.onAuthStateChanged(user => {
@@ -54,7 +73,7 @@ class AuthLoadingScreen extends React.Component {
   };
 
   componentDidMount = async () => {
-    await this.getLocationAndMovieAsync();
+    // await this.getLocationAndMovieAsync();
     this.verifyAccount();
   };
 
