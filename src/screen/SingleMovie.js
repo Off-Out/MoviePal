@@ -117,7 +117,11 @@ class SingleEvent extends React.Component {
 
     const movie = navigation.getParam('movie', null);
 
-    const Showtimes = movie.showtimes.map(show => show.dateTime.split('T')[1]);
+    if (movie.showtimes) {
+      let Showtimes = movie.showtimes.map(show => show.dateTime.split('T')[1]);
+    } else {
+      let Showtimes = null;
+    }
 
     if (!movie.shortDescription) {
       return <Image source={require('../image/logo.png')} />;

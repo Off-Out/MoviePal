@@ -37,7 +37,6 @@ const ProfileStackNavigator = createStackNavigator({
   History: HistoryScreen,
 });
 
-
 const FeedStackNavigator = createStackNavigator({
   Feed: FeedScreen,
   Chat: ChatScreen,
