@@ -3,6 +3,7 @@ import firebase, { auth, database } from '../firebase';
 class FeedBackEnd {
   uid = '';
   name = '';
+  userPhoto = '';
   feedRef = null;
 
   constructor() {
@@ -11,6 +12,7 @@ class FeedBackEnd {
         this.setUid(user.uid);
         database.ref(`/users/${user.uid}`).on('value', snapshot => {
           this.setName(snapshot.val().name);
+          this.setUserPhoto(snapshot.val().photo)
         });
       }
     });
@@ -31,6 +33,14 @@ class FeedBackEnd {
     return this.name;
   }
 
+  setUserPhoto(value) {
+    this.userPhoto = value;
+  }
+
+  getUserPhoto() {
+    return this.userPhoto;
+  }
+
   // retrieve the feeds from the Backend
   loadFeeds(callback) {
     const today = new Date().toDateString();
@@ -46,6 +56,7 @@ class FeedBackEnd {
         createdAt: new Date(feed.createdAt),
         userId: feed.userId,
         userName: feed.userName,
+        userPhoto: feed.userPhoto,
       });
     };
     this.feedRef.limitToLast(50).on('child_added', onReceive);
@@ -56,16 +67,18 @@ class FeedBackEnd {
       context: feed.context,
       userId: feed.userId,
       userName: feed.userName,
+      userPhoto: feed.userPhoto,
       likes: feed.likes,
       createdAt: firebase.database.ServerValue.TIMESTAMP,
     });
   }
 
-  postComment(key, comment, userId, userName) {
+  postComment(key, comment, userId, userName, userPhoto) {
     this.feedRef.child(`${key}/feedComments`).push({
       comments: comment,
       userId: userId,
       userName: userName,
+      userPhoto: userPhoto,
       createdAt: firebase.database.ServerValue.TIMESTAMP,
     });
   }
