@@ -56,7 +56,7 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
-  History: {
+  /*   History: {
     screen: HistoryScreen,
     navigationOptions: {
       tabBarLabel: 'HISTORY',
@@ -64,7 +64,7 @@ const TabNavigator = createBottomTabNavigator({
         <Ionicons name="ios-map" color={tintColor} size={24} />
       ),
     },
-  },
+  }, */
 
   Chat: {
     screen: ChatScreen,
