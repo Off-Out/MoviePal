@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import {
+  material,
+  sanFranciscoSpacing,
+  robotoWeights,
+  iOSColors,
+} from 'react-native-typography';
 import { LinearGradient } from 'expo';
 import {
   StyleSheet,
@@ -22,11 +28,28 @@ import {
   Label,
   Input,
 } from 'native-base';
-import { Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Button, Card, Title, Paragraph, Divider } from 'react-native-paper';
 
 import { auth, database } from '../firebase';
 import Stor from '../store/Stor';
 import { storage } from 'firebase';
+
+const styles = StyleSheet.create({
+  customSize: {
+    fontSize: 34,
+
+    letterSpacing: 5,
+    color: '#aa1919',
+    alignSelf: 'center',
+  },
+  movieTitle: {
+    color: iOSColors.purple,
+    ...material.robotoWeights,
+    ...material.body1,
+    maxWidth: Dimensions.get('window').width * (45 / 100),
+    letterSpacing: 0.5,
+  },
+});
 
 const dummyMovieData = {
   movieImage: 'assets/p14939602_v_v5_aa.jpg',
@@ -66,6 +89,8 @@ export default class HistoryScreen extends Component {
       ],
       selectedMovie: '',
     };
+    this.vw = this.vw.bind(this);
+    this.vh = this.vh.bind(this);
     this.selectMovie = this.selectMovie.bind(this);
     this.deselectMovie = this.deselectMovie.bind(this);
   }
@@ -79,11 +104,7 @@ export default class HistoryScreen extends Component {
   }
 
   async selectMovie(movie) {
-    console.log('SELECTED MOVIE ARGS', movie);
-
     await this.setState({ selectedMovie: movie });
-
-    console.log('SET MOVIE ON STATE', this.state.selectedMovie);
   }
   async deselectMovie() {
     await this.setState({ selectedMovie: '' });
@@ -92,84 +113,93 @@ export default class HistoryScreen extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ flex: 1, margin: 10, backgroundColor: 'red' }}>
-          <LinearGradient
-            colors={['rgba(0,0,0,0.8)', 'transparent']}
-            style={{
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              top: 0,
-              height: -100,
-            }}
-          />
-          {/* <Header style={styles.header}> */}
-          <Title style={{ marginRight: 20, alignSelf: 'center' }}>
-            🍿MY MOVIES
-          </Title>
-          {/* </Header> */}
+        <View style={{ flex: 1, margin: 10 }}>
+          <LinearGradient colors={[('ff0100', 'cc0d0c', 0, 0)]} style={{}} />
+
+          <Text style={styles.customSize}> MOVIE HISTORY</Text>
+          <Divider />
+
           <Content style={{ flex: 1, margin: 10 }} padder>
             {this.state.selectedMovie ? (
               <Card
                 style={{
+                  alignContent: 'center',
+
                   alignSelf: 'center',
-                  width: this.vw(50),
-                  height: this.vh(50),
-                  borderRadius: 4,
+                  width: this.vw(90),
+                  height: this.vh(35),
+
                   borderWidth: 2,
-                  borderColor: 'red',
+                  borderColor: '#aa1919',
+                  borderTop: true,
+                  borderBottom: true,
                   elevation: 4,
                   margin: 10,
                 }}
                 onPress={() => this.selectMovie()}
               >
-                <Card.Content>
-                  <Title
-                    numberOfLines={1}
-                    style={{
-                      alignSelf: 'center',
-                      color: 'darkred',
-                    }}
-                    ellipsizeMode="tail"
-                    onPress={e => {
-                      this.props.navigation.navigate('SingleMovie', {
-                        history: true,
-                        movie: dummyMovieData.movie,
-                        image: dummyMovieData.movieImage,
-                      });
-                    }}
+                <Card.Content flexDirection="row">
+                  <View
+                    style={{ marginRight: 5, justifyContent: 'space-evenly' }}
                   >
-                    {this.state.selectedMovie.movie}
-                  </Title>
-                  <Card.Cover
-                    source={{
-                      uri:
-                        'http://developer.tmsimg.com/' +
-                        this.state.selectedMovie.image +
-                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                    }}
-                  />
+                    <Text
+                      numberOfLines={2}
+                      style={styles.movieTitle}
+                      ellipsizeMode="tail"
+                      onPress={e => {
+                        this.props.navigation.navigate('SingleMovie', {
+                          history: true,
+                          movie: dummyMovieData.movie,
+                          image: dummyMovieData.movieImage,
+                        });
+                      }}
+                    >
+                      {this.state.selectedMovie.movie}
+                    </Text>
 
-                  <View style={{ flexDirection: 'row' }}>
-                    <Label style={{ fontSize: 12 }}>Review: {}</Label>
-                    <Text> {this.state.selectedMovie.review}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text style={material.caption}>Review: {}</Text>
+                      <Text style={material.caption}>
+                        {' '}
+                        {this.state.selectedMovie.review}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <Text style={material.caption}>Rating: {}</Text>
+                      <Text style={material.caption}>
+                        {this.state.selectedMovie.rating}
+                      </Text>
+                    </View>
+
+                    <Text
+                      style={{
+                        fontSize: 10,
+                        color: 'red',
+                      }}
+                    >
+                      {this.state.selectedMovie.theatre}
+                      {'\n'}
+                      {this.state.selectedMovie.time}
+                    </Text>
                   </View>
-
-                  <View style={{ flexDirection: 'row' }}>
-                    <Label style={{ fontSize: 12 }}>Rating: {}</Label>
-                    <Text>{this.state.selectedMovie.rating}</Text>
+                  <View style={{ width: this.vw(45) }}>
+                    <Card.Cover
+                      style={{
+                        maxWidth: Dimensions.get('window').width * (40 / 100),
+                      }}
+                      source={{
+                        uri:
+                          'http://developer.tmsimg.com/' +
+                          this.state.selectedMovie.image +
+                          '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                      }}
+                    />
                   </View>
-
-                  <Paragraph
-                    style={{
-                      fontSize: 10,
-                      color: 'darkred',
-                    }}
-                  >
-                    {this.state.selectedMovie.theatre}
-                    {'\n'}
-                    {this.state.selectedMovie.time}
-                  </Paragraph>
                 </Card.Content>
               </Card>
             ) : null}
@@ -181,17 +211,19 @@ export default class HistoryScreen extends Component {
                   key={item.movie}
                   style={{
                     alignSelf: 'center',
+                    marginEnd: 10,
+                    marginBottom: 10,
                     width: this.vw(40),
                     height: this.vh(40),
-                    borderRadius: 4,
-                    borderWidth: 2,
-                    borderColor: 'red',
+
+                    /* borderRadius: 4, */
+                    /*   borderWidth: 2,
+                    borderColor: 'red', */
                     elevation: 4,
                   }}
                   onPress={() => this.selectMovie(item)}
                 >
-                  <Card.Content>
-                    {/*      <Title
+                  {/*      <Title
                       numberOfLines={1}
                       style={{
                         alignSelf: 'center',
@@ -202,16 +234,17 @@ export default class HistoryScreen extends Component {
                     >
                       {movie.movie}
                     </Title> */}
-                    <Card.Cover
-                      source={{
-                        uri:
-                          'http://developer.tmsimg.com/' +
-                          item.image +
-                          '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                      }}
-                    />
+                  <Card.Cover
+                    style={{ width: this.vw(40), height: this.vh(40) }}
+                    source={{
+                      uri:
+                        'http://developer.tmsimg.com/' +
+                        item.image +
+                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                    }}
+                  />
 
-                    {/*  <Image
+                  {/*  <Image
                       source={{
                         uri:
                         'http://developer.tmsimg.com/' +
@@ -221,17 +254,18 @@ export default class HistoryScreen extends Component {
                       style={{ width: '45%', height: '65%' }}
                     /> */}
 
-                    {/*  <Label style={{ fontSize: 12 }}>Your Review:</Label>
+                  {/*  <Label style={{ fontSize: 12 }}>Your Review:</Label>
 
                     <Text numberOfLines={1} ellipsizeMode="tail">
                       {movie.review}
                     </Text> */}
-                    <View flexDirection="row">
+
+                  {/*  <View flexDirection="row">
                       <Label style={{ fontSize: '10%' }}>Your Rating: {}</Label>
                       <Text style={{ fontSize: '10%' }}>{item.rating}</Text>
-                    </View>
+                    </View> */}
 
-                    {/*  <Paragraph
+                  {/*  <Paragraph
                       numberOfLines={2}
                       ellipsizeMode="tail"
                       style={{
@@ -243,8 +277,8 @@ export default class HistoryScreen extends Component {
                       {'\n'}
                       {movie.time}
                     </Paragraph> */}
-                    <Text style={{ fontSize: '10%' }}>{item.time}</Text>
-                  </Card.Content>
+
+                  {/*  <Text style={{ fontSize: '10%' }}>{item.time}</Text> */}
                 </Card>
               )}
             />
@@ -260,10 +294,3 @@ export default class HistoryScreen extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  header: {
-    margin: -30,
-    padding: -30,
-  },
-});
