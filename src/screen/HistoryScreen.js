@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { LinearGradient } from 'expo';
 import {
   StyleSheet,
   View,
@@ -91,7 +92,17 @@ export default class HistoryScreen extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ flex: 1, margin: 10 }}>
+        <View style={{ flex: 1, margin: 10, backgroundColor: 'red' }}>
+          <LinearGradient
+            colors={['rgba(0,0,0,0.8)', 'transparent']}
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              height: -100,
+            }}
+          />
           {/* <Header style={styles.header}> */}
           <Title style={{ marginRight: 20, alignSelf: 'center' }}>
             🍿MY MOVIES
