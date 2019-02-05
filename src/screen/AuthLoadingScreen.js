@@ -7,14 +7,6 @@ import { connect } from 'react-redux';
 import { setGeoLocation, setMovies } from '../redux/app-redux';
 
 class AuthLoadingScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-    };
-    // this.verifyAccount();
-  }
-
   getLocationAndMovieAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {

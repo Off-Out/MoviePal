@@ -9,7 +9,6 @@ class ChatBackEnd {
   constructor() {
     auth.onAuthStateChanged(async user => {
       if (user) {
-        //console.log('backend testing', user);
         this.setUid(user.uid);
         setTimeout(async () => {
           await database.ref(`/users/${user.uid}`).on('value', snapshot => {
@@ -24,7 +23,7 @@ class ChatBackEnd {
   setUid(value) {
     this.uid = value;
   }
-  
+
   getUid() {
     return this.uid;
   }
@@ -49,7 +48,7 @@ class ChatBackEnd {
     this.messagesRef.off();
     const onReceive = data => {
       const message = data.val();
-      console.log('message', message);
+
       callback({
         _id: data.key,
         text: message.text,
