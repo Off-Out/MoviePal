@@ -80,7 +80,7 @@ export default class ProfileScreen extends Component {
   };
 
   showPassword = () => {
-    if (!!this.state.hidePassword) {
+    if (this.state.hidePassword) {
       this.setState({ hidePassword: false });
       this.setState({ show: 'HIDE' });
     } else {
@@ -114,7 +114,7 @@ export default class ProfileScreen extends Component {
 
   render() {
     const userId = this.props.screenProps;
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     let isProvider = false;
     let currentUser = auth.currentUser || {};
     if (currentUser.providerData) {
@@ -215,8 +215,8 @@ export default class ProfileScreen extends Component {
             dark
             transparent
             onPress={() => {
-              console.log("MY MOVIE HISTORY")
-              navigation.navigate('History')
+              console.log('MY MOVIE HISTORY');
+              navigation.navigate('History');
             }}
           >
             <Text style={{ fontWeight: 'bold' }}>🍿MY MOVIES</Text>

@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Chip } from 'react-native-paper';
 import {
+  material,
+  sanFranciscoSpacing,
+  robotoWeights,
+  iOSColors,
+  human,
+  iOSUIKit,
+} from 'react-native-typography';
+
+import {
   Container,
   Header,
   Title,
@@ -22,6 +31,42 @@ import { Ionicons } from '@expo/vector-icons';
 import FeedBackEnd from './FeedBackEnd';
 import Comment from '../component/Comment';
 import { database } from '../firebase';
+
+const styles = StyleSheet.create({
+  screenHeader: {
+    fontSize: 34,
+
+    letterSpacing: 5,
+    color: '#aa1919',
+    alignSelf: 'center',
+  },
+  feedText: {
+    ...iOSUIKit.title3,
+  },
+  likesAndComments: {
+    color: '#a1320c',
+
+    fontSize: 12,
+  },
+  userDetails: {
+    ...iOSUIKit.caption2Emphasized,
+  },
+  date: {
+    ...material.caption,
+
+    marginLeft: 15,
+    marginBottom: 5,
+    fontStyle: 'italic',
+  },
+  submitButton: {},
+  container: { flex: 1 },
+  hashtags: {},
+  footer: {
+    margin: 0,
+    padding: 0,
+    height: 35,
+  },
+});
 
 export default class Feed extends Component {
   constructor(props) {
@@ -94,11 +139,13 @@ export default class Feed extends Component {
     const { feed } = this.props;
 
     const postTime = this.timeSince(feed.createdAt);
+
     let comments = '';
     if (feed.feedComments) {
       comments = Object.values(feed.feedComments);
     }
 
+    console.log('FEED', feed.feedComments);
     return (
       <Card>
         <CardItem>
@@ -106,23 +153,22 @@ export default class Feed extends Component {
             <Thumbnail small source={ this.state.userPhoto ? {uri: this.state.userPhoto} :
             require('../image/user-account-icon-13.jpg')
           } />
-            <Body>
-          <Text style={{ fontSize: 14 }}>{feed.userName} </Text>
-          <Text style={{ fontSize: 12 }} note>
-            {' '}
-            GeekyAnts
-          </Text>
-          </Body>
           </Left>
+          <View flexDirection="row">
+            <Text style={styles.userDetails && { marginRight: 100 }}>
+              {feed.userName}{' '}
+            </Text>
+          </View>
         </CardItem>
         <CardItem>
-          <Text>{feed.context}</Text>
+          <Text style={styles.feedText}>{feed.context}</Text>
         </CardItem>
+        <Text style={styles.date}>{postTime}</Text>
         <CardItem style={styles.footer} footer bordered>
           <Left>
             <Button transparent onPress={() => FeedBackEnd.likePost(feed._id)}>
-              <Icon active name="thumbs-up" />
-              <Text style={{ paddingLeft: 8, fontSize: 12 }}>
+              <Icon active name="thumbs-up" style={{ color: '#a1320c' }} />
+              <Text style={styles.likesAndComments}>
                 {this.state.feed.likes} Likes
               </Text>
             </Button>
@@ -133,15 +179,15 @@ export default class Feed extends Component {
                 this.showComment();
               }}
             >
-              <Icon active name="chatbubbles" />
-              <Text style={{ paddingLeft: 6, fontSize: 12 }}>
+              <Icon active name="chatbubbles" style={{ color: '#a1320c' }} />
+              <Text style={styles.likesAndComments}>
                 {comments.length} Comments
               </Text>
             </Button>
           </Left>
-          <Right>
-            <Text style={{ fontSize: 12 }}>{postTime}</Text>
-          </Right>
+          {/*  <Right>
+            <Text style={styles.date}>{postTime}</Text>
+          </Right> */}
         </CardItem>
         {this.state.displayComment ? (
           <CardItem>
@@ -178,11 +224,3 @@ export default class Feed extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  footer: {
-    margin: 0,
-    padding: 0,
-    height: 35,
-  },
-});
