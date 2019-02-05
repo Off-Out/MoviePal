@@ -17,8 +17,6 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 
-// const { width, height } = Dimensions.get('window');
-
 export default class Trivia extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -33,7 +31,6 @@ export default class Trivia extends Component {
       qno: 0,
       questions: [],
       isFinished: false
-      // isCorrect: false
     };
   }
 
@@ -52,7 +49,7 @@ export default class Trivia extends Component {
       `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
     );
     let quiz = response.data.results;
-    console.log('quiz>>>>>', quiz);
+    // console.log('quiz>>>>>', quiz);
 
     // the reason putting data.results is all about the trivia questions data structure which is coming from axios request
     this.setState({
@@ -229,7 +226,7 @@ export default class Trivia extends Component {
         <SafeAreaView style={{ flex: 1 }}>
           <ImageBackground
             resizeMode="cover"
-            source={require('../image/questionPic.jpg')}
+            source={require('../image/popcorn.jpg')}
             style={{ width: '100%', height: '100%' }}
           >
             <View
@@ -284,7 +281,6 @@ export default class Trivia extends Component {
                       flexDirection: 'column',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-
                       marginTop: 50,
                       marginBottom: 50
                     }}
@@ -348,23 +344,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-    // backgroundColor: '#F5FCFF'
-  },
-  toolbar: {
-    backgroundColor: 'white',
-    // paddingTop: 30,
-    paddingBottom: 10,
-    flexDirection: 'row'
-  },
-  toolbarButton: {
-    width: 55,
-    color: '#fff',
-    textAlign: 'center'
-  },
-  toolbarTitle: {
-    color: 'blue',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    flex: 1
   }
 });
