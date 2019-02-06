@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
+  ScrollView
 } from 'react-native';
 import { Form, Item, Picker, Body, H2, Text, Input } from 'native-base';
 import { material, iOSColors } from 'react-native-typography';
 import { Card, Divider } from 'react-native-paper';
+import { RkStyleSheet } from 'react-native-ui-kitten';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
 
@@ -19,48 +19,62 @@ import { connect } from 'react-redux';
 const styles = RkStyleSheet.create({
   filter: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   item: {
-    flex: 0.5,
-  },
+    flex: 0.5
+  }
 });
 
 const textStyles = StyleSheet.create({
   screenHeader: {
-    fontSize: 34,
+    fontSize: 24,
     letterSpacing: 5,
     color: '#aa1919',
     alignSelf: 'center',
-    marginBottom: 10,
+    marginBottom: 10
+  },
+  warning: {
+    fontSize: 18,
+    letterSpacing: 5,
+    color: iOSColors.black,
+    alignSelf: 'center',
+    marginBottom: 10
   },
   theaterTitle: {
     color: iOSColors.black,
     ...material.robotoWeights,
     ...material.title3Emphasized,
     maxWidth: Dimensions.get('window').width * 100,
-    letterSpacing: 0.5,
+    letterSpacing: 0.5
   },
   text: {
     color: iOSColors.purple,
     ...material.robotoWeights,
+    ...material.body2,
+    maxWidth: Dimensions.get('window').width * 100,
+    letterSpacing: 0.5
+  },
+  little: {
+    color: iOSColors.purple,
+    ...material.robotoWeights,
     ...material.body1,
     maxWidth: Dimensions.get('window').width * 100,
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5
+  }
 });
 
 class SingleTheaterScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: 'Theater Details',
+      headerTitle: 'Theater Details'
     };
   };
   constructor(props) {
     super(props);
     this.state = {
       selectedDate: format(new Date(), 'YYYY-MM-DD'),
-      movieSearch: '',
+      movieSearch: ''
     };
   }
   vw(percentageWidth) {
@@ -74,12 +88,12 @@ class SingleTheaterScreen extends Component {
 
   onSearchTextChange = (stateField, text) => {
     this.setState({
-      [stateField]: text,
+      [stateField]: text
     });
   };
-  onValueChange2 = value => {
+  onValueChange2 = (value) => {
     this.setState({
-      selectedDate: value,
+      selectedDate: value
     });
     try {
       console.log('onValueChange');
@@ -90,9 +104,9 @@ class SingleTheaterScreen extends Component {
 
   render() {
     const movies = this.props.singleTheaterMovies;
-    console.log('SELECTED MOVIE!!!', this.props.selectedMovie);
+    console.log('SELECTED MOVIE!!!', this.props);
     let searchMovie = movies.filter(
-      movie =>
+      (movie) =>
         movie.title
           .toLowerCase()
           .indexOf(this.state.movieSearch.toLowerCase()) !== -1
@@ -149,128 +163,179 @@ class SingleTheaterScreen extends Component {
             </Form>
           </Card>
 
-          <Card>
-            <CardItem>
-              <Body>
-                <H2>{theatre.name}</H2>
-                <Text>
-                  {`${theatre.location.address.street} ${
-                    theatre.location.address.city
-                  }, ${theatre.location.address.state}`}
-                </Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <Input
-                    placeholder="Search for movie"
-                    onChangeText={text => {
-                      this.onSearchTextChange('movieSearch', text);
-                    }}
-                  />
-                </View>
-              </Body>
-            </CardItem>
-          </Card>
           <Card
             style={{
               alignContent: 'center',
               alignSelf: 'center',
               width: this.vw(90),
-              height: this.vh(30),
+              height: this.vh(20),
               borderWidth: 2,
               borderColor: '#aa1919',
               borderTop: true,
               borderBottom: true,
               elevation: 4,
-              margin: 10,
+              margin: 10
             }}
           >
             <Card.Content flexDirection="row">
-              <View style={{ marginRight: 5, justifyContent: 'space-evenly' }}>
-                <Text style={textStyles.movieTitle}>{selectedMovie.title}</Text>
+              <View
+                style={{
+                  marginRight: 5,
+                  justifyContent: 'space-evenly'
+                }}
+              >
+                <Text style={textStyles.theaterTitle}>{theatre.name}</Text>
                 <Divider />
-                <Body>
-                  <Text style={textStyles.text}>
-                    {selectedMovie.shortDescription}
-                  </Text>
-                </Body>
-                <Divider />
-                {selectedMovie.genres ? (
-                  selectedMovie.genres.map((item, i) => (
-                    <Text key={i} style={textStyles.text}>
-                      {item}
-                    </Text>
-                  ))
-                ) : (
-                  <Text>No genre information</Text>
-                )}
-
-                <Text style={textStyles.text}>
-                  {format(selectedMovie.releaseDate, 'MM-DD-YYYY')}
+                <Text style={textStyles.little}>
+                  {`${theatre.location.address.street} ${
+                    theatre.location.address.city
+                  }, ${theatre.location.address.state}`}
                 </Text>
+                <View style={textStyles.text}>
+                  <Item
+                    rounded
+                    style={
+                      (styles.item,
+                      {
+                        width: this.vw(80),
+                        height: this.vh(5),
+                        marginTop: 15,
+                        alignSelf: 'center',
+                        alignContent: 'center'
+                      })
+                    }
+                  >
+                    <Input
+                      placeholder="Search for movie"
+                      onChangeText={(text) => {
+                        this.onSearchTextChange('movieSearch', text);
+                      }}
+                    />
+                  </Item>
+                </View>
               </View>
-              {/*<View style={{ width: this.vw(45) }}>
-                 <Card.Cover
-                  style={{
-                    maxWidth: Dimensions.get('window').width * (35 / 100),
-                  }}
-                   source={
-                          {
-                            /* uri:
-                            'http://developer.tmsimg.com/' +
-                            selectedMovie.preferredImage.uri +
-                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
-                          }
-                        }
-                />
-              </View>*/}
             </Card.Content>
           </Card>
 
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <H2>In Theater</H2>
+          <View style={{ flex: 1 }}>
+            <Text style={textStyles.screenHeader}> Selected Movie </Text>
+
+            <Card
+              style={{
+                alignContent: 'center',
+                alignSelf: 'center',
+                width: this.vw(90),
+                height: this.vh(10),
+                borderWidth: 2,
+                borderColor: '#aa1919',
+                borderTop: true,
+                borderBottom: true,
+                elevation: 4
+                //margin: 10
+              }}
+            >
+              <Card.Content flexDirection="row">
+                <View
+                  style={{ marginRight: 5, justifyContent: 'space-evenly' }}
+                >
+                  <Text style={textStyles.text}>{selectedMovie.title}</Text>
+                  <Divider />
+
+                  {selectedMovie.genres ? (
+                    selectedMovie.genres.map((item, i) => (
+                      <Text key={i} style={textStyles.little}>
+                        {item}
+                      </Text>
+                    ))
+                  ) : (
+                    <Text style={textStyles.little}>
+                      {' '}
+                      No genre information{' '}
+                    </Text>
+                  )}
+
+                  <Text style={textStyles.little}>
+                    {format(selectedMovie.releaseDate, 'MM-DD-YYYY')}
+                  </Text>
+                </View>
+              </Card.Content>
+            </Card>
           </View>
-          <ScrollView>
-            {searchMovie.map(movie => (
-              <TouchableOpacity
-                key={movie.tmsId}
-                onPress={() =>
-                  this.props.navigation.navigate('SingleMovie', {
-                    movie,
-                    theatre: theatre.name,
-                  })
-                }
-              >
-                <Card>
-                  <CardItem>
-                    <Body>
-                      <Text value={movie}>{movie.title}</Text>
-                      <Text>{movie.releaseDate}</Text>
-                      <Text>{movie.genres ? movie.genres[0] : null}</Text>
-                      <Text>{movie.audience}</Text>
-                    </Body>
-                  </CardItem>
-                </Card>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+
+          <View style={{ flex: 1, marginTop: -95 }}>
+            <Text style={textStyles.screenHeader}> All Movies </Text>
+            <ScrollView>
+              {!searchMovie.length ? (
+                <Text style={textStyles.warning}>
+                  {' '}
+                  No other movies are playing
+                </Text>
+              ) : (
+                searchMovie.map((movie) => (
+                  <TouchableOpacity
+                    key={movie.tmsId}
+                    onPress={() =>
+                      this.props.navigation.navigate('SingleMovie', {
+                        movie,
+                        theatre: theatre.name
+                      })
+                    }
+                  >
+                    <Card
+                      style={{
+                        alignContent: 'center',
+                        alignSelf: 'center',
+                        width: this.vw(90),
+                        height: this.vh(10),
+                        borderWidth: 2,
+                        borderColor: '#aa1919',
+                        borderTop: true,
+                        borderBottom: true,
+                        elevation: 4,
+                        margin: 10
+                      }}
+                    >
+                      <Card.Content>
+                        <View
+                          style={{
+                            justifyContent: 'space-evenly',
+                            alignContent: 'center'
+                          }}
+                        >
+                          <Text style={textStyles.text} value={movie}>
+                            {movie.title}
+                          </Text>
+                          <Text style={textStyles.little}>
+                            {movie.releaseDate}
+                          </Text>
+                          <Text style={textStyles.little}>
+                            {movie.genres ? movie.genres[0] : null}
+                          </Text>
+                          <Text style={textStyles.little}>
+                            {movie.audience}
+                          </Text>
+                        </View>
+                      </Card.Content>
+                    </Card>
+                  </TouchableOpacity>
+                ))
+              )}
+            </ScrollView>
+          </View>
         </View>
       </SafeAreaView>
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     singleTheaterMovies: state.singleTheaterMovies,
-    selectedMovie: state.selectedMovie,
+    selectedMovie: state.selectedMovie
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
