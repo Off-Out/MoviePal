@@ -102,7 +102,6 @@ export const fetchNearbyTheaters = (lat, long) => {
 
 export const fetchSingleTheaterMovies = (theaterId, date) => {
   return async dispatch => {
-    console.log('inside of thunk');
     const { data: movies } = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres/${theaterId}/showings?startDate=${date}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );

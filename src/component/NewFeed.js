@@ -28,7 +28,7 @@ export default class NewFeed extends Component {
     await this.setState({
       userId: FeedBackEnd.getUid(),
       userName: FeedBackEnd.getName(),
-      userPhoto: FeedBackEnd.getUserPhoto()
+      userPhoto: FeedBackEnd.getUserPhoto(),
     });
     // console.log("newFeed", this.state)
   }

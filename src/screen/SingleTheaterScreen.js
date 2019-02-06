@@ -18,7 +18,6 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
-
 import { connect } from 'react-redux';
 
 class SingleTheaterScreen extends Component {
@@ -55,7 +54,7 @@ class SingleTheaterScreen extends Component {
 
   render() {
     const movies = this.props.singleTheaterMovies;
-    console.log('look for this', movies);
+
     let searchMovie = movies.filter(
       movie =>
         movie.title

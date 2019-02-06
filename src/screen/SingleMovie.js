@@ -115,11 +115,9 @@ class SingleEvent extends React.Component {
     const theatre = this.props.navigation.getParam('theatre');
 
     const movie = navigation.getParam('movie', null);
-    console.log('morgan movie', movie);
 
     let Showtimes;
     if (movie.showtimes) {
-      console.log('movie showtimes', movie.showtimes);
       Showtimes = movie.showtimes.map(show => show.dateTime.split('T')[1]);
     } else {
       Showtimes = null;
