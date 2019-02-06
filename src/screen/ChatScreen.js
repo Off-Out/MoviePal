@@ -45,7 +45,9 @@ export default class ChatScreen extends Component {
         <LinearGradient colors={[('ff0100', 'cc0d0c', 0, 0)]} style={{}} />
           <View style={{display: "flex", flexDirection:"row", justifyContent:"center"}}>
           <Text style={styles.screenHeader}>💬CHAT</Text>
-          <Badge warning style={{marginTop: 9}}><Text style={{color: "white", fontSize: 12}}>{this.state.people} Pals</Text></Badge>
+          <Badge warning style={{marginTop: 9}}>
+            { this.state.people.length < 2 ? <Text style={{color: "white", fontSize: 12}}>{this.state.people} Pal</Text> : <Text style={{color: "white", fontSize: 12}}>{this.state.people} Pal</Text> }
+          </Badge>
           </View>
           <Text style={{ fontSize: 13, color:"gray", marginBottom: 5, textAlign: "center" }}>{` "${this.state.title}" \n @ ${this.state.theater}, ${this.state.movieTime} Today`}</Text>
           <Divider />
