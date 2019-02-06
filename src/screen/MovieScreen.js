@@ -214,12 +214,12 @@ export class MovieScreen extends Component {
                         style={{
                           maxWidth: Dimensions.get('window').width * (35 / 100)
                         }}
-                        source={{
-                          uri:
-                            'http://developer.tmsimg.com/' +
-                            movie.preferredImage.uri +
-                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
-                        }}
+                        // source={{
+                        //   uri:
+                        //     'http://developer.tmsimg.com/' +
+                        //     movie.preferredImage.uri +
+                        //     '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+                        // }}
                       />
                     </View>
                   </Card.Content>
