@@ -24,12 +24,12 @@ import { Provider } from 'react-redux';
 import store from './src/redux/app-redux';
 import ChatContainers from './src/screen/ChatScreen';
 
-/* const MapStackNavigator = createStackNavigator({
+const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
-}); */
+});
 
 const ProfileStackNavigator = createStackNavigator({
   Profile: ProfileScreen,
@@ -42,25 +42,25 @@ const FeedStackNavigator = createStackNavigator({
 });
 
 const TabNavigator = createBottomTabNavigator({
-  // Movie: {
-  //   screen: MovieScreen,
-  //   navigationOptions: {
-  //     tabBarLabel: 'MOVIES',
-  //     tabBarIcon: ({ tintColor }) => (
-  //       <Ionicons name="ios-play" color={tintColor} size={24} />
-  //     ),
-  //   },
-  // },
+  Movie: {
+    screen: MovieScreen,
+    navigationOptions: {
+      tabBarLabel: 'MOVIES',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-play" color={tintColor} size={24} />
+      ),
+    },
+  },
 
-  // Map: {
-  //   screen: MapStackNavigator,
-  //   navigationOptions: {
-  //     tabBarLabel: 'MAP',
-  //     tabBarIcon: ({ tintColor }) => (
-  //       <Ionicons name="ios-map" color={tintColor} size={24} />
-  //     ),
-  //   },
-  // },
+  Map: {
+    screen: MapStackNavigator,
+    navigationOptions: {
+      tabBarLabel: 'MAP',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-map" color={tintColor} size={24} />
+      ),
+    },
+  },
 
   Feed: {
     screen: FeedStackNavigator,
@@ -72,7 +72,7 @@ const TabNavigator = createBottomTabNavigator({
     },
   },
 
-  /* Trivia: {
+  Trivia: {
     screen: TriviaQuestions,
     navigationOptions: {
       tabBarLabel: 'TRIVIA',
@@ -81,7 +81,7 @@ const TabNavigator = createBottomTabNavigator({
       ),
     },
   },
- */
+
   Profile: {
     screen: ProfileStackNavigator,
     navigationOptions: {

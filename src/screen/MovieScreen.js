@@ -210,7 +210,7 @@ export class MovieScreen extends Component {
                       </Text>
                     </View>
                     <View style={{ width: this.vw(45) }}>
-                      <Card.Cover
+                      {/* <Card.Cover
                         style={{
                           maxWidth: Dimensions.get('window').width * (35 / 100),
                         }}
@@ -219,8 +219,8 @@ export class MovieScreen extends Component {
                             'http://developer.tmsimg.com/' +
                             movie.preferredImage.uri +
                             '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
-                        }} */
-                      />
+                        }}
+                      /> */}
                     </View>
                   </Card.Content>
                 </Card>
