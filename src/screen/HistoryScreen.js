@@ -69,7 +69,32 @@ export default class HistoryScreen extends Component {
 
     this.state = {
       pastMovies: this.props.navigation.state.params.pastMovies,
-      movies: ,
+      movies: [
+        {
+          movie: 'Spider-Man: Into the Spider-Verse',
+          image: 'assets/p14939602_v_v5_aa.jpg',
+          review: 'family fun!',
+          rating: '☆☆☆☆☆',
+          theatre: 'AMC 600 North Michigan 9',
+          time: '15:00 on Wed Jan 30 2019',
+        },
+        {
+          movie: 'Glass',
+          image: 'assets/p14087450_v_v6_aa.jpg',
+          review: 'terrifying',
+          rating: '☆',
+          theatre: 'Logan Square Theatre',
+          time: '9:00 on Tue Jan 29 2019',
+        },
+        {
+          movie: 'Spider-Man: Into the Spider-Verse',
+          image: 'assets/p14939602_v_v5_aa.jpg',
+          review: 'family fun!',
+          rating: '☆☆☆☆☆',
+          theatre: 'AMC 600 North Michigan 9',
+          time: '15:00 on Wed Jan 30 2019',
+        },
+      ],
       selectedMovie: '',
       loaded: false,
     };
