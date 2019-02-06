@@ -19,8 +19,10 @@ import {
   Right,
   Thumbnail,
   Text,
+  Card,
+  CardItem
 } from 'native-base';
-import { Divider, Card } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 import { Avatar } from 'react-native-elements';
 import { database } from '../firebase';
 
@@ -34,6 +36,8 @@ const styles = StyleSheet.create({
   },
   feedText: {
     ...iOSUIKit.title3,
+    fontSize: 15,
+    color:"steelblue"
   },
   likesAndComments: {
     color: '#a1320c',
@@ -116,55 +120,38 @@ export default class Commment extends Component {
         data={this.state.feedComments.reverse()}
         keyExtractor={item => item.createdAt.toString()}
         renderItem={({ item }) => (
-          <Card
-            style={{
-              margin: 3,
-            }}
-            style={{
-              width: Dimensions.get('window').width,
-            }}
-            // elevation={9}
-          >
-            <View style={{ display: "flex", flexDirection: 'row',}}>
-              <Left>
-              <Thumbnail
-                source={
-                  item.userPhoto
-                    ? { uri: item.userPhoto }
-                    : require('../image/user-account-icon-13.jpg')
-                }
-              />
-              <Text note style={styles.userDetails && { marginLeft: 10 }} >
-                {item.userName} {'\n'}
-              </Text>
-              </Left>
-              <Right>
-                <Text style={styles.theaterDetails}>
-                    {this.timeSince(item.createdAt)}
-                </Text>
-              </Right>
-            </View>
-            <View>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  marginLeft: 40,
-                  marginTop: -20,
-                }}
-              >
-                <Text
-                  numberOfLines={5}
-                  ellipsizeMode="tail"
-                  style={{ width: Dimensions.get('window').width * (80 / 100) }}
-                >
-                  {' '}
-                  {item.comments}
-                </Text>
-              </View>
-            </View>
-          </Card>
+          <Card transparent style={{
+            width: Dimensions.get('window').width,
+            borderBottomColor: "steelblue",
+            borderBottomWidth: 0.55
+          }}>
+        <CardItem style={{paddingTop: 0, paddingBottom: 0}}>
+          <Text
+            numberOfLines={5}
+            ellipsizeMode="tail"
+            style={[styles.feedText,{ width: Dimensions.get('window').width * (80 / 100) } ]}>{item.comments}</Text>
+        </CardItem>
+        <CardItem style={{paddingTop: 0, paddingBottom: 0}}>
+          <Left >
+            <Thumbnail
+              small
+              source={
+                item.userPhoto
+                  ? { uri: item.userPhoto }
+                  : require('../image/user-account-icon-13.jpg')
+              }
+            />
+            <Text style={styles.userDetails && { marginLeft: 10 }} note>
+              {item.userName}{' '}
+            </Text>
+          </Left>
+          <Right>
+          <Text style={styles.date}>{this.timeSince(item.createdAt)}</Text>
+          </Right>
+          <View flexDirection="row" />
+        </CardItem>
+      </Card>
         )}
-      />
-    );
-  }
+  />
+    )}
 }
