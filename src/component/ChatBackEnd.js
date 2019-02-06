@@ -3,6 +3,7 @@ import firebase, { auth, database } from '../firebase';
 class ChatBackEnd {
   uid = '';
   name = '';
+  userPhoto = '';
   chatId = '';
   messagesRef = null;
 
@@ -14,6 +15,7 @@ class ChatBackEnd {
           await database.ref(`/users/${user.uid}`).on('value', snapshot => {
             this.setName(snapshot.val().name);
             this.setChatId(snapshot.val().chatId);
+            this.setUserPhoto(snapshot.val().photo)
           });
         }
         // , 2000
@@ -37,6 +39,14 @@ class ChatBackEnd {
     return this.name;
   }
 
+  setUserPhoto(value) {
+    this.userPhoto = value;
+  }
+
+  getUserPhoto() {
+    return this.userPhoto;
+  }
+
   setChatId(value) {
     this.chatId = value;
   }
@@ -47,7 +57,8 @@ class ChatBackEnd {
   loadMessages(callback) {
     const today = new Date().toDateString();
     this.messagesRef = database.ref(
-      `/chatroom/${today}/${this.chatId}/messages`
+      // `/chatroom/${today}/${this.chatId}/messages`
+      `/chatroom/Mon Feb 04 2019/${this.chatId}/messages`
     );
     this.messagesRef.off();
     const onReceive = data => {
