@@ -60,6 +60,7 @@ export default class ProfileScreen extends Component {
         email: user.email,
         location: user.location,
         photo: user.photo,
+        pastMovies: user.pastMovies
       });
     };
     await this.userRef.on('value', this.callback);
@@ -148,12 +149,9 @@ export default class ProfileScreen extends Component {
     let display = isProvider ? 'none' : 'flex';
 
     return (
-      <ScrollView>
+      // <SafeAreaView style={{ flex: 1 }}>
+      //   <Text style={styles.screenHeader}> PROFILE </Text>
         <Form style={styles.form}>
-          {/*  <Image
-            source={require(`../image/user-account-icon-13.jpg`)}
-            style={styles.image}
-          /> */}
           <View style={{ display: 'flex', justifyContent: 'center' }}>
             <TouchableOpacity onPress={() => this._pickImage()}>
               <Thumbnail
@@ -256,14 +254,14 @@ export default class ProfileScreen extends Component {
               transparent
               onPress={() => {
                 console.log('MY MOVIE HISTORY');
-                navigation.navigate('History');
+                navigation.navigate('History', {pastMovies: this.state.pastMovies});
               }}
             >
               <Text style={styles.button}>🍿MY MOVIES</Text>
             </Button>
           </View>
         </Form>
-      </ScrollView>
+      // </SafeAreaView>
     );
   }
 }
@@ -327,4 +325,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontSize: 5,
   },
+    screenHeader: {
+      fontSize: 34,
+      letterSpacing: 5,
+      color: '#aa1919',
+      alignSelf: 'center',
+    },
 });

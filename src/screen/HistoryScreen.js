@@ -64,11 +64,11 @@ const dummyMovieData = {
 };
 
 export default class HistoryScreen extends Component {
-  constructor(screenProps) {
-    super(screenProps);
+  constructor(props) {
+    super(props);
 
     this.state = {
-      pastMovies: {},
+      movies: this.props.navigation.state.params.pastMovies,
       selectedMovie: '',
       loaded: false,
     };
@@ -86,23 +86,6 @@ export default class HistoryScreen extends Component {
     return Dimensions.get('window').height * (percentageHeight / 100);
   }
 
-  async componentDidMount() {
-    const userId = this.props.screenProps;
-    this.userHistRef = await database.ref(`/users/${userId}/pastMovies`)
-    this.callback = snapshot => {
-      let pastMovies = snapshot.val();
-      this.setState({
-        pastMovies,
-        loaded: true
-      });
-    }
-    await this.userHistRef.on('value', this.callback);
-  }
-
-  componentWillUnmount() {
-    this.userHistRef.off('value', this.callback)
-  }
-
   selectMovie(movie) {
    this.setState({ selectedMovie: movie });
   }
@@ -112,8 +95,7 @@ export default class HistoryScreen extends Component {
   }
 
   render() {
-    console.log(this.state.pastMovies, 
-      "History pastMovies state")
+    console.log(this.state.movies, "this.state.movies")
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1, margin: 10 }}>
@@ -192,22 +174,20 @@ export default class HistoryScreen extends Component {
                       style={{
                         maxWidth: Dimensions.get('window').width * (40 / 100),
                       }}
-                      source={{
-                        uri:
-                          'http://developer.tmsimg.com/' +
-                          this.state.selectedMovie.image +
-                          '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                      }}
+                      // source={{
+                      //   uri:
+                      //     'http://developer.tmsimg.com/' +
+                      //     this.state.selectedMovie.image +
+                      //     '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                      // }}
                     />
                   </View>
                 </Card.Content>
               </Card>
             ) : null}
-            {
-              this.state.loaded ?
             <FlatList
               numColumns={2}
-              data={this.state.pastMovies}
+              data={this.state.movies}
               renderItem={({ item }) => (
                 <Card
                   key={item.movie}
@@ -217,6 +197,10 @@ export default class HistoryScreen extends Component {
                     marginBottom: 10,
                     width: this.vw(40),
                     height: this.vh(40),
+
+                    /* borderRadius: 4, */
+                    /*   borderWidth: 2,
+                    borderColor: 'red', */
                     elevation: 4,
                   }}
                   onPress={() => this.selectMovie(item)}
@@ -232,8 +216,7 @@ export default class HistoryScreen extends Component {
                   />
                 </Card>
               )}
-            /> : null
-            }
+            />
           </Content>
         </View>
       </SafeAreaView>

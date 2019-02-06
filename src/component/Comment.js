@@ -122,24 +122,27 @@ export default class Commment extends Component {
             }}
             style={{
               width: Dimensions.get('window').width,
-              bottomBorder: 40,
-              borderColor: 'red',
-              borderRadius: 100,
             }}
-            /* elevation={9} */
+            // elevation={9}
           >
-            <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ display: "flex", flexDirection: 'row',}}>
+              <Left>
               <Thumbnail
-                small
                 source={
                   item.userPhoto
                     ? { uri: item.userPhoto }
                     : require('../image/user-account-icon-13.jpg')
                 }
               />
-              <Text style={styles.userDetails && { marginLeft: 10 }} note>
-                {item.userName + ' '} {'\n'}
+              <Text note style={styles.userDetails && { marginLeft: 10 }} >
+                {item.userName} {'\n'}
               </Text>
+              </Left>
+              <Right>
+                <Text style={styles.theaterDetails}>
+                    {this.timeSince(item.createdAt)}
+                </Text>
+              </Right>
             </View>
             <View>
               <View
@@ -157,13 +160,7 @@ export default class Commment extends Component {
                   {' '}
                   {item.comments}
                 </Text>
-                <Text style={styles.theaterDetails}>
-                  {this.timeSince(item.createdAt)}
-                </Text>
               </View>
-              {/* <Right>
-                    <Text note>{this.timeSince(item.createdAt)}</Text>
-                  </Right> */}
             </View>
           </Card>
         )}
