@@ -11,6 +11,14 @@ class MapScreen extends Component {
 
     return {
       headerTitle: 'Map',
+      headerTitleStyle: {
+        fontSize: 34,
+        letterSpacing: 3.75,
+        width: '80%',
+        color: '#aa1919',
+        alignSelf: 'center',
+        fontWeight: '300',
+      },
       headerRight: (
         <Ionicons
           name="ios-list-box"
