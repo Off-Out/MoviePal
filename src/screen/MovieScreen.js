@@ -15,7 +15,7 @@ import { RkStyleSheet } from 'react-native-ui-kitten';
 
 import { format } from 'date-fns';
 import { connect } from 'react-redux';
-import { fetchTheaters, fetchMovies } from '../redux/app-redux';
+import { fetchTheaters, fetchMovies, selectMovie } from '../redux/app-redux';
 import { Location } from 'expo';
 
 const styles = RkStyleSheet.create({
@@ -167,7 +167,10 @@ export class MovieScreen extends Component {
             {movies.map(movie => (
               <TouchableOpacity
                 key={movie.tmsId}
-                onPress={() => this.fetchAndNavigate(movie.showtimes)}
+                onPress={() => {
+                  this.fetchAndNavigate(movie.showtimes);
+                  this.props.selectMovie(movie);
+                }}
               >
                 <Card
                   style={{
@@ -210,17 +213,19 @@ export class MovieScreen extends Component {
                       </Text>
                     </View>
                     <View style={{ width: this.vw(45) }}>
-                      {/* <Card.Cover
+                      <Card.Cover
                         style={{
                           maxWidth: Dimensions.get('window').width * (35 / 100),
                         }}
-                        /* source={{
-                          uri:
+                        /* source={
+                          {
+                            /* uri:
                             'http://developer.tmsimg.com/' +
                             movie.preferredImage.uri +
                             '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
-                        }}
-                      /> */}
+                          }
+                        } */
+                      />
                     </View>
                   </Card.Content>
                 </Card>
@@ -246,6 +251,7 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)),
     fetchMovies: (lat, long) => dispatch(fetchMovies(lat, long)),
+    selectMovie: movie => dispatch(selectMovie(movie)),
   };
 };
 

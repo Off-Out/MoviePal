@@ -10,6 +10,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { Text, Title, Button, Card, Paragraph } from 'react-native-paper';
 import { EventCard } from '../component';
 // import axios from 'axios';
@@ -111,15 +112,14 @@ class SingleEvent extends React.Component {
   };
 
   render() {
+    console.log('SINGLE MOVIE PROPS', this.props.movie);
     const { navigation } = this.props;
     const theatre = this.props.navigation.getParam('theatre');
 
     const movie = navigation.getParam('movie', null);
-    console.log('morgan movie', movie);
 
     let Showtimes;
     if (movie.showtimes) {
-      console.log('movie showtimes', movie.showtimes);
       Showtimes = movie.showtimes.map(show => show.dateTime.split('T')[1]);
     } else {
       Showtimes = null;
@@ -306,4 +306,20 @@ class SingleEvent extends React.Component {
   }
 }
 
-export default SingleEvent;
+const mapStateToProps = state => {
+  return {
+    movie: state.selectedMovie,
+    longitude: state.longitude,
+
+  };
+};
+
+/* const mapDispatchToProps = dispatch => {
+  return {
+    fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)),
+    fetchMovies: (lat, long) => dispatch(fetchMovies(lat, long)),
+    selectMovie: movie => dispatch(selectMovie(movie)),
+  };
+}; */
+
+export default connect(mapStateToProps)(SingleEvent);
