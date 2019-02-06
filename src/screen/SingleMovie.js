@@ -95,7 +95,7 @@ class SingleEvent extends React.Component {
             },
           },
           chat: {
-            [`${today}`]: chatId,
+            [`${today}`]: chatId
           }
         });
       })

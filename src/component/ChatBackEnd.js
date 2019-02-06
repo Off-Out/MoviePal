@@ -8,27 +8,23 @@ class ChatBackEnd {
   messagesRef = null;
 
   constructor() {
-    const today = new Date().toDateString()
-    function findChatId (date) {
-      return date === today
-    }
+    
+
     auth.onAuthStateChanged(async user => {
       if (user) {
         this.setUid(user.uid);
-        // setTimeout(async () => {
           await database.ref(`/users/${user.uid}`).on('value', snapshot => {
             this.setName(snapshot.val().name);
             this.setUserPhoto(snapshot.val().photo);
             if (snapshot.val().chat) {
               let chatDates = Object.keys(snapshot.val().chat);
               let chatIds = Object.values(snapshot.val().chat)
-              let index = chatDates.findIndex(findChatId)
-              this.setState({chatId: chatIds[index]})
+              // let index = chatDates.findIndex(date => date === new Date().toDateString())
+              let index = chatDates.findIndex(date => date === "Mon Feb 04 2019")
+              this.setChatId(chatIds[index])
             }
           });
         }
-        // , 2000
-        // )};
     });
   }
 
