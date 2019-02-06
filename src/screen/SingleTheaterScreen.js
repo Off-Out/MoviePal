@@ -1,26 +1,56 @@
 import React, { Component } from 'react';
 import {
+  StyleSheet,
   Text,
   View,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
 } from 'react-native';
-import {
-  Form,
-  Item,
-  Picker,
-  Card,
-  CardItem,
-  Body,
-  H2,
-  Input,
-} from 'native-base';
+import { Form, Item, Picker, Body, H2, Text, Input } from 'native-base';
+import { material, iOSColors } from 'react-native-typography';
+import { Card, Divider } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
-// import axios from 'axios';
 
-export default class SingleTheaterScreen extends Component {
+import { connect } from 'react-redux';
+
+const styles = RkStyleSheet.create({
+  filter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  item: {
+    flex: 0.5,
+  },
+});
+
+const textStyles = StyleSheet.create({
+  screenHeader: {
+    fontSize: 34,
+    letterSpacing: 5,
+    color: '#aa1919',
+    alignSelf: 'center',
+    marginBottom: 10,
+  },
+  theaterTitle: {
+    color: iOSColors.black,
+    ...material.robotoWeights,
+    ...material.title3Emphasized,
+    maxWidth: Dimensions.get('window').width * 100,
+    letterSpacing: 0.5,
+  },
+  text: {
+    color: iOSColors.purple,
+    ...material.robotoWeights,
+    ...material.body1,
+    maxWidth: Dimensions.get('window').width * 100,
+    letterSpacing: 0.5,
+  },
+});
+
+class SingleTheaterScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: 'Theater Details',
@@ -30,73 +60,47 @@ export default class SingleTheaterScreen extends Component {
     super(props);
     this.state = {
       selectedDate: format(new Date(), 'YYYY-MM-DD'),
-      movies: [],
       movieSearch: '',
-      genreSearch: '',
     };
   }
+  vw(percentageWidth) {
+    return Dimensions.get('window').width * (percentageWidth / 100);
+  }
 
-  componentDidMount = async () => {
-    const { navigation } = this.props;
-    const theatre = navigation.getParam('theatre', null);
-    try {
-      //   const response = await axios.get(
-      //   `http://data.tmsapi.com/v1.1/theatres/${
-      //     theatre.theatreId
-      //   }/showings?startDate=${
-      //     this.state.selectedDate
-      //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-      // );
-    } catch (error) {
-      console.error(error);
-    }
-    this.setState({
-      movies: response.data,
-    });
-  };
+  vh(percentageHeight) {
+    return Dimensions.get('window').height * (percentageHeight / 100);
+  }
+  componentDidMount = () => {};
 
   onSearchTextChange = (stateField, text) => {
     this.setState({
       [stateField]: text,
     });
   };
-  onValueChange2 = async value => {
+  onValueChange2 = value => {
     this.setState({
       selectedDate: value,
     });
-    const { navigation } = this.props;
-    const theatre = navigation.getParam('theatre', null);
     try {
-      //   const response = await axios.get(
-      //   `http://data.tmsapi.com/v1.1/theatres/${
-      //     theatre.theatreId
-      //   }/showings?startDate=${
-      //     this.state.selectedDate
-      //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-      // );
+      console.log('onValueChange');
     } catch (error) {
       console.error(error);
     }
-    this.setState({
-      movies: response.data,
-    });
   };
 
   render() {
-    const { navigation } = this.props;
-    const theatre = navigation.getParam('theatre', null);
-    const movies = this.state.movies;
-
+    const movies = this.props.singleTheaterMovies;
+    console.log('SELECTED MOVIE!!!', this.props.selectedMovie);
     let searchMovie = movies.filter(
       movie =>
         movie.title
           .toLowerCase()
-          .indexOf(this.state.movieSearch.toLowerCase()) !==
-        -1 /* &&
-        movie.genres[0]
-          .toLowerCase()
-          .indexOf(this.state.genreSearch.toLowerCase()) !== -1 */
+          .indexOf(this.state.movieSearch.toLowerCase()) !== -1
     );
+
+    const { navigation } = this.props;
+    const theatre = navigation.getParam('theatre', null);
+    const selectedMovie = this.props.selectedMovie[0];
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -161,15 +165,64 @@ export default class SingleTheaterScreen extends Component {
                       this.onSearchTextChange('movieSearch', text);
                     }}
                   />
-                  <Input
-                    placeholder="Search"
-                    onChangeText={text => {
-                      this.onSearchTextChange('genreSearch', text);
-                    }}
-                  />
                 </View>
               </Body>
             </CardItem>
+          </Card>
+          <Card
+            style={{
+              alignContent: 'center',
+              alignSelf: 'center',
+              width: this.vw(90),
+              height: this.vh(30),
+              borderWidth: 2,
+              borderColor: '#aa1919',
+              borderTop: true,
+              borderBottom: true,
+              elevation: 4,
+              margin: 10,
+            }}
+          >
+            <Card.Content flexDirection="row">
+              <View style={{ marginRight: 5, justifyContent: 'space-evenly' }}>
+                <Text style={textStyles.movieTitle}>{selectedMovie.title}</Text>
+                <Divider />
+                <Body>
+                  <Text style={textStyles.text}>
+                    {selectedMovie.shortDescription}
+                  </Text>
+                </Body>
+                <Divider />
+                {selectedMovie.genres ? (
+                  selectedMovie.genres.map((item, i) => (
+                    <Text key={i} style={textStyles.text}>
+                      {item}
+                    </Text>
+                  ))
+                ) : (
+                  <Text>No genre information</Text>
+                )}
+
+                <Text style={textStyles.text}>
+                  {format(selectedMovie.releaseDate, 'MM-DD-YYYY')}
+                </Text>
+              </View>
+              {/*<View style={{ width: this.vw(45) }}>
+                 <Card.Cover
+                  style={{
+                    maxWidth: Dimensions.get('window').width * (35 / 100),
+                  }}
+                   source={
+                          {
+                            /* uri:
+                            'http://developer.tmsimg.com/' +
+                            selectedMovie.preferredImage.uri +
+                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+                          }
+                        }
+                />
+              </View>*/}
+            </Card.Content>
           </Card>
 
           <View
@@ -185,7 +238,7 @@ export default class SingleTheaterScreen extends Component {
               <TouchableOpacity
                 key={movie.tmsId}
                 onPress={() =>
-                  navigation.navigate('SingleMovie', {
+                  this.props.navigation.navigate('SingleMovie', {
                     movie,
                     theatre: theatre.name,
                   })
@@ -209,3 +262,19 @@ export default class SingleTheaterScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    singleTheaterMovies: state.singleTheaterMovies,
+    selectedMovie: state.selectedMovie,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SingleTheaterScreen);

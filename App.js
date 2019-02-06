@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
   createStackNavigator,
   createSwitchNavigator,
-  createAppContainer,
+  createAppContainer
 } from 'react-navigation';
 import {
   AuthLoadingScreen,
@@ -17,50 +17,50 @@ import {
   ListScreen,
   SingleMovie,
   FeedScreen,
-  TriviaQuestions,
+  TriviaQuestions
 } from './src/screen/index';
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'react-redux';
 import store from './src/redux/app-redux';
 import ChatContainers from './src/screen/ChatScreen';
 
-/* const MapStackNavigator = createStackNavigator({
+const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
   SingleTheater: SingleTheaterScreen,
   SingleMovie: SingleMovie,
   ListScreen: ListScreen,
-}); */
+});
 
 const ProfileStackNavigator = createStackNavigator({
   Profile: ProfileScreen,
-  History: HistoryScreen,
+  History: HistoryScreen
 });
 
 const FeedStackNavigator = createStackNavigator({
   Feed: FeedScreen,
-  Chat: ChatContainers,
+  Chat: ChatContainers
 });
 
 const TabNavigator = createBottomTabNavigator({
-  // Movie: {
-  //   screen: MovieScreen,
-  //   navigationOptions: {
-  //     tabBarLabel: 'MOVIES',
-  //     tabBarIcon: ({ tintColor }) => (
-  //       <Ionicons name="ios-play" color={tintColor} size={24} />
-  //     ),
-  //   },
-  // },
+  Movie: {
+    screen: MovieScreen,
+    navigationOptions: {
+      tabBarLabel: 'MOVIES',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-play" color={tintColor} size={24} />
+      ),
+    },
+  },
 
-  // Map: {
-  //   screen: MapStackNavigator,
-  //   navigationOptions: {
-  //     tabBarLabel: 'MAP',
-  //     tabBarIcon: ({ tintColor }) => (
-  //       <Ionicons name="ios-map" color={tintColor} size={24} />
-  //     ),
-  //   },
-  // },
+  Map: {
+    screen: MapStackNavigator,
+    navigationOptions: {
+      tabBarLabel: 'MAP',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-map" color={tintColor} size={24} />
+      ),
+    },
+  },
 
   Feed: {
     screen: FeedStackNavigator,
@@ -68,35 +68,35 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'FEED',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-paper" color={tintColor} size={24} />
-      ),
-    },
+      )
+    }
   },
 
-  /* Trivia: {
+  Trivia: {
     screen: TriviaQuestions,
     navigationOptions: {
       tabBarLabel: 'TRIVIA',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-trophy" color={tintColor} size={24} />
-      ),
-    },
+      )
+    }
   },
- */
+
   Profile: {
     screen: ProfileStackNavigator,
     navigationOptions: {
       tabBarLabel: 'PROFILE',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-contact" color={tintColor} size={24} />
-      ),
-    },
-  },
+      )
+    }
+  }
 });
 
 const AuthStack = createStackNavigator(
   {
     LoginScreen: { screen: LoginScreen },
-    SignUpScreen: { screen: SignUpScreen },
+    SignUpScreen: { screen: SignUpScreen }
   },
   { initialRouteName: 'LoginScreen' }
 );
@@ -118,10 +118,10 @@ const AppContainer = createAppContainer(
     {
       Auth: AuthStack,
       AuthLoading: AuthLoadingScreen,
-      App: TabComponents,
+      App: TabComponents
     },
     {
-      initialRouteName: 'AuthLoading',
+      initialRouteName: 'AuthLoading'
     }
   )
 );
