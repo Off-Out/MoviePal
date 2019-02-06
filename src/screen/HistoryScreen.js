@@ -68,7 +68,8 @@ export default class HistoryScreen extends Component {
     super(props);
 
     this.state = {
-      movies: this.props.navigation.state.params.pastMovies,
+      pastMovies: this.props.navigation.state.params.pastMovies,
+      movies: ,
       selectedMovie: '',
       loaded: false,
     };

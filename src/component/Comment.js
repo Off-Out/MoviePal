@@ -131,7 +131,7 @@ export default class Commment extends Component {
             ellipsizeMode="tail"
             style={[styles.feedText,{ width: Dimensions.get('window').width * (80 / 100) } ]}>{item.comments}</Text>
         </CardItem>
-        <CardItem style={{paddingTop: 0, paddingBottom: 0}}>
+        <CardItem style={{paddingTop: 7, paddingBottom: 7}}>
           <Left >
             <Thumbnail
               small

@@ -40,6 +40,9 @@ class ChatBackEnd {
   setChatId(value) {
     this.chatId = value;
   }
+  getChatId(value) {
+    return this.chatId
+  }
   // retrieve the messages from the Backend
   loadMessages(callback) {
     const today = new Date().toDateString();
