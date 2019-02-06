@@ -266,7 +266,10 @@ export default class Trivia extends Component {
         <SafeAreaView style={{ flex: 1 }}>
           <ImageBackground
             resizeMode="cover"
-            source={require('../image/popcorn.jpg')}
+            source={{
+              uri:
+                'https://firebasestorage.googleapis.com/v0/b/eventpal-40e2c.appspot.com/o/popcorn.jpg?alt=media&token=b9ac27a1-5e26-4dd0-b147-f03c477adefe',
+            }}
             style={{ width: '100%', height: '100%', marginTop: 40 }}
           >
             <View
