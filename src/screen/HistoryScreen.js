@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     color: iOSColors.purple,
     ...material.robotoWeights,
     ...material.body1,
-    maxWidth: Dimensions.get('window').width * (45 / 100),
+    maxWidth: Dimensions.get('window').width * (40 / 100),
     letterSpacing: 0.5,
   },
   userRatingsAndReviews: {
@@ -71,17 +71,17 @@ export default class HistoryScreen extends Component {
       pastMovies: this.props.navigation.state.params.pastMovies,
       movies: [
         {
-          movie: 'Spider-Man: Into the Spider-Verse',
-          image: 'assets/p14939602_v_v5_aa.jpg',
-          review: 'family fun!',
+          movie: 'Mary Poppins Returns',
+          image: 'assets/p15176636_v_v5_ac.jpg',
+          review: 'EMILY BLUNT!',
           rating: '☆☆☆☆☆',
-          theatre: 'AMC 600 North Michigan 9',
+          theatre: 'AMC Dine-in Theatres Block 37',
           time: '15:00 on Wed Jan 30 2019',
         },
         {
           movie: 'Glass',
           image: 'assets/p14087450_v_v6_aa.jpg',
-          review: 'terrifying',
+          review: 'terrifying. ',
           rating: '☆',
           theatre: 'Logan Square Theatre',
           time: '9:00 on Tue Jan 29 2019',
@@ -89,10 +89,26 @@ export default class HistoryScreen extends Component {
         {
           movie: 'Spider-Man: Into the Spider-Verse',
           image: 'assets/p14939602_v_v5_aa.jpg',
-          review: 'family fun!',
+          review: 'whoa. amazing',
           rating: '☆☆☆☆☆',
           theatre: 'AMC 600 North Michigan 9',
           time: '15:00 on Wed Jan 30 2019',
+        },
+        {
+          movie: 'Second Act',
+          image: 'assets/p15198426_v_v5_ab.jpg',
+          review: 'rom-com genius',
+          rating: '☆☆☆☆',
+          theatre: 'AMC Dine-in Theatres Block 37',
+          time: '7:00 on Wed Jan 30 2019',
+        },
+        {
+          movie: 'The Upside',
+          image: 'assets/p14266997_p_v5_aa.jpg',
+          review: 'would not see again but nice',
+          rating: '☆☆☆',
+          theatre: 'Showplace ICON at Roosevelt Collection',
+          time: '11:00 on Wed Jan 30 2019',
         },
       ],
       selectedMovie: '',
@@ -113,7 +129,7 @@ export default class HistoryScreen extends Component {
   }
 
   selectMovie(movie) {
-   this.setState({ selectedMovie: movie });
+    this.setState({ selectedMovie: movie });
   }
 
   deselectMovie() {
@@ -121,7 +137,7 @@ export default class HistoryScreen extends Component {
   }
 
   render() {
-    console.log(this.state.movies, "this.state.movies")
+    console.log(this.state.movies, 'this.state.movies');
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1, margin: 10 }}>
@@ -151,7 +167,11 @@ export default class HistoryScreen extends Component {
               >
                 <Card.Content flexDirection="row">
                   <View
-                    style={{ marginRight: 5, justifyContent: 'space-evenly' }}
+                    style={{
+                      marginRight: 5,
+                      justifyContent: 'space-evenly',
+                      width: this.vw(40),
+                    }}
                   >
                     <Text
                       numberOfLines={2}
@@ -170,7 +190,7 @@ export default class HistoryScreen extends Component {
 
                     <View style={{ flexDirection: 'row' }}>
                       <Text style={material.caption}>Review: {}</Text>
-                      <Text style={material.caption}>
+                      <Text numberOfLines={2} style={material.caption}>
                         {' '}
                         {this.state.selectedMovie.review}
                       </Text>
