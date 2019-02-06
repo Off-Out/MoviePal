@@ -179,7 +179,7 @@ class LoginScreen extends Component {
         onResponderRelease={() => Keyboard.dismiss()}
       >
         <View style={styles.header}>
-          <Image style={styles.image} source={require('../image/logo.png')} />
+          <Image style={styles.image} source={{uri: 'https://firebasestorage.googleapis.com/v0/b/eventpal-40e2c.appspot.com/o/logo.png?alt=media&token=07ae00f8-68f1-488d-a836-af96c16c003b'}} />
         </View>
         <View style={styles.content}>
           <View>
