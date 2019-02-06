@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { Form, Item, Picker, Body, H2, Text, Input } from 'native-base';
 import { material, iOSColors } from 'react-native-typography';
@@ -19,11 +19,11 @@ import { connect } from 'react-redux';
 const styles = RkStyleSheet.create({
   filter: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   item: {
-    flex: 0.5
-  }
+    flex: 0.5,
+  },
 });
 
 const textStyles = StyleSheet.create({
@@ -32,48 +32,54 @@ const textStyles = StyleSheet.create({
     letterSpacing: 5,
     color: '#aa1919',
     alignSelf: 'center',
-    marginBottom: 10
+    marginBottom: 10,
   },
   theaterTitle: {
     color: iOSColors.black,
     ...material.robotoWeights,
     ...material.title3Emphasized,
     maxWidth: Dimensions.get('window').width * 100,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   text: {
     color: iOSColors.purple,
     ...material.robotoWeights,
     ...material.body1,
     maxWidth: Dimensions.get('window').width * 100,
-    letterSpacing: 0.5
-  }
+    letterSpacing: 0.5,
+  },
 });
 
 class SingleTheaterScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: 'Theater Details'
+      headerTitle: 'Theater Details',
     };
   };
   constructor(props) {
     super(props);
     this.state = {
       selectedDate: format(new Date(), 'YYYY-MM-DD'),
-      movieSearch: ''
+      movieSearch: '',
     };
   }
+  vw(percentageWidth) {
+    return Dimensions.get('window').width * (percentageWidth / 100);
+  }
 
+  vh(percentageHeight) {
+    return Dimensions.get('window').height * (percentageHeight / 100);
+  }
   componentDidMount = () => {};
 
   onSearchTextChange = (stateField, text) => {
     this.setState({
-      [stateField]: text
+      [stateField]: text,
     });
   };
-  onValueChange2 = (value) => {
+  onValueChange2 = value => {
     this.setState({
-      selectedDate: value
+      selectedDate: value,
     });
     try {
       console.log('onValueChange');
@@ -84,9 +90,9 @@ class SingleTheaterScreen extends Component {
 
   render() {
     const movies = this.props.singleTheaterMovies;
-    console.log('look for this', movies);
+    console.log('SELECTED MOVIE!!!', this.props.selectedMovie);
     let searchMovie = movies.filter(
-      (movie) =>
+      movie =>
         movie.title
           .toLowerCase()
           .indexOf(this.state.movieSearch.toLowerCase()) !== -1
@@ -94,6 +100,7 @@ class SingleTheaterScreen extends Component {
 
     const { navigation } = this.props;
     const theatre = navigation.getParam('theatre', null);
+    const selectedMovie = this.props.selectedMovie[0];
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -154,7 +161,7 @@ class SingleTheaterScreen extends Component {
                 <View style={{ flexDirection: 'row' }}>
                   <Input
                     placeholder="Search for movie"
-                    onChangeText={(text) => {
+                    onChangeText={text => {
                       this.onSearchTextChange('movieSearch', text);
                     }}
                   />
@@ -162,23 +169,78 @@ class SingleTheaterScreen extends Component {
               </Body>
             </CardItem>
           </Card>
+          <Card
+            style={{
+              alignContent: 'center',
+              alignSelf: 'center',
+              width: this.vw(90),
+              height: this.vh(30),
+              borderWidth: 2,
+              borderColor: '#aa1919',
+              borderTop: true,
+              borderBottom: true,
+              elevation: 4,
+              margin: 10,
+            }}
+          >
+            <Card.Content flexDirection="row">
+              <View style={{ marginRight: 5, justifyContent: 'space-evenly' }}>
+                <Text style={textStyles.movieTitle}>{selectedMovie.title}</Text>
+                <Divider />
+                <Body>
+                  <Text style={textStyles.text}>
+                    {selectedMovie.shortDescription}
+                  </Text>
+                </Body>
+                <Divider />
+                {selectedMovie.genres ? (
+                  selectedMovie.genres.map((item, i) => (
+                    <Text key={i} style={textStyles.text}>
+                      {item}
+                    </Text>
+                  ))
+                ) : (
+                  <Text>No genre information</Text>
+                )}
+
+                <Text style={textStyles.text}>
+                  {format(selectedMovie.releaseDate, 'MM-DD-YYYY')}
+                </Text>
+              </View>
+              {/*<View style={{ width: this.vw(45) }}>
+                 <Card.Cover
+                  style={{
+                    maxWidth: Dimensions.get('window').width * (35 / 100),
+                  }}
+                   source={
+                          {
+                            /* uri:
+                            'http://developer.tmsimg.com/' +
+                            selectedMovie.preferredImage.uri +
+                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+                          }
+                        }
+                />
+              </View>*/}
+            </Card.Content>
+          </Card>
 
           <View
             style={{
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <H2>In Theater</H2>
           </View>
           <ScrollView>
-            {searchMovie.map((movie) => (
+            {searchMovie.map(movie => (
               <TouchableOpacity
                 key={movie.tmsId}
                 onPress={() =>
                   this.props.navigation.navigate('SingleMovie', {
                     movie,
-                    theatre: theatre.name
+                    theatre: theatre.name,
                   })
                 }
               >
@@ -201,13 +263,14 @@ class SingleTheaterScreen extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    singleTheaterMovies: state.singleTheaterMovies
+    singleTheaterMovies: state.singleTheaterMovies,
+    selectedMovie: state.selectedMovie,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {};
 };
 

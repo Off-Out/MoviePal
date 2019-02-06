@@ -16,7 +16,12 @@ const initialState = {
   singleTheaterMovies: [],
   userID: null,
   zipCode: null,
+<<<<<<< HEAD
+  favoriteAnimal: 'dog',
+  selectedMovie: [],
+=======
   favoriteAnimal: 'dog'
+>>>>>>> 5c9c43702c5ac307a7e5f5fc2c13485857143b04
 };
 
 //
@@ -27,11 +32,20 @@ const SET_MOVIES = 'SET_MOVIES';
 const SET_THEATERS = 'SET_THEATERS';
 const SET_ZIPCODE = 'SET_ZIPCODE';
 const SET_SINGLETHEATERMOVIES = 'SET_SINGLETHEATERMOVIES';
+const SELECT_MOVIE = 'SELECT_MOVIE';
 
 //
 // Action Creators
 //
+<<<<<<< HEAD
+
+export const selectMovie = movie => {
+  return { type: SELECT_MOVIE, movie };
+};
+export const setGeoLocation = location => {
+=======
 export const setGeoLocation = (location) => {
+>>>>>>> 5c9c43702c5ac307a7e5f5fc2c13485857143b04
   return { type: SET_GEOLOCATION, location };
 };
 
@@ -152,6 +166,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         singleTheaterMovies: action.movies
       };
+    case SELECT_MOVIE:
+      let selectedMovie = state.movies.filter(
+        movie => movie.tmsId === action.movie.tmsId
+      );
+      return { ...state, selectedMovie: selectedMovie };
+
     default:
       return state;
   }
