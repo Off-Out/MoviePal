@@ -2,50 +2,46 @@ import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { auth } from '../firebase';
 import { Location, Permissions } from 'expo';
-// import axios from 'axios';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import {
   setGeoLocation,
   setMovies,
-  fetchNearbyTheaters,
+  fetchNearbyTheaters
 } from '../redux/app-redux';
 
 class AuthLoadingScreen extends React.Component {
-  // getLocationAndMovieAsync = async () => {
-  //   let { status } = await Permissions.askAsync(Permissions.LOCATION);
-  //   if (status !== 'granted') {
-  //     console.log('Access denied');
-  //   }
-  //   let location = await Location.getCurrentPositionAsync({});
-  //   const geoLocation = {
-  //     latitude: location.coords.latitude,
-  //     longitude: location.coords.longitude,
-  //   };
+  getLocationAndMovieAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      console.log('Access denied');
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    const geoLocation = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude
+    };
 
-  // this.props.fetchNearbyTheaters(geoLocation.latitude, geoLocation.longitude);
-  //console.log('fetchNearby', this.props.fetchNearbyTheaters);
-  // console.log('lat', geoLocation.latitude);
-  // console.log('long', geoLocation.longitude);
+    this.props.fetchNearbyTheaters(geoLocation.latitude, geoLocation.longitude);
 
-  // this.props.setGeoLocation(geoLocation);
+    this.props.setGeoLocation(geoLocation);
 
-  // try {
-  //   const response = await axios.get(
-  //   `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
-  //     this.props.date
-  //   }&lat=${location.coords.latitude}&lng=${
-  //     location.coords.longitude
-  //   }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-  // );
-  // } catch(error) {
-  //   console.error(error)
-  // }
-
-  //   this.props.setMovies(response.data);
-  // };
+    try {
+      const response = await axios.get(
+        `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
+          this.props.date
+        }&lat=${location.coords.latitude}&lng=${
+          location.coords.longitude
+        }&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+      );
+      this.props.setMovies(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   verifyAccount = () => {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         this.props.navigation.navigate('App', { userId: user.uid });
       } else {
@@ -55,7 +51,7 @@ class AuthLoadingScreen extends React.Component {
   };
 
   componentDidMount = async () => {
-    // await this.getLocationAndMovieAsync();
+    await this.getLocationAndMovieAsync();
     this.verifyAccount();
   };
 
@@ -68,18 +64,17 @@ class AuthLoadingScreen extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    date: state.date,
+    date: state.date
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    setGeoLocation: location => dispatch(setGeoLocation(location)),
-    setMovies: movies => dispatch(setMovies(movies)),
-    fetchNearbyTheaters: (lat, long) =>
-      dispatch(fetchNearbyTheaters(lat, long)),
+    setGeoLocation: (location) => dispatch(setGeoLocation(location)),
+    setMovies: (movies) => dispatch(setMovies(movies)),
+    fetchNearbyTheaters: (lat, long) => dispatch(fetchNearbyTheaters(lat, long))
   };
 };
 

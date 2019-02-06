@@ -16,9 +16,9 @@ import { EventCard } from '../component';
 import { database } from '../firebase';
 import Stor from '../store/Stor';
 
-// const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
-// const isGraceNote =
-//   'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&zip=78701&api_key=w8xkqtbg6vf3aj5vdxmc4zjj';
+const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
+const isGraceNote =
+  'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&zip=78701&api_key=w8xkqtbg6vf3aj5vdxmc4zjj';
 
 class SingleEvent extends React.Component {
   constructor() {
@@ -115,13 +115,14 @@ class SingleEvent extends React.Component {
     const theatre = this.props.navigation.getParam('theatre');
 
     const movie = navigation.getParam('movie', null);
+    console.log('morgan movie', movie);
 
+    let Showtimes;
     if (movie.showtimes) {
-      let Showtimes = movie.showtimes.map(
-        (show) => show.dateTime.split('T')[1]
-      );
+      console.log('movie showtimes', movie.showtimes);
+      Showtimes = movie.showtimes.map((show) => show.dateTime.split('T')[1]);
     } else {
-      let Showtimes = null;
+      Showtimes = null;
     }
 
     if (!movie.shortDescription) {
