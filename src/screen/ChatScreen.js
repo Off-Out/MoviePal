@@ -7,7 +7,6 @@ import { Asset, AppLoading } from 'expo';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { auth, database } from '../firebase';
 import ChatBackEnd from '../component/ChatBackEnd';
-import ChatNavBar from '../component/ChatNavBar';
 
 
 // export default function ChatContainers (props) {

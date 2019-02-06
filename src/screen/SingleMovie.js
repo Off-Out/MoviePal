@@ -94,18 +94,13 @@ class SingleEvent extends React.Component {
               theater: theater,
             },
           },
-          chatId,
+          chat: {
+            [`${today}`]: chatId,
+          }
         });
       })
       .then(() => {
-        this.props.navigation.navigate('Chat', {
-          movieInfo: {
-            movie: title,
-            selectedTime: this.state.selectedTime,
-            theater: theater,
-            chatId: chatId,
-          },
-        });
+        this.props.navigation.navigate('Chat');
       })
       .catch(error => console.error(error));
   };
