@@ -18,7 +18,7 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
-import axios from 'axios';
+
 import { connect } from 'react-redux';
 
 class SingleTheaterScreen extends Component {
@@ -31,30 +31,11 @@ class SingleTheaterScreen extends Component {
     super(props);
     this.state = {
       selectedDate: format(new Date(), 'YYYY-MM-DD'),
-      movies: [],
       movieSearch: '',
-      genreSearch: '',
     };
   }
 
-  componentDidMount = async () => {
-    const { navigation } = this.props;
-    const theatre = navigation.getParam('theatre', null);
-    try {
-      //   const response = await axios.get(
-      //   `http://data.tmsapi.com/v1.1/theatres/${
-      //     theatre.theatreId
-      //   }/showings?startDate=${
-      //     this.state.selectedDate
-      //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-      // );
-    } catch (error) {
-      console.error(error);
-    }
-    this.setState({
-      movies: response.data,
-    });
-  };
+  componentDidMount = () => {};
 
   onSearchTextChange = (stateField, text) => {
     this.setState({
@@ -65,27 +46,16 @@ class SingleTheaterScreen extends Component {
     this.setState({
       selectedDate: value,
     });
-    const { navigation } = this.props;
-    const theatre = navigation.getParam('theatre', null);
     try {
-      //   const response = await axios.get(
-      //   `http://data.tmsapi.com/v1.1/theatres/${
-      //     theatre.theatreId
-      //   }/showings?startDate=${
-      //     this.state.selectedDate
-      //   }&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-      // );
+      console.log('onValueChange');
     } catch (error) {
       console.error(error);
     }
-    // this.setState({
-    //   movies: response.data,
-    // });
   };
 
   render() {
     const movies = this.props.singleTheaterMovies;
-
+    console.log('look for this', movies);
     let searchMovie = movies.filter(
       movie =>
         movie.title

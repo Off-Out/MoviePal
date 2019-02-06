@@ -32,10 +32,7 @@ const SET_SINGLETHEATERMOVIES = 'SET_SINGLETHEATERMOVIES';
 // Action Creators
 //
 export const setGeoLocation = location => {
-  return {
-    type: SET_GEOLOCATION,
-    location,
-  };
+  return { type: SET_GEOLOCATION, location };
 };
 
 export const setMovies = movies => {
@@ -76,10 +73,10 @@ export const fetchTheaters = theaterID => {
   return async dispatch => {
     const theaterInfo = theaterID.map(async id => {
       try {
-        // const { data: theater } = await axios.get(
-        //   `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-        // );
-        // return theater;
+        const { data: theater } = await axios.get(
+          `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+        );
+        return theater;
       } catch (error) {
         console.error(error);
       }
@@ -93,10 +90,10 @@ export const fetchTheaters = theaterID => {
 export const fetchNearbyTheaters = (lat, long) => {
   return async dispatch => {
     try {
-      // const { data: theaters } = await axios.get(
-      //   `http://data.tmsapi.com/v1.1/theatres?lat=${lat}&lng=${long}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-      // );
-      // dispatch(setTheaters(theaters));
+      const { data: theaters } = await axios.get(
+        `http://data.tmsapi.com/v1.1/theatres?lat=${lat}&lng=${long}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+      );
+      dispatch(setTheaters(theaters));
     } catch (error) {
       console.error(error);
     }
@@ -105,6 +102,7 @@ export const fetchNearbyTheaters = (lat, long) => {
 
 export const fetchSingleTheaterMovies = (theaterId, date) => {
   return async dispatch => {
+    console.log('inside of thunk');
     const { data: movies } = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres/${theaterId}/showings?startDate=${date}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
     );
@@ -115,15 +113,15 @@ export const fetchSingleTheaterMovies = (theaterId, date) => {
 export const fetchMovies = (lat, long) => {
   return async dispatch => {
     try {
-      //   const { data: movies } = await axios.get(
-      //   `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
-      //     initialState.date
-      //   }&lat=${lat}&lng=${long}&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
-      // );
+      const { data: movies } = await axios.get(
+        `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
+          initialState.date
+        }&lat=${lat}&lng=${long}&imageSize=Sm&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
+      );
+      dispatch(setMovies(movies));
     } catch (error) {
       console.error(error);
     }
-    dispatch(setMovies(movies));
   };
 };
 

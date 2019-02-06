@@ -42,7 +42,7 @@ export default class FeedScreen extends Component {
         width: '80%',
         color: '#aa1919',
         alignSelf: 'center',
-        fontWeight: '350',
+        fontWeight: '300',
       },
       headerRight: (
         <Ionicons
