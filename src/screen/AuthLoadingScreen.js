@@ -22,11 +22,13 @@ class AuthLoadingScreen extends React.Component {
       longitude: location.coords.longitude
     };
 
-    this.props.fetchNearbyTheaters(geoLocation.latitude, geoLocation.longitude);
-
-    this.props.setGeoLocation(geoLocation);
-
     try {
+      this.props.fetchNearbyTheaters(
+        geoLocation.latitude,
+        geoLocation.longitude
+      );
+      this.props.setGeoLocation(geoLocation);
+
       const response = await axios.get(
         `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
           this.props.date
