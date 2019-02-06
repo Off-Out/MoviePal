@@ -1,21 +1,30 @@
 import React, { Component } from 'react';
 import {
+  StyleSheet,
   Text,
   View,
   SafeAreaView,
   TouchableOpacity,
-  ScrollView,
-  StyleSheet,
   Dimensions,
+  ScrollView,
 } from 'react-native';
+import { Form, Item, Picker, Body, H2, Text, Input } from 'native-base';
 import { material, iOSColors } from 'react-native-typography';
-
-import { Form, Item, Picker, CardItem, Body, H2, Input } from 'native-base';
+import { Card, Divider } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
-import { Card, Divider } from 'react-native-paper';
 
 import { connect } from 'react-redux';
+
+const styles = RkStyleSheet.create({
+  filter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  item: {
+    flex: 0.5,
+  },
+});
 
 const textStyles = StyleSheet.create({
   screenHeader: {
@@ -25,10 +34,10 @@ const textStyles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 10,
   },
-  movieTitle: {
-    color: iOSColors.purple,
+  theaterTitle: {
+    color: iOSColors.black,
     ...material.robotoWeights,
-    ...material.body2,
+    ...material.title3Emphasized,
     maxWidth: Dimensions.get('window').width * 100,
     letterSpacing: 0.5,
   },
@@ -36,7 +45,7 @@ const textStyles = StyleSheet.create({
     color: iOSColors.purple,
     ...material.robotoWeights,
     ...material.body1,
-    maxWidth: Dimensions.get('window').width * (45 / 100),
+    maxWidth: Dimensions.get('window').width * 100,
     letterSpacing: 0.5,
   },
 });

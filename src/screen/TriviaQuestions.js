@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Alert,
   Button,
-  ImageBackground,
+  ImageBackground
 } from 'react-native';
 // import { Button } from 'react-native-elements';
 import { Card, Title, Paragraph, Chip } from 'react-native-paper';
@@ -17,10 +17,37 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 
+const scoreCircleSize = 300;
+const styles = StyleSheet.create({
+  score: {
+    color: 'white',
+    fontSize: 20,
+    fontStyle: 'italic'
+  },
+  circle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: scoreCircleSize,
+    height: scoreCircleSize,
+    borderRadius: scoreCircleSize / 2,
+    backgroundColor: 'lightgreen'
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
+
 export default class Trivia extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: '¿ Trivia ?',
+      headerTitle: '¿ Trivia ?'
     };
   };
 
@@ -30,7 +57,7 @@ export default class Trivia extends Component {
       score: 0,
       qno: 0,
       questions: [],
-      isFinished: false,
+      isFinished: false
     };
   }
 
@@ -42,35 +69,28 @@ export default class Trivia extends Component {
     return Dimensions.get('window').height * (percentageHeight / 100);
   }
 
-  //   componentDidMount = async () => {
+  componentDidMount = async () => {
+    const response = await axios.get(
+      // `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
+      //only five questions for demo purposes
+      `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
+    );
+    let quiz = response.data.results;
 
-  //       const response = await axios.get(
-  //       `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
-  //       only five questions for demo purposes
-  //       `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
-  //     );
-  // /*     } catch(error) {
-  //       console.error(error)
-  //     }
-  //     let quiz = response.data.results;
+    // the reason putting data.results is all about the trivia questions data structure which is coming from axios request
+    this.setState({
+      questions: quiz
+    });
+  };
 
-  //       the reason putting data.results is all about the trivia questions data structure which is coming from axios request
-  //       this.setState({
-  //         questions: quiz,
-  //       });
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }; */
-
-  answerQuestion = item => {
+  answerQuestion = (item) => {
     let increment = 0;
 
     if (item === this.state.questions[this.state.qno].correct_answer) {
       //increment += number will change based on how many questions
       increment += 100 / this.state.questions.length;
       this.setState({
-        score: this.state.score + increment,
+        score: this.state.score + increment
       });
       // Alert.alert('¿ Trivia ?', 'You are correct!');
     }
@@ -84,12 +104,12 @@ export default class Trivia extends Component {
     if (this.state.qno === this.state.questions.length - 1) {
       this.setState({
         score: this.state.score + increment,
-        isFinished: true,
+        isFinished: true
       });
     } else {
       this.setState({
         score: this.state.score + increment,
-        qno: this.state.qno + 1,
+        qno: this.state.qno + 1
       });
     }
   };
@@ -108,7 +128,7 @@ export default class Trivia extends Component {
   //   }
   // };
 
-  scoreMessage = score => {
+  scoreMessage = (score) => {
     if (this.state.score <= 30) {
       return (
         <View style={styles.innerContainer}>
@@ -195,7 +215,7 @@ export default class Trivia extends Component {
     if (this.state.questions.length) {
       currentOptions = [
         ...currentQuestion.incorrect_answers,
-        currentQuestion.correct_answer,
+        currentQuestion.correct_answer
       ];
       currentOptions = shuffle(currentOptions);
       singleQuestion = convert(currentQuestion.question);
@@ -216,7 +236,7 @@ export default class Trivia extends Component {
                 score: 0,
                 qno: 0,
                 questions: [],
-                isFinished: false,
+                isFinished: false
               });
               this.componentDidMount();
             }}
@@ -241,7 +261,7 @@ export default class Trivia extends Component {
                 flex: 1,
                 justifyContent: 'flex-bottom',
                 alignContent: 'center',
-                alignItems: 'center',
+                alignItems: 'center'
               }}
             >
               <View style={{ flex: 2 }}>
@@ -253,7 +273,7 @@ export default class Trivia extends Component {
                     /*  alignItems: 'center', */
                     margin: 10,
                     marginTop: 50,
-                    marginBottom: 50,
+                    marginBottom: 50
                   }}
                   elevation={4}
                 >
@@ -262,7 +282,7 @@ export default class Trivia extends Component {
                       style={{
                         alignSelf: 'center',
                         color: 'red',
-                        fontStyle: 'italic',
+                        fontStyle: 'italic'
                       }}
                       numberOfLines={1}
                     >
@@ -274,7 +294,7 @@ export default class Trivia extends Component {
                         alignSelf: 'center',
                         fontSize: 20,
                         marginTop: 30,
-                        fontStyle: 'italic',
+                        fontStyle: 'italic'
                       }}
                       numberOfLines={7}
                     >
@@ -288,7 +308,7 @@ export default class Trivia extends Component {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       marginTop: 50,
-                      marginBottom: 50,
+                      marginBottom: 50
                     }}
                   >
                     {currentOptions.map((item, i) => (
@@ -301,7 +321,7 @@ export default class Trivia extends Component {
                           style={{
                             alignSelf: 'center',
                             fontSize: 15,
-                            fontStyle: 'italic',
+                            fontStyle: 'italic'
                           }}
                           numberOfLines={3}
                         >
@@ -325,30 +345,3 @@ export default class Trivia extends Component {
     }
   }
 }
-
-const scoreCircleSize = 300;
-const styles = StyleSheet.create({
-  score: {
-    color: 'white',
-    fontSize: 20,
-    fontStyle: 'italic',
-  },
-  circle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: scoreCircleSize,
-    height: scoreCircleSize,
-    borderRadius: scoreCircleSize / 2,
-    backgroundColor: 'lightgreen',
-  },
-  innerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
