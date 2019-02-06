@@ -19,8 +19,8 @@ class ChatBackEnd {
             if (snapshot.val().chat) {
               let chatDates = Object.keys(snapshot.val().chat);
               let chatIds = Object.values(snapshot.val().chat)
-              // let index = chatDates.findIndex(date => date === new Date().toDateString())
-              let index = chatDates.findIndex(date => date === "Mon Feb 04 2019")
+              let index = chatDates.findIndex(date => date === new Date().toDateString())
+              // let index = chatDates.findIndex(date => date === "Mon Feb 04 2019")
               this.setChatId(chatIds[index])
             }
           });
@@ -62,8 +62,8 @@ class ChatBackEnd {
   loadMessages(callback) {
     const today = new Date().toDateString();
     this.messagesRef = database.ref(
-      // `/chatroom/${today}/${this.chatId}/messages`
-      `/chatroom/Mon Feb 04 2019/${this.chatId}/messages`
+      `/chatroom/${today}/${this.chatId}/messages`
+      // `/chatroom/Mon Feb 04 2019/${this.chatId}/messages`
     );
     this.messagesRef.off();
     const onReceive = data => {

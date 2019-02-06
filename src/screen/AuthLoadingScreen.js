@@ -2,12 +2,12 @@ import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { auth } from '../firebase';
 import { Location, Permissions } from 'expo';
-// import axios from 'axios';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import {
   setGeoLocation,
   setMovies,
-  fetchNearbyTheaters,
+  fetchNearbyTheaters
 } from '../redux/app-redux';
 
 class AuthLoadingScreen extends React.Component {
@@ -19,7 +19,7 @@ class AuthLoadingScreen extends React.Component {
     let location = await Location.getCurrentPositionAsync({});
     const geoLocation = {
       latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
+      longitude: location.coords.longitude
     };
 
     this.props.fetchNearbyTheaters(geoLocation.latitude, geoLocation.longitude);
@@ -41,7 +41,7 @@ class AuthLoadingScreen extends React.Component {
   };
 
   verifyAccount = () => {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         this.props.navigation.navigate('App', { userId: user.uid });
       } else {
@@ -64,18 +64,17 @@ class AuthLoadingScreen extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    date: state.date,
+    date: state.date
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    setGeoLocation: location => dispatch(setGeoLocation(location)),
-    setMovies: movies => dispatch(setMovies(movies)),
-    fetchNearbyTheaters: (lat, long) =>
-      dispatch(fetchNearbyTheaters(lat, long)),
+    setGeoLocation: (location) => dispatch(setGeoLocation(location)),
+    setMovies: (movies) => dispatch(setMovies(movies)),
+    fetchNearbyTheaters: (lat, long) => dispatch(fetchNearbyTheaters(lat, long))
   };
 };
 

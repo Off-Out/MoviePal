@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView, Text, StyleSheet, View, Alert } from 'react-native';
-import { Badge } from 'native-base'
+import { Badge, Spinner } from 'native-base'
 import { LinearGradient } from 'expo';
 import { Divider } from 'react-native-paper';
 import { Asset, AppLoading } from 'expo';
@@ -36,8 +36,8 @@ export default class ChatScreen extends Component {
     const movieInfo = this.props.movieInfo;
     if (!this.state.chatId) {
       Alert.alert("Please join an movie to enter the movie's chatroom!");
-      this.props.navigation.navigate('Profile');
-      return null;
+      this.props.navigation.navigate('Movie');
+      return null
     } else {
       return (
         <SafeAreaView style={{flex: 1}}>
@@ -77,22 +77,29 @@ export default class ChatScreen extends Component {
         };
       });
     });
-    // await database.ref(`/chatroom/${today}/${this.state.chatId}`).on('value', snapshot => {
-    await database.ref(`/chatroom/Mon Feb 04 2019/${this.state.chatId}`).on('value', snapshot => {
+    await database.ref(`/chatroom/${today}/${this.state.chatId}`).on('value', snapshot => {
+    // await database.ref(`/chatroom/Mon Feb 04 2019/${this.state.chatId}`).on('value', snapshot => {
       if (snapshot.exists()) {
-        let users = Object.keys(snapshot.val().users);
+        
         this.setState({
           title: snapshot.val().movie,
           movieTime: snapshot.val().selectedTime,
           theater: snapshot.val().theater,
-          people: users.length,
         });
       }
-    })
+      if (Object.keys(snapshot.val().users).length) {
+        let users = Object.keys(snapshot.val().users);
+        this.setState({
+          people: users.length,
+        })
+      }
+    });
+    await this.setState({appIsReady: true})
   }
 
   componentWillUnmount() {
     // unsubscribe - cleanup
+    this.setState({appIsReady: false})
     ChatBackEnd.closeChat();
   }
 
