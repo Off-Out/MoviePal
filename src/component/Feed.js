@@ -149,16 +149,20 @@ export default class Feed extends Component {
     return (
       <Card>
         <CardItem>
-          <Left>
-            <Thumbnail small source={feed.userPhoto ? {uri: feed.userPhoto} :
-            require('../image/user-account-icon-13.jpg')
-          } />
-          </Left>
-          <View flexDirection="row">
-            <Text style={styles.userDetails && { marginRight: 100 }}>
+          <Left style={{ marginBottom: -10 }}>
+            <Thumbnail
+              small
+              source={
+                feed.userPhoto
+                  ? { uri: feed.userPhoto }
+                  : require('../image/user-account-icon-13.jpg')
+              }
+            />
+            <Text style={styles.userDetails && { marginLeft: 10 }} note>
               {feed.userName}{' '}
             </Text>
-          </View>
+          </Left>
+          <View flexDirection="row" />
         </CardItem>
         <CardItem>
           <Text style={styles.feedText}>{feed.context}</Text>
@@ -168,9 +172,15 @@ export default class Feed extends Component {
           <Left>
             <Button transparent onPress={() => FeedBackEnd.likePost(feed._id)}>
               <Icon active name="thumbs-up" style={{ color: '#a1320c' }} />
-              <Text style={styles.likesAndComments}>
-                {this.state.feed.likes} Likes
-              </Text>
+              {this.state.feed.likes > 1 ? (
+                <Text style={styles.likesAndComments}>
+                  {this.state.feed.likes} Likes
+                </Text>
+              ) : (
+                <Text style={styles.likesAndComments}>
+                  {this.state.feed.likes} Like
+                </Text>
+              )}
             </Button>
             <Button
               style={{ paddingTop: 3 }}
@@ -180,9 +190,15 @@ export default class Feed extends Component {
               }}
             >
               <Icon active name="chatbubbles" style={{ color: '#a1320c' }} />
-              <Text style={styles.likesAndComments}>
-                {comments.length} Comments
-              </Text>
+              {comments.length > 1 ? (
+                <Text style={styles.likesAndComments}>
+                  {comments.length} Comments
+                </Text>
+              ) : (
+                <Text style={styles.likesAndComments}>
+                  {comments.length} Comment
+                </Text>
+              )}
             </Button>
           </Left>
           {/*  <Right>
@@ -192,7 +208,14 @@ export default class Feed extends Component {
         {this.state.displayComment ? (
           <CardItem>
             <View style={{ display: 'flex' }}>
-              <Comment feedId={feed._id} user={{userId: feed.userId, userName: feed.userName, userPhoto: feed.userPhoto}}/>
+              <Comment
+                feedId={feed._id}
+                user={{
+                  userId: feed.userId,
+                  userName: feed.userName,
+                  userPhoto: feed.userPhoto,
+                }}
+              />
               <Input
                 style={styles.postInput}
                 placeholder="Share comments..."
