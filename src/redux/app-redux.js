@@ -16,7 +16,7 @@ const initialState = {
   singleTheaterMovies: [],
   userID: null,
   zipCode: null,
-
+  favoriteAnimal: 'dog',
   selectedMovie: [],
 };
 

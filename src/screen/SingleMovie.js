@@ -120,12 +120,7 @@ class SingleEvent extends React.Component {
 
     let Showtimes;
     if (movie.showtimes) {
-<<<<<<< HEAD
       Showtimes = movie.showtimes.map(show => show.dateTime.split('T')[1]);
-=======
-      console.log('movie showtimes', movie.showtimes);
-      Showtimes = movie.showtimes.map((show) => show.dateTime.split('T')[1]);
->>>>>>> 5c9c43702c5ac307a7e5f5fc2c13485857143b04
     } else {
       Showtimes = null;
     }
