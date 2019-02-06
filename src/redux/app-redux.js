@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { format } from 'date-fns';
-import axios from 'axios';
+// import axios from 'axios';
 
 //
 // Initial State

@@ -22,6 +22,7 @@ export default class NewFeed extends Component {
       userPhoto: '',
       context: '',
       likes: 0,
+      disabled: true,
     };
   }
   async componentDidMount() {
@@ -37,27 +38,35 @@ export default class NewFeed extends Component {
     this.setState({ context: text });
   };
 
+  pressButton = () => {
+    this.state.context ? this.setState({disabled: false}) : this.setState({disabled: true})
+  }
+
   render() {
     return (
       <View
-      // style={styles.newPost}
+      style={{backgroundColor: "lightgoldenrodyellow"}}
       >
-        <Item regular>
+        <Item style={{borderColor: "transparent"}}>
           <Input
             style={styles.postInput}
-            placeholder="Share something..."
-            onChangeText={text => this.handleInput(text)}
+            placeholder="SHARE SOMETHING..."
+            onChangeText={text => {
+              this.handleInput(text)
+              this.pressButton()
+            }}
           />
           <Button
-            primary
+            danger
             transparent
             small
+            disabled={this.state.disabled}
             style={styles.postBtn}
             onPress={() => {
               FeedBackEnd.postFeed(this.state);
             }}
           >
-            <Text style={{ color: 'indianred' }}>POST</Text>
+            <Text style={{fontSize: 15, fontWeight: "bold" }}>POST</Text>
           </Button>
         </Item>
       </View>
@@ -71,17 +80,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   postInput: {
-    fontSize: 10,
-    borderWidth: 0.75,
-    borderColor: 'indianred',
+    fontSize: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
     marginTop: 5,
-    marginBottom: 5,
-    height: 30,
+    marginBottom: 10,
+    height: 50,
   },
   postBtn: {
     alignSelf: 'flex-end',
-    // padding: -30,
-    // marginBottom: -20,
-    fontSize: 5,
+    marginBottom: 18,
   },
 });

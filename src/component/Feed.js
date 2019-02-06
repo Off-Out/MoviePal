@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   date: {
     ...material.caption,
-
+    marginTop: 5,
     marginLeft: 15,
     marginBottom: 5,
     fontStyle: 'italic',
@@ -77,12 +77,14 @@ export default class Feed extends Component {
     this.state = {
       feed: {
         likes: feed.likes || '',
+        feedComments: [],
       },
       displayComment: false,
       newComment: '',
       userId: FeedBackEnd.getUid(),
       userName: FeedBackEnd.getName(),
       userPhoto: FeedBackEnd.getUserPhoto(),
+      disabled: true,
     };
   }
 
@@ -114,16 +116,23 @@ export default class Feed extends Component {
   };
 
   async componentDidMount() {
-    await database
-      .ref(`/feeds/${this.props.feed._id}`)
-      .on('value', snapshot => {
+    await database.ref(`/feeds/${this.props.feed._id}`).on('value', snapshot => {
+      if (snapshot.val().feedComments) {
+        let comments = Object.values(snapshot.val().feedComments) || [];
         this.setState({
           feed: {
             likes: snapshot.val().likes,
-            feedComments: snapshot.val().feedComments,
-          },
+            feedComments: comments
+          }
         });
-      });
+      } else {
+        this.setState({
+          feed: {
+            likes: snapshot.val().likes,
+          }
+        });
+      }
+    })
   }
 
   handleInput = text => {
@@ -136,20 +145,22 @@ export default class Feed extends Component {
       : this.setState({ displayComment: false });
   };
 
+  pressButton = () => {
+    this.state.newComment ? this.setState({disabled: false}) : this.setState({disabled: true})
+  }
+
   render() {
     const { feed } = this.props;
-
     const postTime = this.timeSince(feed.createdAt);
-
-    let comments = '';
-    if (feed.feedComments) {
-      comments = Object.values(feed.feedComments);
+    let comments = 0;
+    if (this.state.feed.feedComments) {
+      comments = this.state.feed.feedComments.length
     }
 
     return (
       <Card>
         <CardItem>
-          <Left style={{ marginBottom: -10 }}>
+          <Left >
             <Thumbnail
               small
               source={
@@ -162,12 +173,15 @@ export default class Feed extends Component {
               {feed.userName}{' '}
             </Text>
           </Left>
+          <Right>
+          <Text style={styles.date}>{postTime}</Text>
+          </Right>
           <View flexDirection="row" />
         </CardItem>
         <CardItem>
           <Text style={styles.feedText}>{feed.context}</Text>
         </CardItem>
-        <Text style={styles.date}>{postTime}</Text>
+        {/* <Text style={styles.date}>{postTime}</Text> */}
         <CardItem style={styles.footer} footer bordered>
           <Left>
             <Button transparent onPress={() => FeedBackEnd.likePost(feed._id)}>
@@ -190,13 +204,13 @@ export default class Feed extends Component {
               }}
             >
               <Icon active name="chatbubbles" style={{ color: '#a1320c' }} />
-              {comments.length > 1 ? (
+              {comments > 1 ? (
                 <Text style={styles.likesAndComments}>
-                  {comments.length} Comments
+                  {comments} Comments
                 </Text>
               ) : (
                 <Text style={styles.likesAndComments}>
-                  {comments.length} Comment
+                  {comments} Comment
                 </Text>
               )}
             </Button>
@@ -206,8 +220,8 @@ export default class Feed extends Component {
           </Right> */}
         </CardItem>
         {this.state.displayComment ? (
-          <CardItem>
-            <View style={{ display: 'flex' }}>
+          <CardItem style={{paddingLeft: 0, paddingRight: 0}}>
+            <View style={{ display: 'flex',}}>
               <Comment
                 feedId={feed._id}
                 user={{
@@ -216,28 +230,34 @@ export default class Feed extends Component {
                   userPhoto: feed.userPhoto,
                 }}
               />
+              <View style={{marginRight: 0, marginLeft: 0,backgroundColor: "lightyellow"}}>
               <Input
-                style={styles.postInput}
                 placeholder="Share comments..."
-                onChangeText={text => this.handleInput(text)}
+                onChangeText={text => {
+                  this.handleInput(text)
+                  this.pressButton()
+                }}
               />
               <Button
                 primary
                 transparent
                 small
+                disabled={this.state.disabled}
                 style={styles.postBtn}
                 onPress={() => {
-                  FeedBackEnd.postComment(
-                    this.props.feed._id,
-                    this.state.newComment,
-                    this.state.userId,
-                    this.state.userName,
-                    this.state.userPhoto
-                  );
-                }}
+                    FeedBackEnd.postComment(
+                      this.props.feed._id,
+                      this.state.newComment,
+                      this.state.userId,
+                      this.state.userName,
+                      this.state.userPhoto
+                    );
+                  }
+                }
               >
                 <Text>COMMENT</Text>
               </Button>
+              </View>
             </View>
           </CardItem>
         ) : (

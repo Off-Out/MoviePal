@@ -18,7 +18,7 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
-import axios from 'axios';
+// import axios from 'axios';
 
 export default class SingleTheaterScreen extends Component {
   static navigationOptions = ({ navigation }) => {

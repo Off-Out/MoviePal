@@ -64,10 +64,11 @@ const dummyMovieData = {
 };
 
 export default class HistoryScreen extends Component {
-  constructor(screenProps) {
-    super(screenProps);
+  constructor(props) {
+    super(props);
 
     this.state = {
+      pastMovies: this.props.navigation.state.params.pastMovies,
       movies: [
         {
           movie: 'Spider-Man: Into the Spider-Verse',
@@ -95,25 +96,12 @@ export default class HistoryScreen extends Component {
         },
       ],
       selectedMovie: '',
+      loaded: false,
     };
     this.vw = this.vw.bind(this);
     this.vh = this.vh.bind(this);
     this.selectMovie = this.selectMovie.bind(this);
     this.deselectMovie = this.deselectMovie.bind(this);
-  }
-
-  async componentDidMount() {
-    const userId = this.props.screenProps;
-    this.userRef = database.ref(`/users/${userId}`);
-
-    this.callback = snapshot => {
-      let user = snapshot.val();
-    };
-    await this.userRef.on('value', this.callback);
-  }
-
-  componentWillUnmount() {
-    this.userRef.off('value', this.callback);
   }
 
   vw(percentageWidth) {
@@ -124,14 +112,16 @@ export default class HistoryScreen extends Component {
     return Dimensions.get('window').height * (percentageHeight / 100);
   }
 
-  async selectMovie(movie) {
-    await this.setState({ selectedMovie: movie });
+  selectMovie(movie) {
+   this.setState({ selectedMovie: movie });
   }
-  async deselectMovie() {
-    await this.setState({ selectedMovie: '' });
+
+  deselectMovie() {
+    this.setState({ selectedMovie: '' });
   }
 
   render() {
+    console.log(this.state.movies, "this.state.movies")
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1, margin: 10 }}>
@@ -210,12 +200,12 @@ export default class HistoryScreen extends Component {
                       style={{
                         maxWidth: Dimensions.get('window').width * (40 / 100),
                       }}
-                      source={{
-                        uri:
-                          'http://developer.tmsimg.com/' +
-                          this.state.selectedMovie.image +
-                          '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                      }}
+                      // source={{
+                      //   uri:
+                      //     'http://developer.tmsimg.com/' +
+                      //     this.state.selectedMovie.image +
+                      //     '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                      // }}
                     />
                   </View>
                 </Card.Content>
@@ -234,18 +224,21 @@ export default class HistoryScreen extends Component {
                     width: this.vw(40),
                     height: this.vh(40),
 
+                    /* borderRadius: 4, */
+                    /*   borderWidth: 2,
+                    borderColor: 'red', */
                     elevation: 4,
                   }}
                   onPress={() => this.selectMovie(item)}
                 >
                   <Card.Cover
                     style={{ width: this.vw(40), height: this.vh(40) }}
-                    source={{
-                      uri:
-                        'http://developer.tmsimg.com/' +
-                        item.image +
-                        '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                    }}
+                    // source={{
+                    //   uri:
+                    //     'http://developer.tmsimg.com/' +
+                    //     item.image +
+                    //     '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                    // }}
                   />
                 </Card>
               )}

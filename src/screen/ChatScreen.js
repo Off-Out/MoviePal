@@ -7,10 +7,12 @@ import ChatBackEnd from '../component/ChatBackEnd';
 import ChatNavBar from '../component/ChatNavBar';
 
 
-export default function ChatContainers (props) {
-  const movieInfo = this.props.navigation.getParam('movieInfo');
+export default ChatContainers = (props) => {
+  // const movieInfo = this.props.navigation.getParam('movieInfo');
   // const chatId = movieInfoToChatId(movieInfo);
-  return <ChatScreen movieInfo={movieInfo}/>
+  return <ChatScreen
+  // movieInfo={movieInfo}
+  />
 }
 
 
@@ -19,16 +21,18 @@ export class ChatScreen extends Component {
     super(props);
 
     this.state = {
+      chatId: '',
       messages: [],
       appIsReady: false,
+      people: 0,
     };
   }
 
   render() {
     // const movieInfo = this.props.navigation.getParam('movieInfo');
-    const movieInfo = this.props.movieInfo
-    if (!movieInfo) {
-      Alert.alert("Please join an event to enter the event's chatroom!");
+    const movieInfo = this.props.movieInfo;
+    if (!this.state.chatId) {
+      Alert.alert("Please join an movie to enter the movie's chatroom!");
       this.props.navigation.navigate('Map');
       return null;
     } else {
@@ -51,14 +55,22 @@ export class ChatScreen extends Component {
     }
   }
 
-  componentDidMount() {
-    ChatBackEnd.loadMessages(message => {
+  async componentDidMount() {
+    const chatId = await ChatBackEnd.getChatId()
+    chatId ? this.setState({chatId}) : null
+    await ChatBackEnd.loadMessages(message => {
       this.setState(previousState => {
         return {
           messages: GiftedChat.append(previousState.messages, message),
         };
       });
     });
+    await database.ref(`/chatroom/${today}/${this.state.chatId}/users`).on('value', snapshot => {
+      if (snapshot.exists()) {
+        let users = Object.keys(snapshot.val());
+        this.setState({people: users.length})
+      }
+    })
   }
 
   componentWillUnmount() {

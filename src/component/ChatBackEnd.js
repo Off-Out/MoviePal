@@ -10,13 +10,14 @@ class ChatBackEnd {
     auth.onAuthStateChanged(async user => {
       if (user) {
         this.setUid(user.uid);
-        setTimeout(async () => {
+        // setTimeout(async () => {
           await database.ref(`/users/${user.uid}`).on('value', snapshot => {
             this.setName(snapshot.val().name);
             this.setChatId(snapshot.val().chatId);
           });
-        }, 2000);
-      }
+        }
+        // , 2000
+        // )};
     });
   }
 
@@ -38,6 +39,9 @@ class ChatBackEnd {
 
   setChatId(value) {
     this.chatId = value;
+  }
+  getChatId(value) {
+    return this.chatId
   }
   // retrieve the messages from the Backend
   loadMessages(callback) {
