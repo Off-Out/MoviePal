@@ -8,7 +8,7 @@ import {
   Linking,
   ImageBackground,
   Dimensions,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Text, Title, Button, Card, Paragraph } from 'react-native-paper';
@@ -26,7 +26,7 @@ class SingleEvent extends React.Component {
     super();
     this.state = {
       selectedTime: '',
-      ticketURI: ''
+      ticketURI: '',
     };
     this.handlePress = this.handlePress.bind(this);
   }
@@ -38,10 +38,10 @@ class SingleEvent extends React.Component {
   vh(percentageHeight) {
     return Dimensions.get('window').height * (percentageHeight / 100);
   }
-  handlePress = (selectedTime) => {
+  handlePress = selectedTime => {
     const movieShowtime = this.props.navigation
       .getParam('movie', null)
-      .showtimes.filter((movie) => movie.dateTime.includes(selectedTime));
+      .showtimes.filter(movie => movie.dateTime.includes(selectedTime));
 
     this.setState({ selectedTime, ticketURI: movieShowtime[0].ticketURI });
   };
@@ -58,7 +58,7 @@ class SingleEvent extends React.Component {
     const image = this.props.navigation.getParam('movie');
   }
 
-  goToChatRoom = (userId) => {
+  goToChatRoom = userId => {
     const { selectedTime } = this.state;
     const theater = this.props.navigation.getParam('theatre');
     const { title } = this.props.navigation.getParam('movie', null);
@@ -73,7 +73,7 @@ class SingleEvent extends React.Component {
     const userRef = database.ref('users/' + userId);
 
     chatRef
-      .once('value', (snapshot) => {
+      .once('value', snapshot => {
         if (snapshot.exists()) {
           chatRef.child('users' + userId);
         } else {
@@ -81,7 +81,7 @@ class SingleEvent extends React.Component {
             movie: title,
             selectedTime,
             theater,
-            users: userId
+            users: userId,
           });
         }
       })
@@ -92,18 +92,18 @@ class SingleEvent extends React.Component {
             [`${today}`]: {
               movie: title,
               selectedTime: this.state.selectedTime,
-              theater: theater
-            }
+              theater: theater,
+            },
           },
           chat: {
-            [`${today}`]: chatId
-          }
+            [`${today}`]: chatId,
+          },
         });
       })
       .then(() => {
         this.props.navigation.navigate('Chat');
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   };
 
   render() {
@@ -131,7 +131,7 @@ class SingleEvent extends React.Component {
               uri:
                 'http://developer.tmsimg.com/' +
                 movie.preferredImage.uri +
-                '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
+                '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
             }}
             style={{ width: '100%', height: '100%' }}
           >
@@ -141,7 +141,7 @@ class SingleEvent extends React.Component {
                 flex: 1,
                 justifyContent: 'flex-bottom',
                 alignContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
               }}
             >
               <View style={{ flex: 2 }}>
@@ -151,19 +151,19 @@ class SingleEvent extends React.Component {
                     width: this.vw(75),
                     height: this.vh(80),
                     /*  alignItems: 'center', */
-                    margin: 10
+                    margin: 10,
                   }}
                   elevation={4}
                 >
                   <ScrollView>
                     <Card.Content>
                       <Card.Cover
-                      // source={{
-                      //   uri:
-                      //     'http://developer.tmsimg.com/' +
-                      //     movie.preferredImage.uri +
-                      //     '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                      // }}
+                        source={{
+                          uri:
+                            'http://developer.tmsimg.com/' +
+                            movie.preferredImage.uri +
+                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
+                        }}
                       />
 
                       <Title numberOfLines={2} style={{ alignSelf: 'center' }}>
@@ -203,7 +203,7 @@ class SingleEvent extends React.Component {
                                   flexDirection: 'center',
                                   height: 40,
                                   width: 100,
-                                  margin: 10
+                                  margin: 10,
                                 }}
                                 key={item}
                                 accessibilityLabel={item}
@@ -252,7 +252,7 @@ class SingleEvent extends React.Component {
                                     icon: 'movie',
 
                                     onPress: () =>
-                                      Linking.openURL(this.state.ticketURI)
+                                      Linking.openURL(this.state.ticketURI),
                                   },
                                   {
                                     text: 'Add to Calendar',
@@ -261,15 +261,15 @@ class SingleEvent extends React.Component {
                                       AddCalendarEvent.presentEventCreatingDialog(
                                         movie.title,
                                         this.state.selectedTime
-                                      )
+                                      ),
                                   },
                                   {
                                     text: 'Cancel',
 
                                     onPress: () =>
                                       console.log('Cancel Pressed'),
-                                    style: 'cancel'
-                                  }
+                                    style: 'cancel',
+                                  },
                                 ],
                                 { cancelable: true }
                               )
@@ -302,7 +302,6 @@ const mapStateToProps = state => {
   return {
     movie: state.selectedMovie,
     longitude: state.longitude,
-
   };
 };
 
