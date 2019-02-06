@@ -35,18 +35,19 @@ export default class FeedScreen extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: ' Movie Reel',
+      headerTitle: ' MOVIE REEL',
       headerTitleStyle: {
-        fontSize: 34,
-        letterSpacing: 2.5,
+        fontSize: 25,
+        letterSpacing: 3.75,
+        width: '80%',
         color: '#aa1919',
         alignSelf: 'center',
-        fontWeight: '400',
+        fontWeight: '350',
       },
       headerRight: (
         <Ionicons
           name="ios-chatbubbles"
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10, color: 'indianred' }}
           size={24}
           onPress={() => navigation.navigate('Chat')}
         />
@@ -67,9 +68,15 @@ export default class FeedScreen extends Component {
     return (
       <Container>
         <Content>
-          {this.state.feeds.map(feed => (
-            <Feed key={feed._id} feed={feed} userId={this.props.screenProps} />
-          ))}
+          {this.state.feeds
+            .map(feed => (
+              <Feed
+                key={feed._id}
+                feed={feed}
+                userId={this.props.screenProps}
+              />
+            ))
+            .reverse()}
         </Content>
         <NewFeed />
       </Container>

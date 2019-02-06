@@ -7,7 +7,7 @@ import {
   human,
   iOSUIKit,
 } from 'react-native-typography';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 import {
   Container,
   Header,
@@ -20,7 +20,7 @@ import {
   Thumbnail,
   Text,
 } from 'native-base';
-import { Divider } from 'react-native-paper';
+import { Divider, Card } from 'react-native-paper';
 import { Avatar } from 'react-native-elements';
 import { database } from '../firebase';
 
@@ -113,10 +113,21 @@ export default class Commment extends Component {
   render() {
     return (
       <FlatList
-        data={this.state.feedComments}
+        data={this.state.feedComments.reverse()}
         keyExtractor={item => item.createdAt.toString()}
         renderItem={({ item }) => (
-          <View>
+          <Card
+            style={{
+              margin: 3,
+            }}
+            style={{
+              width: Dimensions.get('window').width,
+              bottomBorder: 40,
+              borderColor: 'red',
+              borderRadius: 100,
+            }}
+            /* elevation={9} */
+          >
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <Thumbnail
                 small
@@ -138,17 +149,23 @@ export default class Commment extends Component {
                   marginTop: -20,
                 }}
               >
-                <Text> {item.comments}</Text>
+                <Text
+                  numberOfLines={5}
+                  ellipsizeMode="tail"
+                  style={{ width: Dimensions.get('window').width * (80 / 100) }}
+                >
+                  {' '}
+                  {item.comments}
+                </Text>
                 <Text style={styles.theaterDetails}>
                   {this.timeSince(item.createdAt)}
                 </Text>
-                <Divider style={{ margin: 3 }} />
               </View>
               {/* <Right>
                     <Text note>{this.timeSince(item.createdAt)}</Text>
                   </Right> */}
             </View>
-          </View>
+          </Card>
         )}
       />
     );
