@@ -10,10 +10,10 @@ class MapScreen extends Component {
     const theaters = navigation.getParam('theaters');
 
     return {
-      headerTitle: 'Map',
+      headerTitle: 'MAP',
       headerTitleStyle: {
         fontSize: 34,
-        letterSpacing: 3.75,
+        letterSpacing: 5,
         width: '80%',
         color: '#aa1919',
         alignSelf: 'center',

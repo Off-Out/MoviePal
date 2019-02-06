@@ -67,7 +67,15 @@ const textStyles = StyleSheet.create({
 class SingleTheaterScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: 'Theater Details',
+      headerTitle: 'Theater Info',
+      headerTitleStyle: {
+        fontSize: 34,
+        letterSpacing: 1,
+        width: '80%',
+        color: '#aa1919',
+        alignSelf: 'center',
+        fontWeight: '300',
+      },
     };
   };
   constructor(props) {
