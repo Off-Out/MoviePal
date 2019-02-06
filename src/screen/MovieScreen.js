@@ -17,6 +17,7 @@ import { format } from 'date-fns';
 import { connect } from 'react-redux';
 import { fetchTheaters, fetchMovies, selectMovie } from '../redux/app-redux';
 import { Location } from 'expo';
+import MovieImg from '../component/MovieImg';
 
 const styles = RkStyleSheet.create({
   filter: {
@@ -212,19 +213,7 @@ export class MovieScreen extends Component {
                         {format(movie.releaseDate, 'MM-DD-YYYY')}
                       </Text>
                     </View>
-                    <View style={{ width: this.vw(45) }}>
-                      <Card.Cover
-                        style={{
-                          maxWidth: Dimensions.get('window').width * (35 / 100)
-                        }}
-                        // source={{
-                        //   uri:
-                        //     'http://developer.tmsimg.com/' +
-                        //     movie.preferredImage.uri +
-                        //     '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj'
-                        // }}
-                      />
-                    </View>
+<MovieImg movie={movie} />
                   </Card.Content>
                 </Card>
               </TouchableOpacity>

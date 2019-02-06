@@ -13,7 +13,6 @@ import { Card, Divider } from 'react-native-paper';
 import { RkStyleSheet } from 'react-native-ui-kitten';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
-
 import { connect } from 'react-redux';
 
 const styles = RkStyleSheet.create({
@@ -112,7 +111,7 @@ class SingleTheaterScreen extends Component {
 
   render() {
     const movies = this.props.singleTheaterMovies;
-    console.log('SELECTED MOVIE!!!', this.props);
+
     let searchMovie = movies.filter(
       movie =>
         movie.title
