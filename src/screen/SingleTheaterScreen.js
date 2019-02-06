@@ -1,38 +1,66 @@
 import React, { Component } from 'react';
 import {
+  StyleSheet,
   Text,
   View,
   SafeAreaView,
   TouchableOpacity,
-  ScrollView,
+  Dimensions,
+  ScrollView
 } from 'react-native';
-import {
-  Form,
-  Item,
-  Picker,
-  Card,
-  CardItem,
-  Body,
-  H2,
-  Input,
-} from 'native-base';
+import { Form, Item, Picker, Body, H2, Text, Input } from 'native-base';
+import { material, iOSColors } from 'react-native-typography';
+import { Card, Divider } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
 
-
 import { connect } from 'react-redux';
+
+const styles = RkStyleSheet.create({
+  filter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  item: {
+    flex: 0.5
+  }
+});
+
+const textStyles = StyleSheet.create({
+  screenHeader: {
+    fontSize: 34,
+    letterSpacing: 5,
+    color: '#aa1919',
+    alignSelf: 'center',
+    marginBottom: 10
+  },
+  theaterTitle: {
+    color: iOSColors.black,
+    ...material.robotoWeights,
+    ...material.title3Emphasized,
+    maxWidth: Dimensions.get('window').width * 100,
+    letterSpacing: 0.5
+  },
+  text: {
+    color: iOSColors.purple,
+    ...material.robotoWeights,
+    ...material.body1,
+    maxWidth: Dimensions.get('window').width * 100,
+    letterSpacing: 0.5
+  }
+});
 
 class SingleTheaterScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: 'Theater Details',
+      headerTitle: 'Theater Details'
     };
   };
   constructor(props) {
     super(props);
     this.state = {
       selectedDate: format(new Date(), 'YYYY-MM-DD'),
-      movieSearch: '',
+      movieSearch: ''
     };
   }
 
@@ -40,12 +68,12 @@ class SingleTheaterScreen extends Component {
 
   onSearchTextChange = (stateField, text) => {
     this.setState({
-      [stateField]: text,
+      [stateField]: text
     });
   };
-  onValueChange2 = value => {
+  onValueChange2 = (value) => {
     this.setState({
-      selectedDate: value,
+      selectedDate: value
     });
     try {
       console.log('onValueChange');
@@ -58,7 +86,7 @@ class SingleTheaterScreen extends Component {
     const movies = this.props.singleTheaterMovies;
     console.log('look for this', movies);
     let searchMovie = movies.filter(
-      movie =>
+      (movie) =>
         movie.title
           .toLowerCase()
           .indexOf(this.state.movieSearch.toLowerCase()) !== -1
@@ -126,7 +154,7 @@ class SingleTheaterScreen extends Component {
                 <View style={{ flexDirection: 'row' }}>
                   <Input
                     placeholder="Search for movie"
-                    onChangeText={text => {
+                    onChangeText={(text) => {
                       this.onSearchTextChange('movieSearch', text);
                     }}
                   />
@@ -138,19 +166,19 @@ class SingleTheaterScreen extends Component {
           <View
             style={{
               justifyContent: 'center',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <H2>In Theater</H2>
           </View>
           <ScrollView>
-            {searchMovie.map(movie => (
+            {searchMovie.map((movie) => (
               <TouchableOpacity
                 key={movie.tmsId}
                 onPress={() =>
                   this.props.navigation.navigate('SingleMovie', {
                     movie,
-                    theatre: theatre.name,
+                    theatre: theatre.name
                   })
                 }
               >
@@ -173,13 +201,13 @@ class SingleTheaterScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    singleTheaterMovies: state.singleTheaterMovies,
+    singleTheaterMovies: state.singleTheaterMovies
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {};
 };
 

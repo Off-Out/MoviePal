@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { format } from 'date-fns';
-// import axios from 'axios';
+import axios from 'axios';
 
 //
 // Initial State
@@ -16,7 +16,7 @@ const initialState = {
   singleTheaterMovies: [],
   userID: null,
   zipCode: null,
-  favoriteAnimal: 'dog',
+  favoriteAnimal: 'dog'
 };
 
 //
@@ -31,35 +31,35 @@ const SET_SINGLETHEATERMOVIES = 'SET_SINGLETHEATERMOVIES';
 //
 // Action Creators
 //
-export const setGeoLocation = location => {
+export const setGeoLocation = (location) => {
   return { type: SET_GEOLOCATION, location };
 };
 
-export const setMovies = movies => {
+export const setMovies = (movies) => {
   return {
     type: SET_MOVIES,
-    movies,
+    movies
   };
 };
 
-export const setTheaters = theaters => {
+export const setTheaters = (theaters) => {
   return {
     type: SET_THEATERS,
-    theaters,
+    theaters
   };
 };
 
-export const setZipCode = zipcode => {
+export const setZipCode = (zipcode) => {
   return {
     type: SET_ZIPCODE,
-    zipcode,
+    zipcode
   };
 };
 
-export const setSingleTheaterMovies = movies => {
+export const setSingleTheaterMovies = (movies) => {
   return {
     type: SET_SINGLETHEATERMOVIES,
-    movies,
+    movies
   };
 };
 
@@ -69,9 +69,9 @@ export const setSingleTheaterMovies = movies => {
 //
 
 //This fetch is only for a specific theater that is showing a chosen movie
-export const fetchTheaters = theaterID => {
-  return async dispatch => {
-    const theaterInfo = theaterID.map(async id => {
+export const fetchTheaters = (theaterID) => {
+  return async (dispatch) => {
+    const theaterInfo = theaterID.map(async (id) => {
       try {
         const { data: theater } = await axios.get(
           `http://data.tmsapi.com/v1.1/theatres/${id}?api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
@@ -88,7 +88,7 @@ export const fetchTheaters = theaterID => {
 };
 
 export const fetchNearbyTheaters = (lat, long) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       const { data: theaters } = await axios.get(
         `http://data.tmsapi.com/v1.1/theatres?lat=${lat}&lng=${long}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
@@ -101,7 +101,7 @@ export const fetchNearbyTheaters = (lat, long) => {
 };
 
 export const fetchSingleTheaterMovies = (theaterId, date) => {
-  return async dispatch => {
+  return async (dispatch) => {
     console.log('inside of thunk');
     const { data: movies } = await axios.get(
       `http://data.tmsapi.com/v1.1/theatres/${theaterId}/showings?startDate=${date}&api_key=w8xkqtbg6vf3aj5vdxmc4zjj`
@@ -111,7 +111,7 @@ export const fetchSingleTheaterMovies = (theaterId, date) => {
 };
 
 export const fetchMovies = (lat, long) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       const { data: movies } = await axios.get(
         `http://data.tmsapi.com/v1.1/movies/showings?startDate=${
@@ -135,22 +135,22 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         latitude: action.location.latitude,
-        longitude: action.location.longitude,
+        longitude: action.location.longitude
       };
     case SET_MOVIES:
       return {
         ...state,
-        movies: [...action.movies],
+        movies: [...action.movies]
       };
     case SET_THEATERS:
       return {
         ...state,
-        theaters: action.theaters,
+        theaters: action.theaters
       };
     case SET_SINGLETHEATERMOVIES:
       return {
         ...state,
-        singleTheaterMovies: action.movies,
+        singleTheaterMovies: action.movies
       };
     default:
       return state;
