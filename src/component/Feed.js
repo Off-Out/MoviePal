@@ -26,6 +26,7 @@ import {
   Body,
   Right,
 } from 'native-base';
+import { Avatar } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import FeedBackEnd from './FeedBackEnd';
 import Comment from '../component/Comment';
@@ -81,10 +82,12 @@ export default class Feed extends Component {
       newComment: '',
       userId: FeedBackEnd.getUid(),
       userName: FeedBackEnd.getName(),
+      userPhoto: FeedBackEnd.getUserPhoto(),
     };
   }
 
   timeSince = timeStamp => {
+    // console.log("feed timeStamp", timeStamp)
     let now = new Date(),
       secondsPast = (now.getTime() - timeStamp.getTime()) / 1000;
     if (secondsPast < 60) {
@@ -143,10 +146,14 @@ export default class Feed extends Component {
       comments = Object.values(feed.feedComments);
     }
 
-    console.log('FEED', feed.feedComments);
     return (
       <Card>
         <CardItem>
+          <Left>
+            <Thumbnail small source={feed.userPhoto ? {uri: feed.userPhoto} :
+            require('../image/user-account-icon-13.jpg')
+          } />
+          </Left>
           <View flexDirection="row">
             <Text style={styles.userDetails && { marginRight: 100 }}>
               {feed.userName}{' '}
@@ -185,7 +192,7 @@ export default class Feed extends Component {
         {this.state.displayComment ? (
           <CardItem>
             <View style={{ display: 'flex' }}>
-              <Comment feedId={this.props.feed._id} />
+              <Comment feedId={feed._id} user={{userId: feed.userId, userName: feed.userName, userPhoto: feed.userPhoto}}/>
               <Input
                 style={styles.postInput}
                 placeholder="Share comments..."
@@ -201,7 +208,8 @@ export default class Feed extends Component {
                     this.props.feed._id,
                     this.state.newComment,
                     this.state.userId,
-                    this.state.userName
+                    this.state.userName,
+                    this.state.userPhoto
                   );
                 }}
               >

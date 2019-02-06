@@ -19,6 +19,7 @@ export default class NewFeed extends Component {
     this.state = {
       userId: '',
       userName: '',
+      userPhoto: '',
       context: '',
       likes: 0,
     };
@@ -27,6 +28,7 @@ export default class NewFeed extends Component {
     await this.setState({
       userId: FeedBackEnd.getUid(),
       userName: FeedBackEnd.getName(),
+      userPhoto: FeedBackEnd.getUserPhoto()
     });
     // console.log("newFeed", this.state)
   }

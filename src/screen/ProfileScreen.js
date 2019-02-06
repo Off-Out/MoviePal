@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Image, Alert } from 'react-native';
-import { Form, Item, Label, Input, Button, Text, Icon } from 'native-base';
+import { StyleSheet, View, TextInput, Image, Alert, TouchableOpacity } from 'react-native';
+import { Form, Item, Label, Input, Button, Text, Icon, Thumbnail } from 'native-base';
 import { Avatar } from 'react-native-elements';
-import { auth, database } from '../firebase';
+import { Constants, ImagePicker, Permissions } from 'expo';
+import firebase, { auth, database } from '../firebase';
 import { storage } from 'firebase';
+import uploadImageAsync from '../utility/christina'
+
 
 export default class ProfileScreen extends Component {
   constructor() {
@@ -14,16 +17,18 @@ export default class ProfileScreen extends Component {
       email: '',
       location: '',
       password: '',
-      photoUrl: '',
+      photo: '',
+      uploading: '',
       hidePassword: true,
       show: 'SHOW',
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const userId = this.props.screenProps;
-    console.log('profilescreen props', this.props);
-    database.ref(`/users/${userId}`).on('value', snapshot => {
+    this.userRef = database.ref(`/users/${userId}`)
+    console.log("profilescreen props", this.props)
+    this.callback = snapshot => {
       let user = snapshot.val();
       this.setState({
         name: user.name,
@@ -31,7 +36,14 @@ export default class ProfileScreen extends Component {
         location: user.location,
         photo: user.photo,
       });
-    });
+    }
+    await this.userRef.on('value', this.callback);
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    // await Permissions.askAsync(Permissions.CAMERA);
+  }
+
+  componentWillUnmount() {
+    this.userRef.off('value', this.callback)
   }
 
   handleInput = (stateField, text) => {
@@ -49,8 +61,7 @@ export default class ProfileScreen extends Component {
   };
 
   save = async userId => {
-    let userRef = await database.ref('users').child(`${userId}`);
-    userRef
+    this.userRef
       .update({
         name: this.state.name,
         email: this.state.email,
@@ -78,8 +89,30 @@ export default class ProfileScreen extends Component {
     }
   };
 
+  _pickImage = async () => {
+    console.log('Click _pickImage!!')
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    this._handleImagePicked(pickerResult);
+  };
+
+  _handleImagePicked = async pickerResult => {
+    try {
+      this.setState({ uploading: true });
+      if (!pickerResult.cancelled) {
+        uploadUrl = await uploadImageAsync(pickerResult.uri);
+        this.userRef.update({ photo: uploadUrl})
+      }
+    } catch (e) {
+      console.log(e);
+      alert('Upload failed, sorry :(');
+    }
+  };
+
   render() {
-    console.log('PHOTO', this.state.photo);
     const userId = this.props.screenProps;
     const { navigation } = this.props;
     let isProvider = false;
@@ -88,15 +121,27 @@ export default class ProfileScreen extends Component {
       isProvider = currentUser.providerData[0].providerId !== 'password';
     }
     let display = isProvider ? 'none' : 'flex';
-    let photo = '../image/' + this.state.photo;
-    console.log(typeof photo, 'photo');
 
     return (
       <Form style={styles.form}>
-        <Image
-          source={require(`../image/user-account-icon-13.jpg`)}
-          style={styles.image}
-        />
+        <View style={{display: "flex", justifyContent:"center"}}>
+        <TouchableOpacity onPress={() => this._pickImage()}>
+        <Thumbnail style={styles.image} source={ this.state.photo ? {uri: this.state.photo} :
+            require('../image/user-account-icon-13.jpg')
+          } 
+          />
+          {/* <Button
+          style={{alignSelf: "center"}}
+            small
+            transparent
+            danger
+            onPress={() => this._pickImage()}
+          >
+            <Text>EDIT</Text>
+          </Button> */}
+          </TouchableOpacity>
+          </View>
+        {/* <Image style={styles.image} source={image}/> */}
         <Item stackedLabel style={styles.item}>
           <Label style={styles.label}>NAME</Label>
           <Input
@@ -201,10 +246,11 @@ const styles = StyleSheet.create({
     marginBottom: -5,
   },
   image: {
-    width: 150,
-    height: 150,
+    height: 200,
+    borderRadius: 100,
+    width: 200,
     alignSelf: 'center',
-    marginBottom: 55,
+    marginTop: 15,
   },
   input: {
     marginLeft: 7,

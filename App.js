@@ -42,22 +42,32 @@ const FeedStackNavigator = createStackNavigator({
 });
 
 const TabNavigator = createBottomTabNavigator({
-  Movie: {
-    screen: MovieScreen,
-    navigationOptions: {
-      tabBarLabel: 'MOVIES',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-play" color={tintColor} size={24} />
-      ),
-    },
-  },
+  // Movie: {
+  //   screen: MovieScreen,
+  //   navigationOptions: {
+  //     tabBarLabel: 'MOVIES',
+  //     tabBarIcon: ({ tintColor }) => (
+  //       <Ionicons name="ios-play" color={tintColor} size={24} />
+  //     ),
+  //   },
+  // },
 
-  Map: {
-    screen: MapStackNavigator,
+  // Map: {
+  //   screen: MapStackNavigator,
+  //   navigationOptions: {
+  //     tabBarLabel: 'MAP',
+  //     tabBarIcon: ({ tintColor }) => (
+  //       <Ionicons name="ios-map" color={tintColor} size={24} />
+  //     ),
+  //   },
+  // },
+
+  Feed: {
+    screen: FeedStackNavigator,
     navigationOptions: {
-      tabBarLabel: 'MAP',
+      tabBarLabel: 'FEED',
       tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-map" color={tintColor} size={24} />
+        <Ionicons name="ios-paper" color={tintColor} size={24} />
       ),
     },
   },
@@ -80,16 +90,7 @@ const TabNavigator = createBottomTabNavigator({
         <Ionicons name="ios-contact" color={tintColor} size={24} />
       ),
     },
-  },
-  Feed: {
-    screen: FeedStackNavigator,
-    navigationOptions: {
-      tabBarLabel: 'FEED',
-      tabBarIcon: ({ tintColor }) => (
-        <Ionicons name="ios-paper" color={tintColor} size={24} />
-      ),
-    },
-  },
+  }
 });
 
 const AuthStack = createStackNavigator(
