@@ -92,8 +92,4 @@ export default class FeedScreen extends Component {
       });
     });
   }
-
-  // componentWillUnmount() {
-  //   FeedBackEnd.closeChat();
-  // }
 }

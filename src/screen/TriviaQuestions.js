@@ -17,6 +17,33 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 
+const scoreCircleSize = 300;
+const styles = StyleSheet.create({
+  score: {
+    color: 'white',
+    fontSize: 20,
+    fontStyle: 'italic',
+  },
+  circle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: scoreCircleSize,
+    height: scoreCircleSize,
+    borderRadius: scoreCircleSize / 2,
+    backgroundColor: 'lightgreen',
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
 export default class Trivia extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -34,6 +61,20 @@ export default class Trivia extends Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: 'TRIVIA',
+      headerTitleStyle: {
+        fontSize: 34,
+        letterSpacing: 3.75,
+        width: '80%',
+        color: '#aa1919',
+        alignSelf: 'center',
+        fontWeight: '300',
+      },
+    };
+  };
+
   vw(percentageWidth) {
     return Dimensions.get('window').width * (percentageWidth / 100);
   }
@@ -42,26 +83,19 @@ export default class Trivia extends Component {
     return Dimensions.get('window').height * (percentageHeight / 100);
   }
 
-  //   componentDidMount = async () => {
+  componentDidMount = async () => {
+    const response = await axios.get(
+      // `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
+      //only five questions for demo purposes
+      `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
+    );
+    let quiz = response.data.results;
 
-  //       const response = await axios.get(
-  //       `https://opentdb.com/api.php?amount=20&category=11&difficulty=medium&type=multiple`
-  //       only five questions for demo purposes
-  //       `https://opentdb.com/api.php?amount=5&category=11&difficulty=medium&type=multiple`
-  //     );
-  // /*     } catch(error) {
-  //       console.error(error)
-  //     }
-  //     let quiz = response.data.results;
-
-  //       the reason putting data.results is all about the trivia questions data structure which is coming from axios request
-  //       this.setState({
-  //         questions: quiz,
-  //       });
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }; */
+    // the reason putting data.results is all about the trivia questions data structure which is coming from axios request
+    this.setState({
+      questions: quiz,
+    });
+  };
 
   answerQuestion = item => {
     let increment = 0;
@@ -233,7 +267,7 @@ export default class Trivia extends Component {
           <ImageBackground
             resizeMode="cover"
             source={require('../image/popcorn.jpg')}
-            style={{ width: '100%', height: '100%' }}
+            style={{ width: '100%', height: '100%', marginTop: 40 }}
           >
             <View
               style={{
@@ -325,30 +359,3 @@ export default class Trivia extends Component {
     }
   }
 }
-
-const scoreCircleSize = 300;
-const styles = StyleSheet.create({
-  score: {
-    color: 'white',
-    fontSize: 20,
-    fontStyle: 'italic',
-  },
-  circle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: scoreCircleSize,
-    height: scoreCircleSize,
-    borderRadius: scoreCircleSize / 2,
-    backgroundColor: 'lightgreen',
-  },
-  innerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

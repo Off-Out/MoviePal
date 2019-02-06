@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  Dimensions,
+  Dimensions
 } from 'react-native';
 import { Item, Input, Button, Text, Body } from 'native-base';
 
@@ -15,18 +15,18 @@ import { RkStyleSheet } from 'react-native-ui-kitten';
 
 import { format } from 'date-fns';
 import { connect } from 'react-redux';
-import { fetchTheaters, fetchMovies } from '../redux/app-redux';
+import { fetchTheaters, fetchMovies, selectMovie } from '../redux/app-redux';
 import { Location } from 'expo';
 import MovieImg from '../component/MovieImg';
 
 const styles = RkStyleSheet.create({
   filter: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   item: {
-    flex: 0.5,
-  },
+    flex: 0.5
+  }
 });
 
 const textStyles = StyleSheet.create({
@@ -35,40 +35,40 @@ const textStyles = StyleSheet.create({
     letterSpacing: 5,
     color: '#aa1919',
     alignSelf: 'center',
-    marginBottom: 10,
+    marginBottom: 10
   },
   movieTitle: {
     color: iOSColors.purple,
     ...material.robotoWeights,
     ...material.body2,
     maxWidth: Dimensions.get('window').width * (45 / 100),
-    letterSpacing: 0.5,
+    letterSpacing: 0.5
   },
   text: {
     color: iOSColors.purple,
     ...material.robotoWeights,
     ...material.body1,
     maxWidth: Dimensions.get('window').width * (45 / 100),
-    letterSpacing: 0.5,
-  },
+    letterSpacing: 0.5
+  }
 });
 
 export class MovieScreen extends Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
 
   constructor(props) {
     super(props);
     this.state = {
       zipCode: '',
-      movieSearch: '',
+      movieSearch: ''
     };
   }
 
   handleSearchChange = (stateField, text) => {
     this.setState({
-      [stateField]: text,
+      [stateField]: text
     });
   };
 
@@ -78,9 +78,9 @@ export class MovieScreen extends Component {
     this.setState({ zipCode: '' });
   };
 
-  fetchAndNavigate = showtimes => {
+  fetchAndNavigate = (showtimes) => {
     const theaterArray = [];
-    showtimes.forEach(theater => theaterArray.push(theater.theatre.id));
+    showtimes.forEach((theater) => theaterArray.push(theater.theatre.id));
     const uniqueTheaters = [...new Set(theaterArray)];
     this.props.fetchTheaters(uniqueTheaters);
     this.props.navigation.navigate('Map');
@@ -105,7 +105,7 @@ export class MovieScreen extends Component {
 
     if (this.state.movieSearch) {
       movies = movies.filter(
-        movie =>
+        (movie) =>
           movie.title
             .toLowerCase()
             .indexOf(this.state.movieSearch.toLowerCase()) !== -1
@@ -128,7 +128,7 @@ export class MovieScreen extends Component {
             >
               <Input
                 placeholder="Movie Search"
-                onChangeText={text => {
+                onChangeText={(text) => {
                   this.handleSearchChange('movieSearch', text);
                 }}
               />
@@ -141,7 +141,7 @@ export class MovieScreen extends Component {
             >
               <Input
                 placeholder="ZipCode"
-                onChangeText={text => {
+                onChangeText={(text) => {
                   preZipCode = text;
                 }}
               />
@@ -154,7 +154,7 @@ export class MovieScreen extends Component {
             style={{
               marginTop: 5,
               width: this.vw(95),
-              height: this.vh(4),
+              height: this.vh(4)
             }}
             onPress={() => {
               this.setState({ zipCode: preZipCode }, async () => {
@@ -165,10 +165,13 @@ export class MovieScreen extends Component {
             <Text>Search</Text>
           </Button>
           <ScrollView>
-            {movies.map(movie => (
+            {movies.map((movie) => (
               <TouchableOpacity
                 key={movie.tmsId}
-                onPress={() => this.fetchAndNavigate(movie.showtimes)}
+                onPress={() => {
+                  this.fetchAndNavigate(movie.showtimes);
+                  this.props.selectMovie(movie);
+                }}
               >
                 <Card
                   style={{
@@ -181,7 +184,7 @@ export class MovieScreen extends Component {
                     borderTop: true,
                     borderBottom: true,
                     elevation: 4,
-                    margin: 10,
+                    margin: 10
                   }}
                 >
                   <Card.Content flexDirection="row">
@@ -210,20 +213,7 @@ export class MovieScreen extends Component {
                         {format(movie.releaseDate, 'MM-DD-YYYY')}
                       </Text>
                     </View>
-                    {/* <View style={{ width: this.vw(45) }}>
-                      <Card.Cover
-                        style={{
-                          maxWidth: Dimensions.get('window').width * (35 / 100),
-                        }}
-                        source={{
-                          uri:
-                            'http://developer.tmsimg.com/' +
-                            movie.preferredImage.uri +
-                            '?api_key=w8xkqtbg6vf3aj5vdxmc4zjj',
-                        }}
-                      />
-                    </View> */}
-                    <MovieImg movie={movie} />
+<MovieImg movie={movie} />
                   </Card.Content>
                 </Card>
               </TouchableOpacity>
@@ -235,19 +225,20 @@ export class MovieScreen extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     latitude: state.latitude,
     longitude: state.longitude,
     movies: state.movies,
-    theaters: state.theaters,
+    theaters: state.theaters
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    fetchTheaters: theaterID => dispatch(fetchTheaters(theaterID)),
+    fetchTheaters: (theaterID) => dispatch(fetchTheaters(theaterID)),
     fetchMovies: (lat, long) => dispatch(fetchMovies(lat, long)),
+    selectMovie: (movie) => dispatch(selectMovie(movie))
   };
 };
 

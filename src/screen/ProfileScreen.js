@@ -48,6 +48,19 @@ export default class ProfileScreen extends Component {
       show: 'SHOW',
     };
   }
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: ' PROFILE',
+      headerTitleStyle: {
+        fontSize: 25,
+        letterSpacing: 3.75,
+        width: '80%',
+        color: '#aa1919',
+        alignSelf: 'center',
+        fontWeight: '300',
+      },
+    };
+  };
 
   async componentDidMount() {
     const userId = this.props.screenProps;
@@ -60,6 +73,7 @@ export default class ProfileScreen extends Component {
         email: user.email,
         location: user.location,
         photo: user.photo,
+        pastMovies: user.pastMovies,
       });
     };
     await this.userRef.on('value', this.callback);
@@ -148,23 +162,20 @@ export default class ProfileScreen extends Component {
     let display = isProvider ? 'none' : 'flex';
 
     return (
-      <ScrollView>
-        <Form style={styles.form}>
-          {/*  <Image
-            source={require(`../image/user-account-icon-13.jpg`)}
-            style={styles.image}
-          /> */}
-          <View style={{ display: 'flex', justifyContent: 'center' }}>
-            <TouchableOpacity onPress={() => this._pickImage()}>
-              <Thumbnail
-                style={styles.image}
-                source={
-                  this.state.photo
-                    ? { uri: this.state.photo }
-                    : require('../image/user-account-icon-13.jpg')
-                }
-              />
-              {/* <Button
+      // <SafeAreaView style={{ flex: 1 }}>
+      //   <Text style={styles.screenHeader}> PROFILE </Text>
+      <Form style={styles.form}>
+        <View style={{ display: 'flex', justifyContent: 'center' }}>
+          <TouchableOpacity onPress={() => this._pickImage()}>
+            <Thumbnail
+              style={styles.image}
+              source={
+                this.state.photo
+                  ? { uri: this.state.photo }
+                  : require('../image/user-account-icon-13.jpg')
+              }
+            />
+            {/* <Button
           style={{alignSelf: "center"}}
             small
             transparent
@@ -173,97 +184,99 @@ export default class ProfileScreen extends Component {
           >
             <Text>EDIT</Text>
           </Button> */}
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
+        </View>
 
-          <Item stackedLabel style={styles.item}>
-            <Label style={styles.label}>NAME</Label>
-            <Input
-              style={styles.input}
-              name="name"
-              value={this.state.name}
-              onChangeText={text => this.handleInput('name', text)}
-            />
-          </Item>
-          <Item stackedLabel style={styles.item}>
-            <Label style={styles.label}>EMAIL</Label>
-            <Input
-              style={styles.input}
-              keyboardType="email-address"
-              name="email"
-              value={this.state.email}
-              onChangeText={text => this.handleInput('email', text)}
-            />
-          </Item>
-          <Item stackedLabel style={[styles.item, { display }]}>
-            <Label style={styles.label}>LOCATION</Label>
-            <Input
-              style={styles.input}
-              keyboardType={'numeric'}
-              name="location"
-              value={this.state.location}
-              onChangeText={text => this.handleInput('location', text)}
-            />
-          </Item>
-          <Item stackedLabel style={[styles.item, { display }]}>
-            <View style={styles.changepw}>
-              <Label style={styles.label}>CHANGE PASSWORD</Label>
+        <Item stackedLabel style={styles.item}>
+          <Label style={styles.label}>NAME</Label>
+          <Input
+            style={styles.input}
+            name="name"
+            value={this.state.name}
+            onChangeText={text => this.handleInput('name', text)}
+          />
+        </Item>
+        <Item stackedLabel style={styles.item}>
+          <Label style={styles.label}>EMAIL</Label>
+          <Input
+            style={styles.input}
+            keyboardType="email-address"
+            name="email"
+            value={this.state.email}
+            onChangeText={text => this.handleInput('email', text)}
+          />
+        </Item>
+        <Item stackedLabel style={[styles.item, { display }]}>
+          <Label style={styles.label}>LOCATION</Label>
+          <Input
+            style={styles.input}
+            keyboardType={'numeric'}
+            name="location"
+            value={this.state.location}
+            onChangeText={text => this.handleInput('location', text)}
+          />
+        </Item>
+        <Item stackedLabel style={[styles.item, { display }]}>
+          <View style={styles.changepw}>
+            <Label style={styles.label}>CHANGE PASSWORD</Label>
 
-              <Button
-                danger
-                transparent
-                small
-                style={styles.showBtn}
-                onPress={this.showPassword}
-              >
-                <Text>{this.state.show}</Text>
-              </Button>
-            </View>
-            <Input
-              style={styles.input}
-              secureTextEntry={this.state.hidePassword}
-              name="password"
-              value={this.state.password}
-              onChangeText={text => this.handleInput('password', text)}
-            />
-          </Item>
-          <Button
-            danger
-            style={[{ margin: 10 }, { marginLeft: 25 }, { display }]}
-            onPress={() => {
-              this.save(userId);
-            }}
-          >
-            <Text>SAVE</Text>
-          </Button>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
             <Button
-              transparent
               danger
-              style={{ marginLeft: 10 }}
-              onPress={() => this.logout()}
-            >
-              <Text style={styles.button}>LOG OUT</Text>
-            </Button>
-            <Button
-              style={{ marginRight: 15 }}
-              dark
               transparent
-              onPress={() => {
-                console.log('MY MOVIE HISTORY');
-                navigation.navigate('History');
-              }}
+              small
+              style={styles.showBtn}
+              onPress={this.showPassword}
             >
-              <Text style={styles.button}>🍿MY MOVIES</Text>
+              <Text>{this.state.show}</Text>
             </Button>
           </View>
-        </Form>
-      </ScrollView>
+          <Input
+            style={styles.input}
+            secureTextEntry={this.state.hidePassword}
+            name="password"
+            value={this.state.password}
+            onChangeText={text => this.handleInput('password', text)}
+          />
+        </Item>
+        <Button
+          danger
+          style={[{ margin: 10 }, { marginLeft: 25 }, { display }]}
+          onPress={() => {
+            this.save(userId);
+          }}
+        >
+          <Text>SAVE</Text>
+        </Button>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Button
+            transparent
+            danger
+            style={{ marginLeft: 10 }}
+            onPress={() => this.logout()}
+          >
+            <Text style={styles.button}>LOG OUT</Text>
+          </Button>
+          <Button
+            style={{ marginRight: 15 }}
+            dark
+            transparent
+            onPress={() => {
+              console.log('MY MOVIE HISTORY');
+              navigation.navigate('History', {
+                pastMovies: this.state.pastMovies,
+              });
+            }}
+          >
+            <Text style={styles.button}>🍿MY MOVIES</Text>
+          </Button>
+        </View>
+      </Form>
+      // </SafeAreaView>
     );
   }
 }
@@ -279,7 +292,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     marginLeft: 7,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   button: {
     ...material.button,
@@ -297,14 +310,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 200,
     alignSelf: 'center',
-    marginTop: 15,
+    marginTop: 10,
   },
   input: {
     marginLeft: 7,
     fontSize: 17,
     marginRight: 20,
-    paddingTop: 1,
-    marginBottom: 10,
     borderColor: 'indianred',
     borderBottomWidth: 0.5,
   },
@@ -328,5 +339,11 @@ const styles = StyleSheet.create({
     marginBottom: -20,
     marginRight: 10,
     fontSize: 5,
+  },
+  screenHeader: {
+    fontSize: 34,
+    letterSpacing: 5,
+    color: '#aa1919',
+    alignSelf: 'center',
   },
 });
