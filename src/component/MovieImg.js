@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Dimensions, Image } from 'react-native';
 import axios from 'axios';
 import { Card } from 'react-native-paper';
 
@@ -25,19 +25,24 @@ export class MovieImg extends Component {
 
     this.setState({ image: imageURL });
   };
+  vw(percentageWidth) {
+    return Dimensions.get('window').width * (percentageWidth / 100);
+  }
+
+  vh(percentageHeight) {
+    return Dimensions.get('window').height * (percentageHeight / 100);
+  }
   render() {
     const movie = this.props.movie;
     return (
-      <View style={{ width: 185 }}>
-        <Card.Cover
-          style={{
-            maxWidth: 185,
-          }}
-          source={{
-            uri: this.state.image,
-          }}
-        />
-      </View>
+      <Card.Cover
+        style={{
+          maxWidth: Dimensions.get('window').width * (35 / 100),
+        }}
+        source={{
+          uri: this.state.image,
+        }}
+      />
     );
   }
 }
