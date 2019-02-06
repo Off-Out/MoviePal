@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { auth } from '../firebase';
 import { Location, Permissions } from 'expo';
-import axios from 'axios';
+// import axios from 'axios';
 import { connect } from 'react-redux';
 import {
   setGeoLocation,

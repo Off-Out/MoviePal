@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 import { Text, Title, Button, Card, Paragraph } from 'react-native-paper';
 import { EventCard } from '../component';
-import axios from 'axios';
+// import axios from 'axios';
 import { database } from '../firebase';
 import Stor from '../store/Stor';
 
-const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
-const isGraceNote =
-  'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&zip=78701&api_key=w8xkqtbg6vf3aj5vdxmc4zjj';
+// const gracenote = 'w8xkqtbg6vf3aj5vdxmc4zjj';
+// const isGraceNote =
+//   'http://data.tmsapi.com/v1.1/movies/showings?startDate=2019-01-28&zip=78701&api_key=w8xkqtbg6vf3aj5vdxmc4zjj';
 
 class SingleEvent extends React.Component {
   constructor() {

@@ -19,6 +19,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { format, addDays } from 'date-fns';
 
+
 import { connect } from 'react-redux';
 
 class SingleTheaterScreen extends Component {

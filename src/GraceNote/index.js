@@ -1,6 +1,6 @@
 // construct the url with parameter values
 
-var apikey = 'w8xkqtbg6vf3aj5vdxmc4zjj';
+// var apikey = 'w8xkqtbg6vf3aj5vdxmc4zjj';
 
 var baseUrl = 'http://data.tmsapi.com/v1.1';
 

@@ -11,7 +11,6 @@ import {
   HistoryScreen,
   MovieScreen,
   MapScreen,
-  ChatScreen,
   LoginScreen,
   SignUpScreen,
   SingleTheaterScreen,
@@ -23,6 +22,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'react-redux';
 import store from './src/redux/app-redux';
+import ChatContainers from './src/screen/ChatScreen';
 
 const MapStackNavigator = createStackNavigator({
   Main: MapScreen,
@@ -38,7 +38,7 @@ const ProfileStackNavigator = createStackNavigator({
 
 const FeedStackNavigator = createStackNavigator({
   Feed: FeedScreen,
-  Chat: ChatScreen,
+  Chat: ChatContainers,
 });
 
 const TabNavigator = createBottomTabNavigator({
