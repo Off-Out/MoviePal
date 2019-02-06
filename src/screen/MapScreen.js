@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import { fetchSingleTheaterMovies } from '../redux/app-redux';
 
 class MapScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -51,11 +52,15 @@ class MapScreen extends Component {
               }}
               title={marker.name}
               description={marker.location.address.street}
-              onPress={() =>
+              onPress={() => {
+                this.props.fetchSingleTheaterMovies(
+                  marker.theatreId,
+                  this.props.date
+                );
                 this.props.navigation.navigate('SingleTheater', {
                   theatre: marker,
-                })
-              }
+                });
+              }}
             />
           ))}
         </MapView>
@@ -69,11 +74,15 @@ const mapStateToProps = state => {
     theaters: state.theaters,
     latitude: state.latitude,
     longitude: state.longitude,
+    date: state.date,
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    fetchSingleTheaterMovies: (theaterID, date) =>
+      dispatch(fetchSingleTheaterMovies(theaterID, date)),
+  };
 };
 
 export default connect(
