@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
-// import axios from 'axios';
+import axios from 'axios';
 
 class EventCard extends React.Component {
   constructor() {

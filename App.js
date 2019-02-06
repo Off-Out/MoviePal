@@ -9,6 +9,7 @@ import {
   AuthLoadingScreen,
   ProfileScreen,
   HistoryScreen,
+  ChatScreen,
   MovieScreen,
   MapScreen,
   LoginScreen,
@@ -38,7 +39,7 @@ const ProfileStackNavigator = createStackNavigator({
 
 const FeedStackNavigator = createStackNavigator({
   Feed: FeedScreen,
-  Chat: ChatContainers
+  Chat: ChatScreen,
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -78,8 +79,8 @@ const TabNavigator = createBottomTabNavigator({
       tabBarLabel: 'TRIVIA',
       tabBarIcon: ({ tintColor }) => (
         <Ionicons name="ios-trophy" color={tintColor} size={24} />
-      )
-    }
+      ),
+    },
   },
 
   Profile: {

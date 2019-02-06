@@ -221,7 +221,7 @@ export default class Feed extends Component {
         </CardItem>
         {this.state.displayComment ? (
           <CardItem style={{paddingLeft: 0, paddingRight: 0}}>
-            <View style={{ display: 'flex',}}>
+            <View style={{ display: 'flex', flex: 1}}>
               <Comment
                 feedId={feed._id}
                 user={{
@@ -230,9 +230,10 @@ export default class Feed extends Component {
                   userPhoto: feed.userPhoto,
                 }}
               />
-              <View style={{marginRight: 0, marginLeft: 0,backgroundColor: "lightyellow"}}>
+              <View style={{marginRight: 0, marginLeft: 0,backgroundColor: "lightblue", display: "flex", flexDirection: "row"}}>
               <Input
-                placeholder="Share comments..."
+                style={{fontSize: 13, width: "100%" }}
+                placeholder="SHARE COMMENTS..."
                 onChangeText={text => {
                   this.handleInput(text)
                   this.pressButton()
@@ -243,7 +244,7 @@ export default class Feed extends Component {
                 transparent
                 small
                 disabled={this.state.disabled}
-                style={styles.postBtn}
+                style={{marginTop: 10}}
                 onPress={() => {
                     FeedBackEnd.postComment(
                       this.props.feed._id,
@@ -255,7 +256,7 @@ export default class Feed extends Component {
                   }
                 }
               >
-                <Text>COMMENT</Text>
+                <Text style={{fontWeight: "bold"}}>COMMENT</Text>
               </Button>
               </View>
             </View>
