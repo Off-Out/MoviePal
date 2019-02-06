@@ -13,7 +13,7 @@ import {
 import { connect } from 'react-redux';
 import { Text, Title, Button, Card, Paragraph } from 'react-native-paper';
 import { EventCard } from '../component';
-// import axios from 'axios';
+import axios from 'axios';
 import { database } from '../firebase';
 import Stor from '../store/Stor';
 
@@ -95,18 +95,13 @@ class SingleEvent extends React.Component {
               theater: theater
             }
           },
-          chatId
+          chat: {
+            [`${today}`]: chatId
+          }
         });
       })
       .then(() => {
-        this.props.navigation.navigate('Chat', {
-          movieInfo: {
-            movie: title,
-            selectedTime: this.state.selectedTime,
-            theater: theater,
-            chatId: chatId
-          }
-        });
+        this.props.navigation.navigate('Chat');
       })
       .catch((error) => console.error(error));
   };
