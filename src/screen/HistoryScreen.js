@@ -70,25 +70,12 @@ export default class HistoryScreen extends Component {
     this.state = {
       pastMovies: {},
       selectedMovie: '',
+      loaded: false,
     };
     this.vw = this.vw.bind(this);
     this.vh = this.vh.bind(this);
     this.selectMovie = this.selectMovie.bind(this);
     this.deselectMovie = this.deselectMovie.bind(this);
-  }
-
-  async componentDidMount() {
-    const userId = this.props.screenProps;
-    this.userRef = database.ref(`/users/${userId}`);
-
-    this.callback = snapshot => {
-      let user = snapshot.val();
-    };
-    await this.userRef.on('value', this.callback);
-  }
-
-  componentWillUnmount() {
-    this.userRef.off('value', this.callback);
   }
 
   vw(percentageWidth) {
@@ -105,7 +92,8 @@ export default class HistoryScreen extends Component {
     this.callback = snapshot => {
       let pastMovies = snapshot.val();
       this.setState({
-        pastMovies
+        pastMovies,
+        loaded: true
       });
     }
     await this.userHistRef.on('value', this.callback);
@@ -215,6 +203,8 @@ export default class HistoryScreen extends Component {
                 </Card.Content>
               </Card>
             ) : null}
+            {
+              this.state.loaded ?
             <FlatList
               numColumns={2}
               data={this.state.pastMovies}
@@ -242,7 +232,8 @@ export default class HistoryScreen extends Component {
                   />
                 </Card>
               )}
-            />
+            /> : null
+            }
           </Content>
         </View>
       </SafeAreaView>

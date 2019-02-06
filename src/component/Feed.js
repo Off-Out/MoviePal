@@ -77,6 +77,7 @@ export default class Feed extends Component {
     this.state = {
       feed: {
         likes: feed.likes || '',
+        feedComments: [],
       },
       displayComment: false,
       newComment: '',
@@ -114,16 +115,23 @@ export default class Feed extends Component {
   };
 
   async componentDidMount() {
-    await database
-      .ref(`/feeds/${this.props.feed._id}`)
-      .on('value', snapshot => {
+    await database.ref(`/feeds/${this.props.feed._id}`).on('value', snapshot => {
+      if (snapshot.val().feedComments) {
+        let comments = Object.values(snapshot.val().feedComments) || [];
         this.setState({
           feed: {
             likes: snapshot.val().likes,
-            feedComments: snapshot.val().feedComments,
-          },
+            feedComments: comments
+          }
         });
-      });
+      } else {
+        this.setState({
+          feed: {
+            likes: snapshot.val().likes,
+          }
+        });
+      }
+    })
   }
 
   handleInput = text => {
@@ -138,12 +146,10 @@ export default class Feed extends Component {
 
   render() {
     const { feed } = this.props;
-
     const postTime = this.timeSince(feed.createdAt);
-
-    let comments = '';
-    if (feed.feedComments) {
-      comments = Object.values(feed.feedComments);
+    let comments = 0;
+    if (this.state.feed.feedComments) {
+      comments = this.state.feed.feedComments.length
     }
 
     return (
@@ -190,13 +196,13 @@ export default class Feed extends Component {
               }}
             >
               <Icon active name="chatbubbles" style={{ color: '#a1320c' }} />
-              {comments.length > 1 ? (
+              {comments > 1 ? (
                 <Text style={styles.likesAndComments}>
-                  {comments.length} Comments
+                  {comments} Comments
                 </Text>
               ) : (
                 <Text style={styles.likesAndComments}>
-                  {comments.length} Comment
+                  {comments} Comment
                 </Text>
               )}
             </Button>
@@ -217,7 +223,6 @@ export default class Feed extends Component {
                 }}
               />
               <Input
-                style={styles.postInput}
                 placeholder="Share comments..."
                 onChangeText={text => this.handleInput(text)}
               />
